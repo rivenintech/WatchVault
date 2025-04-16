@@ -1,0 +1,611 @@
+{
+    "version": "6",
+    "dialect": "sqlite",
+    "id": "8aed9e97-91b2-4b50-841f-1297aedcea6b",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "tables": {
+        "movies_genres": {
+            "name": "movies_genres",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "movies": {
+            "name": "movies",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "title": {
+                    "name": "title",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "overview": {
+                    "name": "overview",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "release_date": {
+                    "name": "release_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "runtime": {
+                    "name": "runtime",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "backdrop_path": {
+                    "name": "backdrop_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "poster_path": {
+                    "name": "poster_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "watched_date": {
+                    "name": "watched_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "movie_to_genre": {
+            "name": "movie_to_genre",
+            "columns": {
+                "movie_id": {
+                    "name": "movie_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "genre_id": {
+                    "name": "genre_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "movie_to_genre_movie_id_movies_id_fk": {
+                    "name": "movie_to_genre_movie_id_movies_id_fk",
+                    "tableFrom": "movie_to_genre",
+                    "tableTo": "movies",
+                    "columnsFrom": ["movie_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "movie_to_genre_genre_id_movies_genres_id_fk": {
+                    "name": "movie_to_genre_genre_id_movies_genres_id_fk",
+                    "tableFrom": "movie_to_genre",
+                    "tableTo": "movies_genres",
+                    "columnsFrom": ["genre_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "movie_to_genre_movie_id_genre_id_pk": {
+                    "columns": ["movie_id", "genre_id"],
+                    "name": "movie_to_genre_movie_id_genre_id_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "settings": {
+            "name": "settings",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": true
+                },
+                "locale": {
+                    "name": "locale",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "region": {
+                    "name": "region",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "theme_name": {
+                    "name": "theme_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "tv_episodes": {
+            "name": "tv_episodes",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "episode_number": {
+                    "name": "episode_number",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "overview": {
+                    "name": "overview",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "runtime": {
+                    "name": "runtime",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "air_date": {
+                    "name": "air_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "vote_average": {
+                    "name": "vote_average",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "vote_count": {
+                    "name": "vote_count",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "watched_date": {
+                    "name": "watched_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "season_id": {
+                    "name": "season_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "tv_episodes_season_id_tv_seasons_id_fk": {
+                    "name": "tv_episodes_season_id_tv_seasons_id_fk",
+                    "tableFrom": "tv_episodes",
+                    "tableTo": "tv_seasons",
+                    "columnsFrom": ["season_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "tv_genres": {
+            "name": "tv_genres",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "tv": {
+            "name": "tv",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "overview": {
+                    "name": "overview",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "first_air_date": {
+                    "name": "first_air_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "backdrop_path": {
+                    "name": "backdrop_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "poster_path": {
+                    "name": "poster_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "tv_seasons": {
+            "name": "tv_seasons",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "season_number": {
+                    "name": "season_number",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "overview": {
+                    "name": "overview",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "poster_path": {
+                    "name": "poster_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "show_id": {
+                    "name": "show_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "tv_seasons_show_id_tv_id_fk": {
+                    "name": "tv_seasons_show_id_tv_id_fk",
+                    "tableFrom": "tv_seasons",
+                    "tableTo": "tv",
+                    "columnsFrom": ["show_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "tv_to_genres": {
+            "name": "tv_to_genres",
+            "columns": {
+                "show_id": {
+                    "name": "show_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "genre_id": {
+                    "name": "genre_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "tv_to_genres_show_id_tv_id_fk": {
+                    "name": "tv_to_genres_show_id_tv_id_fk",
+                    "tableFrom": "tv_to_genres",
+                    "tableTo": "tv",
+                    "columnsFrom": ["show_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "tv_to_genres_genre_id_tv_genres_id_fk": {
+                    "name": "tv_to_genres_genre_id_tv_genres_id_fk",
+                    "tableFrom": "tv_to_genres",
+                    "tableTo": "tv_genres",
+                    "columnsFrom": ["genre_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "tv_to_genres_show_id_genre_id_pk": {
+                    "columns": ["show_id", "genre_id"],
+                    "name": "tv_to_genres_show_id_genre_id_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        }
+    },
+    "views": {
+        "next_episodes_view": {
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "episode_number": {
+                    "name": "episode_number",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "overview": {
+                    "name": "overview",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "runtime": {
+                    "name": "runtime",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "air_date": {
+                    "name": "air_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "vote_average": {
+                    "name": "vote_average",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "vote_count": {
+                    "name": "vote_count",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "watched_date": {
+                    "name": "watched_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "season_id": {
+                    "name": "season_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "season_number": {
+                    "name": "season_number",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "show_id": {
+                    "name": "show_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "name": "next_episodes_view",
+            "isExisting": false,
+            "definition": "select \"tv_episodes\".\"id\", \"tv_episodes\".\"name\", \"tv_episodes\".\"episode_number\", \"tv_episodes\".\"overview\", \"tv_episodes\".\"runtime\", \"tv_episodes\".\"air_date\", \"tv_episodes\".\"vote_average\", \"tv_episodes\".\"vote_count\", \"tv_episodes\".\"watched_date\", \"tv_episodes\".\"season_id\", \"tv_seasons\".\"name\", \"tv_seasons\".\"season_number\", \"tv_seasons\".\"show_id\" from \"tv_episodes\" inner join \"tv_seasons\" on \"tv_seasons\".\"id\" = \"tv_episodes\".\"season_id\" where \"tv_episodes\".\"watched_date\" is null group by \"tv_seasons\".\"show_id\" order by \"tv_seasons\".\"season_number\" asc, \"tv_episodes\".\"episode_number\" asc"
+        },
+        "tv_show_status_view": {
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "overview": {
+                    "name": "overview",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "first_air_date": {
+                    "name": "first_air_date",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "backdrop_path": {
+                    "name": "backdrop_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "poster_path": {
+                    "name": "poster_path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                }
+            },
+            "name": "tv_show_status_view",
+            "isExisting": false,
+            "definition": "select \"tv\".\"id\", \"tv\".\"name\", \"tv\".\"overview\", \"tv\".\"first_air_date\", \"tv\".\"backdrop_path\", \"tv\".\"poster_path\", count(\"tv_episodes\".\"watched_date\") as \"watched_episodes\", count(\"tv_episodes\".\"id\") as \"episode_count\", CASE\n                WHEN COUNT(\"tv_episodes\".\"watched_date\") = COUNT(\"tv_episodes\".\"id\") THEN 'watched'\n                WHEN COUNT(\"tv_episodes\".\"watched_date\") > 0 THEN 'watching'\n                ELSE 'planned' END as \"status\" from \"tv\" inner join \"tv_seasons\" on \"tv_seasons\".\"show_id\" = \"tv\".\"id\" inner join \"tv_episodes\" on \"tv_episodes\".\"season_id\" = \"tv_seasons\".\"id\" group by \"tv\".\"id\""
+        }
+    },
+    "enums": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
+    },
+    "internal": {
+        "indexes": {}
+    }
+}

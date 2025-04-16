@@ -1,0 +1,1 @@
+DROP VIEW `next_episodes_view`;
