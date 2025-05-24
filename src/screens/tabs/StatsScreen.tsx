@@ -1,5 +1,6 @@
 import DonutChart from "@/src/components/Charts";
 import { LoadingIndicator } from "@/src/components/components";
+import { pastelColors } from "@/src/constants/ChartsColors";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { finishedTvQuery, statsMoviesGenresQuery, statsMoviesQuery, statsTvGenresQuery, statsTvQuery } from "@/src/db/dbQueries";
 import { MediaTypeContext } from "@/src/layouts/TabsLayout";
@@ -7,12 +8,13 @@ import { formatTime } from "@/src/utils/datetime";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 
 export default function StatsScreen() {
     const { colors } = useSettings().settings.theme;
     const ctx = useContext(MediaTypeContext);
-    const [selectedSlice, setSelectedSlice] = useState<{ name: string; value: number } | undefined>();
+    const [selectedSlice, setSelectedSlice] = useState<{ id: number | string; name: string; value: number } | undefined>();
+    const screenWidth = useWindowDimensions().width;
 
     if (!ctx) {
         throw new Error("MediaTypeContext not found");
@@ -85,9 +87,8 @@ export default function StatsScreen() {
                     <DonutChart
                         data={data.genres}
                         noDataText="Watch something to see your top genres..."
-                        pieColors={["#eccc68", "#ff7f50", "#ff6b81", "#70a1ff", "#2ed573"]}
-                        size={250}
-                        innerRadius={80}
+                        pieColors={pastelColors}
+                        size={screenWidth - 100}
                         selectedSlice={selectedSlice}
                         setSelectedSlice={setSelectedSlice}
                     >

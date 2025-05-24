@@ -1,15 +1,17 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
 import { useSettings } from "../contexts/UtilsProvider";
 
+type Slice = { id: number | string; name: string; value: number };
+
 type DonutChartProps = {
-    data: { name: string; value: number }[];
+    data: Slice[];
     pieColors: string[];
     size?: number;
-    innerRadius?: number;
+    innerRadiusFactor?: number;
     noDataText?: string;
-    selectedSlice?: { name: string; value: number };
-    setSelectedSlice: (selectedSlice: { name: string; value: number } | undefined) => void;
+    selectedSlice?: Slice;
+    setSelectedSlice: (selectedSlice: Slice | undefined) => void;
     children?: React.ReactNode;
 };
 
@@ -17,7 +19,7 @@ export default function DonutChart({
     data,
     pieColors,
     size = 300,
-    innerRadius = 100,
+    innerRadiusFactor = 0.7,
     noDataText = "No data available",
     selectedSlice,
     setSelectedSlice,
@@ -28,15 +30,14 @@ export default function DonutChart({
     if (data.length === 0) return <Text style={{ color: colors.primary, textAlign: "center" }}>{noDataText}</Text>;
 
     const radius = size / 2;
+    const innerRadius = radius * innerRadiusFactor;
     const centerX = radius;
     const centerY = radius;
-
     const total = data.reduce((sum, slice) => sum + slice.value, 0);
-
     let cumulativeAngle = 0;
 
-    const handlePress = (slice: { name: string; value: number }) => {
-        if (selectedSlice === slice) {
+    const handlePress = (slice: Slice) => {
+        if (selectedSlice?.id === slice.id) {
             setSelectedSlice(undefined);
             return;
         }
@@ -45,8 +46,8 @@ export default function DonutChart({
     };
 
     return (
-        <View style={{ alignItems: "center", justifyContent: "center", gap: 10 }}>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <View style={styles.wrapper}>
+            <View style={styles.chartContainer}>
                 <Svg width={size} height={size}>
                     {/* Render pie chart slices */}
                     {data.map((slice, index) => {
@@ -61,7 +62,7 @@ export default function DonutChart({
                                 key={`slice-${index}`}
                                 d={path}
                                 fill={pieColors[index]}
-                                fillOpacity={selectedSlice && selectedSlice !== slice ? 0.2 : 1}
+                                fillOpacity={selectedSlice && selectedSlice.id !== slice.id ? 0.2 : 1}
                                 onPress={() => handlePress(slice)}
                             />
                         );
@@ -69,22 +70,15 @@ export default function DonutChart({
                     {/* Render inner circle to create donut effect */}
                     <Circle cx={centerX} cy={centerY} r={innerRadius} fill={colors.background} />
                 </Svg>
-
-                <View
-                    style={{
-                        position: "absolute",
-                    }}
-                >
-                    {children}
-                </View>
+                <View style={styles.absoluteCenter}>{children}</View>
             </View>
 
             {/* Render legend */}
-            <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+            <View style={styles.legendContainer}>
                 {data.map(({ name }, index) => (
-                    <View key={`legend-${index}`} style={{ flexDirection: "row", alignItems: "baseline", gap: 5 }}>
-                        <View style={{ backgroundColor: pieColors[index], width: 10, height: 10 }} />
-                        <Text style={{ color: colors.text }}>{name}</Text>
+                    <View key={`legend-${index}`} style={styles.legendItem}>
+                        <View style={[styles.legendColor, { backgroundColor: pieColors[index] }]} />
+                        <Text style={[styles.legendText, { color: colors.text }]}>{name}</Text>
                     </View>
                 ))}
             </View>
@@ -118,3 +112,35 @@ const createArcPath = (x: number, y: number, radius: number, startAngle: number,
         "Z", // Close path
     ].join(" ");
 };
+
+const styles = StyleSheet.create({
+    wrapper: {
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+    },
+    chartContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    absoluteCenter: {
+        position: "absolute",
+    },
+    legendContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 10,
+    },
+    legendItem: {
+        flexDirection: "row",
+        alignItems: "baseline",
+        gap: 5,
+    },
+    legendColor: {
+        width: 10,
+        height: 10,
+    },
+    legendText: {},
+});

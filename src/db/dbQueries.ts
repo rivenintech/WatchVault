@@ -1,4 +1,4 @@
-import { asc, count, eq, getTableColumns, isNotNull, isNull, sum } from "drizzle-orm";
+import { asc, count, eq, getTableColumns, isNotNull, isNull, or, sum } from "drizzle-orm";
 import { LocalDB } from "./DatabaseProvider";
 import {
     moviesGenresInDB,
@@ -63,6 +63,7 @@ export const statsMoviesQuery = LocalDB.select({ total: count(moviesInDB.watched
     .where(isNotNull(moviesInDB.watched_date));
 
 export const statsMoviesGenresQuery = LocalDB.select({
+    id: moviesGenresInDB.id,
     name: moviesGenresInDB.name,
     value: count(moviesGenresInDB.id),
 })
@@ -88,13 +89,14 @@ export const finishedTvQuery = LocalDB.select({
     .where(eq(tvShowStatusView.status, "watched"));
 
 export const statsTvGenresQuery = LocalDB.select({
+    id: tvGenresInDB.id,
     name: tvGenresInDB.name,
     value: count(tvGenresInDB.id),
 })
     .from(tvToGenres)
     .innerJoin(tvShowStatusView, eq(tvToGenres.show_id, tvShowStatusView.id))
     .innerJoin(tvGenresInDB, eq(tvToGenres.genre_id, tvGenresInDB.id))
-    .where(eq(tvShowStatusView.status, "watched"))
+    .where(or(eq(tvShowStatusView.status, "watched"), eq(tvShowStatusView.status, "watching")))
     .groupBy(tvGenresInDB.name);
 
 export const tvGenresQuery = (id: number) =>
