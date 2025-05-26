@@ -1,9 +1,10 @@
 import Header from "@/src/components/Header";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
 import { createContext, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 export type MediaTypeContextType = {
     mediaType: "tv" | "movie";
@@ -11,6 +12,12 @@ export type MediaTypeContextType = {
 };
 
 export const MediaTypeContext = createContext<MediaTypeContextType | undefined>(undefined);
+
+const removeWhiteFlashOnTouch = (props: BottomTabBarButtonProps) => (
+    <TouchableOpacity onPress={props.onPress} style={props.style} activeOpacity={1}>
+        {props.children}
+    </TouchableOpacity>
+);
 
 export default function RootLayout() {
     const [mediaType, setMediaType] = useState<"tv" | "movie">("tv");
@@ -32,6 +39,7 @@ export default function RootLayout() {
                     options={{
                         title: "Watchlist",
                         tabBarIcon: ({ color }) => <Ionicons name="film-outline" color={color} size={24} />,
+                        tabBarButton: removeWhiteFlashOnTouch,
                     }}
                     initialParams={{ mediaType }}
                 />
@@ -40,6 +48,7 @@ export default function RootLayout() {
                     options={{
                         title: "Explore",
                         tabBarIcon: ({ color }) => <Ionicons name="search-sharp" color={color} size={24} />,
+                        tabBarButton: removeWhiteFlashOnTouch,
                     }}
                 />
                 <Tabs.Screen
@@ -47,6 +56,7 @@ export default function RootLayout() {
                     options={{
                         title: "Stats",
                         tabBarIcon: ({ color }) => <Ionicons name="stats-chart" color={color} size={24} />,
+                        tabBarButton: removeWhiteFlashOnTouch,
                     }}
                 />
             </Tabs>
