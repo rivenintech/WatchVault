@@ -5,7 +5,7 @@ import { Image } from "expo-image";
 import React, { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
-import { DrawerModalTemplate } from "./modals";
+import { DrawerModal, DrawerModalScroll } from "./modals";
 
 type SelectWatchProvidersProps = {
     modalRef: RefObject<BottomSheetModal>;
@@ -33,53 +33,52 @@ export function SelectWatchProviders({
     };
 
     return (
-        <DrawerModalTemplate modalRef={modalRef} onDismiss={() => onSelectedProviders()}>
-            <View style={{ margin: 10 }}>
-                <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>
-                    Where To Watch ({watchProviders?.length})
-                </Text>
-                <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select providers to filter the results.</Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-                    {watchProviders.map((provider) => (
-                        <Pressable
-                            key={provider.provider_id}
-                            onPress={() => toggleProvider(provider.provider_id)}
-                            style={[
-                                { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
-                                selectedProvider.includes(provider.provider_id) && { borderColor: colors.primary },
-                            ]}
-                        >
-                            <Image
-                                style={{ width: 38, height: 38, borderRadius: 5 }}
-                                source={getTMDBImageURL("logo", "w92", provider.logo_path)}
-                                transition={100}
-                            />
-                        </Pressable>
-                    ))}
-                </View>
-
-                <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
-                    <Pressable onPress={() => setSelectedProvider([])} style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
-                        <Ionicons name="trash-bin-sharp" size={24} color={colors.text} />
-                    </Pressable>
+        <DrawerModalScroll modalRef={modalRef} onDismiss={() => onSelectedProviders()}>
+            {/* TODO: Change to BottomSheetFlashList */}
+            <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>
+                Where To Watch ({watchProviders?.length})
+            </Text>
+            <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select providers to filter the results.</Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+                {watchProviders.map((provider) => (
                     <Pressable
-                        onPress={() => modalRef.current?.dismiss()}
-                        style={{ padding: 10, flex: 1, backgroundColor: colors.primary, borderRadius: 15 }}
+                        key={provider.provider_id}
+                        onPress={() => toggleProvider(provider.provider_id)}
+                        style={[
+                            { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
+                            selectedProvider.includes(provider.provider_id) && { borderColor: colors.primary },
+                        ]}
                     >
-                        <Text
-                            style={{
-                                color: colors.text,
-                                fontSize: 16,
-                                fontWeight: "bold",
-                                textAlign: "center",
-                            }}
-                        >
-                            Apply
-                        </Text>
+                        <Image
+                            style={{ width: 38, height: 38, borderRadius: 5 }}
+                            source={getTMDBImageURL("logo", "w92", provider.logo_path)}
+                            transition={100}
+                        />
                     </Pressable>
-                </View>
+                ))}
             </View>
-        </DrawerModalTemplate>
+
+            <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <Pressable onPress={() => setSelectedProvider([])} style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
+                    <Ionicons name="trash-bin-sharp" size={24} color={colors.text} />
+                </Pressable>
+                <Pressable
+                    onPress={() => modalRef.current?.dismiss()}
+                    style={{ padding: 10, flex: 1, backgroundColor: colors.primary, borderRadius: 15 }}
+                >
+                    <Text
+                        style={{
+                            color: colors.text,
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            textAlign: "center",
+                        }}
+                    >
+                        Apply
+                    </Text>
+                </Pressable>
+            </View>
+        </DrawerModalScroll>
     );
 }
 
@@ -94,51 +93,48 @@ export function SortByModal({ modalRef, selectedOption, setSelectedOption, onSel
     const { colors } = useSettings().settings.theme;
 
     return (
-        <DrawerModalTemplate modalRef={modalRef} onDismiss={() => onSelectedOption()}>
-            <View style={{ margin: 10 }}>
-                <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>Sort By</Text>
-                <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select the option to sort the results.</Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-                    {["popularity", "rating"].map((option) => (
-                        <Pressable
-                            onPress={() => setSelectedOption(option.toLowerCase() as "popularity" | "rating")}
-                            key={option}
-                            style={[
-                                { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
-                                selectedOption === option && { borderColor: colors.primary },
-                            ]}
-                        >
-                            <Text
-                                style={[
-                                    { textTransform: "capitalize", color: colors.text, fontWeight: 500 },
-                                    selectedOption === option && { color: colors.primary },
-                                ]}
-                            >
-                                {option}
-                            </Text>
-                        </Pressable>
-                    ))}
-                </View>
-
-                <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
+        <DrawerModal modalRef={modalRef} onDismiss={() => onSelectedOption()}>
+            <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>Sort By</Text>
+            <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select the option to sort the results.</Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+                {["popularity", "rating"].map((option) => (
                     <Pressable
-                        onPress={() => modalRef.current?.dismiss()}
-                        style={{ padding: 10, flex: 1, backgroundColor: colors.primary, borderRadius: 15 }}
+                        onPress={() => setSelectedOption(option.toLowerCase() as "popularity" | "rating")}
+                        key={option}
+                        style={[
+                            { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
+                            selectedOption === option && { borderColor: colors.primary },
+                        ]}
                     >
                         <Text
-                            style={{
-                                color: colors.text,
-                                fontSize: 16,
-                                fontWeight: "bold",
-                                textAlign: "center",
-                            }}
+                            style={[
+                                { textTransform: "capitalize", color: colors.text, fontWeight: 500 },
+                                selectedOption === option && { color: colors.primary },
+                            ]}
                         >
-                            Apply
+                            {option}
                         </Text>
                     </Pressable>
-                </View>
+                ))}
             </View>
-        </DrawerModalTemplate>
+            <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <Pressable
+                    onPress={() => modalRef.current?.dismiss()}
+                    style={{ padding: 10, flex: 1, backgroundColor: colors.primary, borderRadius: 15 }}
+                >
+                    <Text
+                        style={{
+                            color: colors.text,
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            textAlign: "center",
+                        }}
+                    >
+                        Apply
+                    </Text>
+                </Pressable>
+            </View>
+        </DrawerModal>
     );
 }
 
@@ -162,48 +158,46 @@ export function SelectGenres({ modalRef, genres, selectedGenres, setSelectedGenr
     };
 
     return (
-        <DrawerModalTemplate modalRef={modalRef} onDismiss={() => onSelectedGenres()}>
-            <View style={{ margin: 10 }}>
-                <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>Genres</Text>
-                <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select genres to filter the results.</Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-                    {genres.map((genre) => (
-                        <Pressable
-                            onPress={() => toggleGenre(genre.id)}
-                            key={genre.id}
-                            style={[
-                                { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
-                                selectedGenres.includes(genre.id) && { borderColor: colors.primary },
-                            ]}
-                        >
-                            <Text style={[{ color: colors.text, fontWeight: 500 }, selectedGenres.includes(genre.id) && { color: colors.primary }]}>
-                                {genre.name}
-                            </Text>
-                        </Pressable>
-                    ))}
-                </View>
-
-                <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
-                    <Pressable onPress={() => setSelectedGenres([])} style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
-                        <Ionicons name="trash-bin-sharp" size={24} color={colors.text} />
-                    </Pressable>
+        <DrawerModal modalRef={modalRef} onDismiss={() => onSelectedGenres()}>
+            <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>Genres</Text>
+            <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select genres to filter the results.</Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+                {genres.map((genre) => (
                     <Pressable
-                        onPress={() => modalRef.current?.dismiss()}
-                        style={{ padding: 10, flex: 1, backgroundColor: colors.primary, borderRadius: 15 }}
+                        onPress={() => toggleGenre(genre.id)}
+                        key={genre.id}
+                        style={[
+                            { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
+                            selectedGenres.includes(genre.id) && { borderColor: colors.primary },
+                        ]}
                     >
-                        <Text
-                            style={{
-                                color: colors.text,
-                                fontSize: 16,
-                                fontWeight: "bold",
-                                textAlign: "center",
-                            }}
-                        >
-                            Apply
+                        <Text style={[{ color: colors.text, fontWeight: 500 }, selectedGenres.includes(genre.id) && { color: colors.primary }]}>
+                            {genre.name}
                         </Text>
                     </Pressable>
-                </View>
+                ))}
             </View>
-        </DrawerModalTemplate>
+
+            <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
+                <Pressable onPress={() => setSelectedGenres([])} style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
+                    <Ionicons name="trash-bin-sharp" size={24} color={colors.text} />
+                </Pressable>
+                <Pressable
+                    onPress={() => modalRef.current?.dismiss()}
+                    style={{ padding: 10, flex: 1, backgroundColor: colors.primary, borderRadius: 15 }}
+                >
+                    <Text
+                        style={{
+                            color: colors.text,
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            textAlign: "center",
+                        }}
+                    >
+                        Apply
+                    </Text>
+                </Pressable>
+            </View>
+        </DrawerModal>
     );
 }

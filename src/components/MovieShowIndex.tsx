@@ -6,19 +6,21 @@ import { FlashList } from "@shopify/flash-list";
 import { Image, ImageBackground } from "expo-image";
 import { Link, router } from "expo-router";
 import { useRef, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettings } from "../contexts/UtilsProvider";
-import { PersonModal } from "./modals/PersonModal";
 import { ProgressBar } from "./TvComponents";
+import { PersonModal } from "./modals/PersonModal";
 
 export function MovieTvPage({ backdrop_path, poster_path, release_date, runtime, title, genres, localData, children }) {
     const { settings } = useSettings();
     const { colors } = settings.theme;
+    const insets = useSafeAreaInsets();
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}>
                 <View>
                     <ImageBackground
                         source={getTMDBImageURL("backdrop", "original", backdrop_path)}
@@ -29,7 +31,7 @@ export function MovieTvPage({ backdrop_path, poster_path, release_date, runtime,
                     >
                         <View style={styles.darkOverlay} />
                     </ImageBackground>
-                    <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={20}>
+                    <Pressable onPress={() => router.back()} style={[styles.backBtn, { top: insets.top }]} hitSlop={20}>
                         <Ionicons name="arrow-back" color="white" size={24} />
                     </Pressable>
 
@@ -72,7 +74,7 @@ export function MovieTvPage({ backdrop_path, poster_path, release_date, runtime,
                     {children}
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
         left: 20,
         borderRadius: 5,
     },
-    backBtn: { position: "absolute", top: 10, left: 10 },
+    backBtn: { position: "absolute", left: 20, marginTop: 10 },
     darkOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)" },
     title: { fontSize: 24, fontWeight: "bold" },
     genres: { fontStyle: "italic" },

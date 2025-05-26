@@ -1,18 +1,19 @@
+import { TvEpisodeItem } from "@/src/components/TvComponents";
 import { LoadingIndicator } from "@/src/components/components";
 import { EpisodeDetailsDrawer } from "@/src/components/modals/EpisodeDetails";
 import { WatchedDrawer } from "@/src/components/modals/modals";
-import { TvEpisodeItem } from "@/src/components/TvComponents";
 import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvEpisodesInDB, tvInDB, tvSeasonsInDB, tvToGenres } from "@/src/db/schema";
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { asc, count, eq, getTableColumns } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TvSeasonScreen() {
     const { id: idStr, showID, seasonNumber } = useLocalSearchParams();

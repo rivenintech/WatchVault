@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { FlashList } from "@shopify/flash-list";
+import { BottomSheetFlashList } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { useState } from "react";
@@ -67,74 +67,72 @@ export function PersonCreditsList({ credits }) {
     let lastYear: string | null = null;
 
     return (
-        <View style={{ height: "100%" }}>
-            <FlashList
-                data={credits}
-                ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-                keyExtractor={(item) => item.id.toString()}
-                estimatedItemSize={22}
-                renderItem={({ item }) => {
-                    const year = item.media_type === "movie" ? item.release_date.split("-")[0] : item.first_air_date.split("-")[0];
-                    const isSameYear = year === lastYear;
-                    lastYear = year;
+        <BottomSheetFlashList
+            data={credits}
+            ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+            keyExtractor={(item) => item.id.toString()}
+            estimatedItemSize={22}
+            renderItem={({ item }) => {
+                const year = item.media_type === "movie" ? item.release_date.split("-")[0] : item.first_air_date.split("-")[0];
+                const isSameYear = year === lastYear;
+                lastYear = year;
 
-                    return (
-                        <>
-                            {!isSameYear && (
-                                <Text
-                                    style={{
-                                        color: colors.textSecondary,
-                                        fontWeight: "500",
-                                        fontSize: 12,
-                                        marginTop: 10,
-                                        marginBottom: 5,
-                                    }}
-                                >
-                                    {year || "N/A"}
-                                </Text>
-                            )}
+                return (
+                    <>
+                        {!isSameYear && (
+                            <Text
+                                style={{
+                                    color: colors.textSecondary,
+                                    fontWeight: "500",
+                                    fontSize: 12,
+                                    marginTop: 10,
+                                    marginBottom: 5,
+                                }}
+                            >
+                                {year || "N/A"}
+                            </Text>
+                        )}
 
-                            <Link key={item.id} href={`/${item.media_type}/${item.id}`}>
-                                <View
+                        <Link key={item.id} href={`/${item.media_type}/${item.id}`}>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    alignCredits: "center",
+                                    borderRadius: 10,
+                                    borderBottomColor: colors.border,
+                                    borderBottomWidth: 1,
+                                }}
+                            >
+                                <Image
+                                    source={getTMDBImageURL("poster", "w500", item.poster_path)}
+                                    recyclingKey={item.poster_path}
+                                    cachePolicy={"disk"}
+                                    transition={200}
                                     style={{
-                                        flexDirection: "row",
-                                        alignCredits: "center",
+                                        aspectRatio: 2 / 3,
+                                        height: 120,
                                         borderRadius: 10,
-                                        borderBottomColor: colors.border,
-                                        borderBottomWidth: 1,
+                                        margin: 5,
                                     }}
-                                >
-                                    <Image
-                                        source={getTMDBImageURL("poster", "w500", item.poster_path)}
-                                        recyclingKey={item.poster_path}
-                                        cachePolicy={"disk"}
-                                        transition={200}
-                                        style={{
-                                            aspectRatio: 2 / 3,
-                                            height: 120,
-                                            borderRadius: 10,
-                                            margin: 5,
-                                        }}
-                                    />
-                                    <View style={{ flex: 1, padding: 15 }}>
-                                        <Text style={{ color: "white", fontWeight: "500", fontSize: 16 }}>
-                                            {item.media_type === "movie" ? item.title : item.name}
+                                />
+                                <View style={{ flex: 1, padding: 15 }}>
+                                    <Text style={{ color: "white", fontWeight: "500", fontSize: 16 }}>
+                                        {item.media_type === "movie" ? item.title : item.name}
+                                    </Text>
+                                    <Text numberOfLines={4} style={{ color: "white", marginTop: 3, fontSize: 12 }}>
+                                        {item.overview}
+                                    </Text>
+                                    {item.character && (
+                                        <Text numberOfLines={4} style={{ color: colors.primary, marginTop: 3, fontSize: 12 }}>
+                                            as {item.character}
                                         </Text>
-                                        <Text numberOfLines={4} style={{ color: "white", marginTop: 3, fontSize: 12 }}>
-                                            {item.overview}
-                                        </Text>
-                                        {item.character && (
-                                            <Text numberOfLines={4} style={{ color: colors.primary, marginTop: 3, fontSize: 12 }}>
-                                                as {item.character}
-                                            </Text>
-                                        )}
-                                    </View>
+                                    )}
                                 </View>
-                            </Link>
-                        </>
-                    );
-                }}
-            />
-        </View>
+                            </View>
+                        </Link>
+                    </>
+                );
+            }}
+        />
     );
 }

@@ -1,14 +1,17 @@
+import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettings } from "../contexts/UtilsProvider";
-import { MediaTypeContextType } from "../layouts/TabsLayout";
+import type { MediaTypeContextType } from "../layouts/TabsLayout";
 import { SearchBar } from "./Search";
 
 export default function Header({ mediaType, setMediaType }: MediaTypeContextType) {
-    const { colors } = useSettings().settings.theme;
+    const { colors, dark } = useSettings().settings.theme;
+    const insets = useSafeAreaInsets();
 
     return (
-        <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+        <View style={[styles.safeArea, { backgroundColor: colors.background, paddingTop: insets.top }]}>
+            <StatusBar style={dark ? "light" : "dark"} />
             <SearchBar />
             <View style={styles.toggleContainer}>
                 <Pressable onPress={() => setMediaType("tv")}>
@@ -19,7 +22,7 @@ export default function Header({ mediaType, setMediaType }: MediaTypeContextType
                     <Text style={[styles.toggleText, { color: mediaType === "movie" ? colors.primary : colors.textSecondary }]}>Movies</Text>
                 </Pressable>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

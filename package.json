@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
-    "@gorhom/bottom-sheet": "^5",
+    "@gorhom/bottom-sheet": "^5.1.5",
     "@legendapp/list": "^1.0.11",
     "@react-native-community/netinfo": "11.4.1",
     "@react-native-picker/picker": "2.11.0",

@@ -1,8 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetModalProps, BottomSheetView } from "@gorhom/bottom-sheet";
+import {
+    BottomSheetBackdrop,
+    BottomSheetBackdropProps,
+    BottomSheetModal,
+    BottomSheetModalProps,
+    BottomSheetScrollView,
+    BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import { BottomSheetScrollViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetScrollable/types";
+import { BottomSheetViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types";
 import React, { RefObject, useCallback, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate } from "../../utils/datetime";
 
@@ -25,8 +35,8 @@ export function WatchedDrawer({ drawerRef, releaseDate, onSubmit, ...props }: Wa
     return (
         <>
             <CalendarModal modalRef={calendarRef} onSubmit={submitDate} minDate={releaseDate || undefined} maxDate={today} />
-            <DrawerModalTemplate modalRef={drawerRef}>
-                <View style={{ backgroundColor: colors.background, padding: 20, gap: 25 }}>
+            <DrawerModal modalRef={drawerRef}>
+                <View style={{ backgroundColor: colors.background, gap: 25 }}>
                     <Text style={{ fontWeight: "500", fontSize: 22, color: "white" }}>When did you watch this?</Text>
                     <Pressable hitSlop={10} style={{ flexDirection: "row", alignItems: "center", gap: 20 }} onPress={() => submitDate(today)}>
                         <Ionicons name="alarm-outline" color="white" size={28} />
@@ -55,7 +65,7 @@ export function WatchedDrawer({ drawerRef, releaseDate, onSubmit, ...props }: Wa
                         <Ionicons name="chevron-down" color="white" size={28} style={{ marginLeft: "auto" }} />
                     </Pressable>
                 </View>
-            </DrawerModalTemplate>
+            </DrawerModal>
         </>
     );
 }
@@ -66,8 +76,8 @@ export function ConfirmModal({ modalRef, onSubmit }: ConfirmModalProps) {
     const { colors } = useSettings().settings.theme;
 
     return (
-        <DrawerModalTemplate modalRef={modalRef}>
-            <View style={{ padding: 20, gap: 10, borderRadius: 10, backgroundColor: colors.background }}>
+        <DrawerModal modalRef={modalRef}>
+            <View style={{ gap: 10, borderRadius: 10, backgroundColor: colors.background }}>
                 <Text style={{ color: "white", fontWeight: "500", fontSize: 20 }}>Are you sure?</Text>
                 <Text style={{ color: colors.text }}>This will remove the movie from your watched list.</Text>
                 <View style={{ flexDirection: "row", gap: 20, marginLeft: "auto", marginTop: 10 }}>
@@ -90,7 +100,7 @@ export function ConfirmModal({ modalRef, onSubmit }: ConfirmModalProps) {
                     </Pressable>
                 </View>
             </View>
-        </DrawerModalTemplate>
+        </DrawerModal>
     );
 }
 
@@ -106,7 +116,7 @@ export function CalendarModal({ modalRef, onSubmit, minDate, maxDate }: Calendar
     const [selected, setSelected] = useState("");
 
     return (
-        <DrawerModalTemplate modalRef={modalRef} enableContentPanningGesture={false}>
+        <DrawerModal modalRef={modalRef} enableContentPanningGesture={false}>
             <Calendar
                 minDate={minDate}
                 maxDate={maxDate}
@@ -155,7 +165,7 @@ export function CalendarModal({ modalRef, onSubmit, minDate, maxDate }: Calendar
                     </Pressable>
                 </View>
             </View>
-        </DrawerModalTemplate>
+        </DrawerModal>
     );
 }
 
@@ -166,6 +176,7 @@ type DrawerModalTemplateProps = BottomSheetModalProps & {
 
 export function DrawerModalTemplate({ modalRef, children, ...props }: DrawerModalTemplateProps) {
     const { colors } = useSettings().settings.theme;
+    const insets = useSafeAreaInsets();
 
     const renderBackdrop = useCallback(
         (backdropProps: BottomSheetBackdropProps) => (
@@ -179,13 +190,44 @@ export function DrawerModalTemplate({ modalRef, children, ...props }: DrawerModa
             {...props}
             ref={modalRef}
             stackBehavior="push"
+            topInset={insets.top}
             handleIndicatorStyle={{ backgroundColor: colors.text }}
             handleStyle={{ backgroundColor: colors.background }}
             enableOverDrag={false}
             backgroundStyle={{ backgroundColor: colors.background }}
             backdropComponent={renderBackdrop}
         >
-            <BottomSheetView>{children}</BottomSheetView>
+            {children}
         </BottomSheetModal>
+    );
+}
+
+export function DrawerModalScroll({
+    modalRef,
+    children,
+    style = { margin: 10 },
+    ...props
+}: DrawerModalTemplateProps & { style?: BottomSheetScrollViewProps["style"] }) {
+    const insets = useSafeAreaInsets();
+
+    return (
+        <DrawerModalTemplate modalRef={modalRef} {...props}>
+            <BottomSheetScrollView style={[style, { marginBottom: insets.bottom }]}>{children}</BottomSheetScrollView>
+        </DrawerModalTemplate>
+    );
+}
+
+export function DrawerModal({
+    modalRef,
+    children,
+    style = { padding: 10 },
+    ...props
+}: DrawerModalTemplateProps & { style?: BottomSheetViewProps["style"] }) {
+    const insets = useSafeAreaInsets();
+
+    return (
+        <DrawerModalTemplate modalRef={modalRef} {...props}>
+            <BottomSheetView style={[style, { paddingBottom: insets.bottom }]}>{children}</BottomSheetView>
+        </DrawerModalTemplate>
     );
 }

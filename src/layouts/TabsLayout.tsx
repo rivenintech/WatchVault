@@ -29,8 +29,7 @@ export default function RootLayout() {
                 screenOptions={{
                     tabBarActiveTintColor: colors.primary,
                     tabBarInactiveTintColor: colors.textSecondary,
-                    tabBarStyle: [styles.tabBarStyle, { borderColor: colors.border, backgroundColor: colors.border }],
-                    tabBarItemStyle: styles.tabBarItemStyle,
+                    tabBarStyle: [styles.tabBarStyle, { borderColor: colors.border, backgroundColor: colors.card }],
                     header: () => <Header mediaType={mediaType} setMediaType={setMediaType} />,
                 }}
             >
@@ -66,12 +65,7 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
     tabBarStyle: {
-        borderRadius: 10,
-        margin: 10,
-        height: 65,
-        borderWidth: 1,
-    },
-    tabBarItemStyle: {
-        marginVertical: 5,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
     },
 });

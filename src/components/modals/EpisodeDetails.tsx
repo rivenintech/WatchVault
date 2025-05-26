@@ -8,7 +8,7 @@ import { Pressable, Text, View } from "react-native";
 import { useSettings, useTMDB } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
 import { CastAndCrew } from "../MovieShowIndex";
-import { DrawerModalTemplate } from "./modals";
+import { DrawerModal } from "./modals";
 
 type EpisodeDetailsDrawerProps = {
     drawerRef: RefObject<BottomSheetModal>;
@@ -38,7 +38,7 @@ export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef 
     }, [episodeData]);
 
     return (
-        <DrawerModalTemplate modalRef={drawerRef}>
+        <DrawerModal modalRef={drawerRef} style={{}}>
             {episodeData && (
                 <>
                     <View>
@@ -110,6 +110,6 @@ export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef 
                     </View>
                 </>
             )}
-        </DrawerModalTemplate>
+        </DrawerModal>
     );
 }

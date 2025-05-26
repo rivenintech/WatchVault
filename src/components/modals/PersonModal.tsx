@@ -1,10 +1,10 @@
 import { APIResponses } from "@/src/utils/types/apiResponses";
-import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { RefObject, useEffect, useState } from "react";
 import { useTMDB } from "../../contexts/UtilsProvider";
 import { LoadingIndicator } from "../components";
 import { PersonCreditsList, PersonDetails } from "../person";
-import { DrawerModalTemplate } from "./modals";
+import { DrawerModalScroll } from "./modals";
 
 type PersonModalProps = {
     modalRef: RefObject<BottomSheetModal>;
@@ -53,15 +53,15 @@ export function PersonModal({ modalRef, person }: PersonModalProps) {
     }, [person]);
 
     return (
-        <DrawerModalTemplate modalRef={modalRef}>
+        <DrawerModalScroll modalRef={modalRef}>
             {personDetails && person ? (
-                <BottomSheetScrollView style={{ marginHorizontal: 10 }}>
+                <>
                     <PersonDetails person={personDetails} roles={person.roles} />
                     <PersonCreditsList credits={personDetails.combined_credits.cast} />
-                </BottomSheetScrollView>
+                </>
             ) : (
                 LoadingIndicator
             )}
-        </DrawerModalTemplate>
+        </DrawerModalScroll>
     );
 }
