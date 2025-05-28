@@ -16,7 +16,7 @@ export const RenderItem = ({ image_path, date, text, secondaryText }: RenderItem
 
     return (
         <>
-            <Image source={getTMDBImageURL("poster", "original", image_path)} style={styles.poster} />
+            <Image source={getTMDBImageURL("poster", "original", image_path)} style={styles.poster} recyclingKey={image_path} transition={150} />
             <View style={styles.flex1}>
                 {date && <Text style={[styles.release_date, { color: colors.primary }]}>{formatDate(date, "short")}</Text>}
                 <Text style={[styles.title, { color: colors.text }]}>{text}</Text>
