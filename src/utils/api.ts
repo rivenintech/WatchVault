@@ -42,18 +42,17 @@ export class API {
     regions = this.getWatchProvidersRegions.bind(this);
 
     private async fetchTMDB(endpoint: string) {
-        const apiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
+        const apiUrl = process.env.EXPO_PUBLIC_TMDB_API_URL;
 
         const options = {
             method: "GET",
             headers: {
                 accept: "application/json",
-                Authorization: `Bearer ${apiKey}`,
             },
         };
 
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/${endpoint}`, options);
+            const response = await fetch(new URL(endpoint, apiUrl), options);
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch data from TMDB: ${response.statusText} (Status code: ${response.status})`);
