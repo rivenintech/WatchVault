@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 coverage/**/*
 .env
+.env.*
 
 # macOS
 .DS_Store
@@ -24,3 +25,4 @@ expo-env.d.ts
 android/
 ios/
 .wrangler
+*.apk
