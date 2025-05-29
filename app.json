@@ -8,19 +8,14 @@
         "scheme": "myapp",
         "userInterfaceStyle": "automatic",
         "newArchEnabled": true,
-        "splash": {
-            "image": "./src/assets/images/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.rivenintech.watchvault"
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./src/assets/images/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
+                "foregroundImage": "./src/assets/images/icon.png",
+                "backgroundColor": "#2A2845"
             },
             "edgeToEdgeEnabled": true,
             "package": "com.rivenintech.watchvault"
@@ -30,7 +25,24 @@
             "output": "static",
             "favicon": "./src/assets/images/favicon.png"
         },
-        "plugins": ["expo-router", "expo-font", "expo-localization", "expo-sqlite"],
+        "plugins": [
+            "expo-router",
+            "expo-font",
+            "expo-localization",
+            "expo-sqlite",
+            [
+                "expo-splash-screen",
+                {
+                    "backgroundColor": "#2A2845",
+                    "image": "./src/assets/images/splash.png",
+                    "dark": {
+                        "image": "./src/assets/images/splash.png",
+                        "backgroundColor": "#2A2845"
+                    },
+                    "imageWidth": 200
+                }
+            ]
+        ],
         "experiments": {
             "typedRoutes": true
         },

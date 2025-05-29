@@ -1,21 +1,27 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
-import { Suspense } from "react";
+import * as SplashScreen from "expo-splash-screen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { LoadingIndicator } from "../components/components";
 import { UtilsProvider, useSettings } from "../contexts/UtilsProvider";
 import { LocalDatabase } from "../db/DatabaseProvider";
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
+// Set the animation options. This is optional.
+SplashScreen.setOptions({
+    duration: 150,
+    fade: true,
+});
+
 export default function RootLayout() {
     return (
-        <Suspense fallback={LoadingIndicator}>
-            <LocalDatabase>
-                <UtilsProvider>
-                    <ThemedLayout />
-                </UtilsProvider>
-            </LocalDatabase>
-        </Suspense>
+        <LocalDatabase>
+            <UtilsProvider>
+                <ThemedLayout />
+            </UtilsProvider>
+        </LocalDatabase>
     );
 }
 
@@ -24,7 +30,7 @@ function ThemedLayout() {
 
     return (
         <ThemeProvider value={theme}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
+            <GestureHandlerRootView style={{ flex: 1 }} onLayout={() => SplashScreen.hide()}>
                 <BottomSheetModalProvider>
                     <Stack screenOptions={{ contentStyle: { backgroundColor: theme.colors.background } }}>
                         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
