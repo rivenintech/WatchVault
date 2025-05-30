@@ -69,7 +69,7 @@
     "react-native-svg": "15.11.2",
     "react-native-tab-view": "^4.0.5",
     "react-native-web": "^0.20.0",
-    "valibot": "^1.0.0-beta.9"
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
