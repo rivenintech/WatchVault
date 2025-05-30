@@ -60,7 +60,7 @@ export class API {
 
             return await response.json();
         } catch (error) {
-            console.error(error);
+            this.logError(error);
         }
     }
 
@@ -70,7 +70,7 @@ export class API {
         try {
             return v.parse(ProvidersList, data).results;
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -80,7 +80,7 @@ export class API {
         try {
             return v.parse(Region, data).results;
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -96,7 +96,7 @@ export class API {
 
             return { ...parsedData, "watch/providers": watchProvidersProcessed };
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -106,7 +106,7 @@ export class API {
         try {
             return v.parse(GenresList, data).genres;
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -122,7 +122,7 @@ export class API {
 
             return { ...parsedData, "watch/providers": watchProvidersProcessed };
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -132,7 +132,7 @@ export class API {
         try {
             return v.parse(SearchMulti, data).results;
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -144,7 +144,7 @@ export class API {
 
             return { ...parsedData, episode_count: parsedData.episodes.length };
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -154,7 +154,7 @@ export class API {
         try {
             return v.parse(EpisodeDetails, data);
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -177,7 +177,7 @@ export class API {
         try {
             return v.parse(Discover, data).results;
         } catch (error) {
-            console.log(error);
+            this.logError(error);
         }
     }
 
@@ -187,7 +187,17 @@ export class API {
         try {
             return v.parse(PersonDetails, data);
         } catch (error) {
-            console.log(error);
+            this.logError(error);
+        }
+    }
+
+    private logError(error: any) {
+        if (v.isValiError(error)) {
+            const path = error.issues[0].path?.map((p) => p.key).join(" -> ");
+            console.error(`[Valibot] Path: ${path}`);
+            console.warn(error);
+        } else {
+            console.error(error);
         }
     }
 
