@@ -166,7 +166,7 @@ const Episode = v.object({
     overview: v.string(),
     vote_average: v.number(),
     vote_count: v.number(),
-    air_date: v.string(),
+    air_date: v.nullable(v.string()),
     episode_number: v.number(),
     production_code: v.string(),
     runtime: v.nullable(v.number()),
@@ -255,8 +255,8 @@ export const MovieDetails = v.intersect([
         ),
         budget: v.number(),
         genres: v.array(Genre),
-        homepage: v.string(),
-        imdb_id: v.string(),
+        homepage: v.nullable(v.string()),
+        imdb_id: v.nullable(v.string()),
         original_title: v.string(),
         production_companies: v.array(ProductionCompany),
         production_countries: v.array(Country),
@@ -281,7 +281,7 @@ export const TvDetails = v.intersect([
         episode_run_time: v.array(v.number()),
         first_air_date: v.string(),
         genres: v.array(Genre),
-        homepage: v.string(),
+        homepage: v.nullable(v.string()),
         in_production: v.boolean(),
         languages: v.array(v.string()),
         last_air_date: v.string(),
@@ -320,22 +320,28 @@ export const PersonDetails = v.intersect([
     v.object({
         also_known_as: v.array(v.string()),
         biography: v.string(),
-        birthday: v.string(),
+        birthday: v.nullable(v.string()),
         deathday: v.nullable(v.string()),
         homepage: v.nullable(v.string()),
-        imdb_id: v.string(),
-        place_of_birth: v.string(),
+        imdb_id: v.nullable(v.string()),
+        place_of_birth: v.nullable(v.string()),
         combined_credits: v.object({
             cast: v.array(
                 v.union([
                     v.intersect([SearchMovie, v.object({ order: v.number(), character: v.nullable(v.string()), credit_id: v.string() })]),
-                    v.intersect([SearchTV, v.object({ episode_count: v.number(), character: v.nullable(v.string()), credit_id: v.string() })]),
+                    v.intersect([
+                        SearchTV,
+                        v.object({ episode_count: v.nullish(v.number()), character: v.nullable(v.string()), credit_id: v.string() }),
+                    ]),
                 ]),
             ),
             crew: v.array(
                 v.union([
                     v.intersect([SearchMovie, v.object({ department: v.string(), job: v.string(), credit_id: v.string() })]),
-                    v.intersect([SearchTV, v.object({ department: v.string(), episode_count: v.number(), job: v.string(), credit_id: v.string() })]),
+                    v.intersect([
+                        SearchTV,
+                        v.object({ department: v.string(), episode_count: v.nullish(v.number()), job: v.string(), credit_id: v.string() }),
+                    ]),
                 ]),
             ),
         }),
