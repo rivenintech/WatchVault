@@ -9,10 +9,11 @@ import {
 } from "@gorhom/bottom-sheet";
 import { BottomSheetScrollViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetScrollable/types";
 import { BottomSheetViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types";
+import { useCalendars, useLocales } from "expo-localization";
 import React, { RefObject, useCallback, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { Calendar, DateData } from "react-native-calendars";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import DateTimePicker, { DateType, useDefaultStyles } from "react-native-ui-datepicker";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate } from "../../utils/datetime";
 
@@ -112,55 +113,71 @@ type CalendarModalProps = {
 };
 
 export function CalendarModal({ modalRef, onSubmit, minDate, maxDate }: CalendarModalProps) {
-    const { colors } = useSettings().settings.theme;
-    const [selected, setSelected] = useState("");
+    const { colors, dark } = useSettings().settings.theme;
+    const [selected, setSelected] = useState<DateType>();
+    const defaultStyles = useDefaultStyles(dark ? "dark" : "light");
+    const { firstWeekday, calendar, timeZone, uses24hourClock } = useCalendars()[0];
+    const { languageCode } = useLocales()[0];
+
+    // DateTimePicker uses 0 - 6, but expo-localization uses 1 - 7
+    // https://docs.expo.dev/versions/latest/sdk/localization/#weekday
+    // https://github.com/farhoudshapouran/react-native-ui-datepicker?tab=readme-ov-file#calendar-base-props
+    const firstWeekdayNumber = firstWeekday ? (firstWeekday as number) - 1 : undefined;
+
+    const submitDate = () => {
+        if (!selected) return;
+
+        onSubmit(selected?.toString());
+        modalRef.current?.dismiss();
+    };
 
     return (
-        <DrawerModal modalRef={modalRef} enableContentPanningGesture={false}>
-            <Calendar
-                minDate={minDate}
+        <DrawerModal modalRef={modalRef}>
+            <DateTimePicker
+                mode="single"
+                locale={languageCode ?? undefined}
+                date={selected}
+                firstDayOfWeek={firstWeekdayNumber}
+                calendar={calendar === "persian" ? "jalali" : "gregory"}
+                timeZone={timeZone ?? "UTC"}
+                use12Hours={uses24hourClock === false}
+                onChange={({ date }) => setSelected(date)}
                 maxDate={maxDate}
-                disableAllTouchEventsForDisabledDays
-                enableSwipeMonths={true}
-                onDayPress={(day: DateData) => {
-                    setSelected(day.dateString);
-                }}
-                theme={{
-                    calendarBackground: colors.border,
-                    textSectionTitleColor: colors.text,
-                    dayTextColor: colors.text,
-                    monthTextColor: colors.text,
-                    selectedDayTextColor: colors.text,
-                    todayTextColor: colors.primary,
-                    arrowColor: colors.primary,
-                    textDisabledColor: colors.textSecondary,
-                    disabledArrowColor: colors.textSecondary,
-                    textMonthFontWeight: "bold",
-                    textDayHeaderFontSize: 14,
-                }}
-                markedDates={{
-                    [selected]: { selected: true, disableTouchEvent: true, selectedColor: colors.primary },
+                minDate={minDate}
+                styles={{
+                    ...defaultStyles,
+                    selected: { borderColor: colors.primary, borderWidth: 2 },
+                    selected_label: { color: colors.primary, fontWeight: "700" },
+                    button_next_image: { tintColor: colors.primary },
+                    button_prev_image: { tintColor: colors.primary },
+                    selected_month: { backgroundColor: colors.primary },
+                    selected_month_label: { color: colors.textHeading },
+                    active_year: { backgroundColor: colors.primary, color: colors.textHeading },
+                    selected_year: { backgroundColor: colors.border },
+                    selected_year_label: { color: colors.text },
                 }}
             />
             <View
                 style={{
-                    backgroundColor: colors.border,
+                    backgroundColor: colors.background,
                     paddingHorizontal: 20,
-                    paddingTop: 5,
-                    paddingBottom: 15,
+                    paddingVertical: 15,
                 }}
             >
-                <View style={{ marginLeft: "auto", flexDirection: "row", gap: 20 }}>
-                    <Pressable hitSlop={20} onPress={() => modalRef.current?.dismiss()}>
-                        <Text style={{ color: colors.primary, fontWeight: "500" }}>Cancel</Text>
+                <View style={{ flexDirection: "row", gap: 20 }}>
+                    <Pressable hitSlop={20} onPress={() => setSelected(new Date())} style={{ marginRight: "auto" }}>
+                        <Text style={{ color: colors.primary, fontWeight: "500" }}>Today</Text>
                     </Pressable>
                     <Pressable
                         hitSlop={20}
                         onPress={() => {
-                            onSubmit(selected);
+                            setSelected(undefined);
                             modalRef.current?.dismiss();
                         }}
                     >
+                        <Text style={{ color: colors.primary, fontWeight: "500" }}>Cancel</Text>
+                    </Pressable>
+                    <Pressable hitSlop={20} onPress={() => submitDate()}>
                         <Text style={{ color: colors.primary, fontWeight: "500" }}>OK</Text>
                     </Pressable>
                 </View>
