@@ -1,6 +1,7 @@
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import React, { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -34,29 +35,32 @@ export function SelectWatchProviders({
 
     return (
         <DrawerModalScroll modalRef={modalRef} onDismiss={() => onSelectedProviders()}>
-            {/* TODO: Change to BottomSheetFlashList */}
             <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 20, marginBottom: 2 }}>
                 Where To Watch ({watchProviders?.length})
             </Text>
             <Text style={{ color: colors.textSecondary, fontSize: 12, marginBottom: 10 }}>Select providers to filter the results.</Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-                {watchProviders.map((provider) => (
+            <FlashList
+                data={watchProviders}
+                numColumns={6}
+                estimatedItemSize={55}
+                extraData={selectedProvider}
+                keyExtractor={(item) => item.provider_id.toString()}
+                renderItem={({ item }) => (
                     <Pressable
-                        key={provider.provider_id}
-                        onPress={() => toggleProvider(provider.provider_id)}
+                        onPress={() => toggleProvider(item.provider_id)}
                         style={[
                             { padding: 8, borderWidth: 1, borderColor: colors.border, borderRadius: 15 },
-                            selectedProvider.includes(provider.provider_id) && { borderColor: colors.primary },
+                            selectedProvider.includes(item.provider_id) && { borderColor: colors.primary },
                         ]}
                     >
                         <Image
                             style={{ width: 38, height: 38, borderRadius: 5 }}
-                            source={getTMDBImageURL("logo", "w92", provider.logo_path)}
+                            source={getTMDBImageURL("logo", "w92", item.logo_path)}
                             transition={100}
                         />
                     </Pressable>
-                ))}
-            </View>
+                )}
+            />
 
             <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5 }}>
                 <Pressable onPress={() => setSelectedProvider([])} style={{ width: "10%", justifyContent: "center", alignItems: "center" }}>
