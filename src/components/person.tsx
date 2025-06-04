@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetFlashList } from "@gorhom/bottom-sheet";
+import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { useState } from "react";
@@ -67,7 +67,7 @@ export function PersonCreditsList({ credits }) {
     let lastYear: string | null = null;
 
     return (
-        <BottomSheetFlashList
+        <FlashList
             data={credits}
             ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
             keyExtractor={(item) => item.id.toString()}

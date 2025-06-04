@@ -222,14 +222,14 @@ export function DrawerModalTemplate({ modalRef, children, ...props }: DrawerModa
 export function DrawerModalScroll({
     modalRef,
     children,
-    style = { margin: 10 },
+    style = { padding: 10 },
     ...props
 }: DrawerModalTemplateProps & { style?: BottomSheetScrollViewProps["style"] }) {
     const insets = useSafeAreaInsets();
 
     return (
         <DrawerModalTemplate modalRef={modalRef} {...props}>
-            <BottomSheetScrollView style={[style, { marginBottom: insets.bottom }]}>{children}</BottomSheetScrollView>
+            <BottomSheetScrollView contentContainerStyle={[style, { paddingBottom: insets.bottom }]}>{children}</BottomSheetScrollView>
         </DrawerModalTemplate>
     );
 }

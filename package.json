@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
-    "@gorhom/bottom-sheet": "^5.1.5",
+    "@gorhom/bottom-sheet": "^5.1.6",
     "@legendapp/list": "^1.0.11",
     "@react-native-community/netinfo": "11.4.1",
     "@react-native-picker/picker": "2.11.0",
@@ -59,7 +59,7 @@
     "react-native-collapsible-tab-view": "^8.0.0",
     "react-native-country-codes-picker": "^2.3.5",
     "react-native-element-dropdown": "^2.12.2",
-    "react-native-gesture-handler": "~2.24.0",
+    "react-native-gesture-handler": "^2.25.0",
     "react-native-pager-view": "6.8.1",
     "react-native-quick-base64": "2.1.2",
     "react-native-reanimated": "~3.17.4",
