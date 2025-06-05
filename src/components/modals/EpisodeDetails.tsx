@@ -8,6 +8,7 @@ import { Pressable, Text, View } from "react-native";
 import { useSettings, useTMDB } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
 import { CastAndCrew } from "../MovieShowIndex";
+import { ToggleMoreText } from "../ToggleMoreText";
 import { DrawerModal } from "./modals";
 
 type EpisodeDetailsDrawerProps = {
@@ -105,7 +106,7 @@ export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef 
                             <Text style={{ color: "white", fontSize: 12 }}> {formatTime(episodeData.runtime)} </Text>
                         </View>
                         <Text style={{ color: "white", fontSize: 16, fontWeight: "500" }}>Overview</Text>
-                        <Text style={{ color: colors.text, fontSize: 12 }}>{episodeData.overview}</Text>
+                        <ToggleMoreText max_lines={3}>{episodeData.overview}</ToggleMoreText>
                         {apiData?.guest_stars && <CastAndCrew title="Guest Stars" credits={{ crew: apiData.crew, cast: apiData.guest_stars }} />}
                     </View>
                 </>

@@ -8,6 +8,7 @@ import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { ToggleMoreText } from "../components/ToggleMoreText";
 import { movieWithGenresQuery } from "../db/dbQueries";
 
 export default function MovieScreen() {
@@ -71,7 +72,7 @@ export default function MovieScreen() {
 
             <View>
                 <Text style={[styles.sectionHeading, { color: colors.textHeading }]}>Overview</Text>
-                <Text style={{ color: colors.text }}>{movieData.overview}</Text>
+                <ToggleMoreText max_lines={3}>{movieData.overview}</ToggleMoreText>
             </View>
 
             {apiMovieData && (

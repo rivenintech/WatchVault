@@ -1,17 +1,15 @@
-import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useSettings } from "../contexts/UtilsProvider";
 import { formatDate, getAge } from "../utils/datetime";
 import { getTMDBImageURL } from "../utils/images";
 import { APIResponses } from "../utils/types/apiResponses";
+import { ToggleMoreText } from "./ToggleMoreText";
 
 export function PersonDetails({ person, roles }: { person: APIResponses["person"] & { roles: { character: string }[] } }) {
     const { colors } = useSettings().settings.theme;
-    const [showText, setShowText] = useState(false);
 
     if (!person) return;
 
@@ -45,19 +43,7 @@ export function PersonDetails({ person, roles }: { person: APIResponses["person"
                     </View>
                 </View>
             </View>
-            {person.biography && (
-                <Pressable onPress={() => setShowText(!showText)} style={{ marginTop: 5 }}>
-                    <Text style={{ color: colors.text }} numberOfLines={showText ? undefined : 3}>
-                        {person.biography.split("\n")[0]}
-                    </Text>
-                    {!showText && (
-                        <View style={{ alignItems: "baseline", flexDirection: "row", gap: 5 }}>
-                            <Text style={{ color: colors.primary }}>Show More</Text>
-                            <Ionicons name="chevron-down" size={12} color={colors.primary} />
-                        </View>
-                    )}
-                </Pressable>
-            )}
+            {person.biography && <ToggleMoreText max_lines={3}>{person.biography.split("\n")[0]}</ToggleMoreText>}
         </View>
     );
 }

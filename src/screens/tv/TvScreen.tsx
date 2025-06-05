@@ -1,6 +1,7 @@
 import { LoadingIndicator } from "@/src/components/components";
 import { CastAndCrew, MovieTvPage, Recommendations, TVSeasons, WhereToWatch } from "@/src/components/MovieShowIndex";
 import SlidingScreen from "@/src/components/SlidingScreen";
+import { ToggleMoreText } from "@/src/components/ToggleMoreText";
 import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvGenresQuery, tvSeasonsQuery } from "@/src/db/dbQueries";
@@ -10,7 +11,7 @@ import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function TvScreen() {
@@ -57,9 +58,7 @@ export default function TvScreen() {
         >
             <SlidingScreen tabs={["Overview", "Seasons"]}>
                 <ScrollView contentContainerStyle={{ gap: 15 }}>
-                    <View>
-                        <Text style={{ color: colors.text }}>{showData.overview}</Text>
-                    </View>
+                    <ToggleMoreText max_lines={3}>{showData.overview}</ToggleMoreText>
 
                     {apiShowData && (
                         <>
