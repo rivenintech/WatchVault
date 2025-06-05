@@ -32,11 +32,13 @@ export function PersonDetails({ person, roles }: { person: APIResponses["person"
                             <Text style={{ color: colors.textSecondary }}>Age: </Text>
                             <Text style={{ color: colors.text }}>{getAge(person.birthday)}</Text>
                         </View>
-                        <View style={{ flexDirection: "row", width: "100%" }}>
-                            <Text style={{ color: colors.textSecondary }}>Born: </Text>
-                            <Text numberOfLines={0} style={{ color: colors.text }}>
-                                {formatDate(person.birthday, "medium")}
-                                {person.place_of_birth && `, ${person.place_of_birth}`}
+                        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                            <Text style={{ color: colors.textSecondary }}>
+                                Born:{" "}
+                                <Text style={{ color: colors.text }}>
+                                    {formatDate(person.birthday, "medium")}
+                                    {person.place_of_birth && `, ${person.place_of_birth}`}
+                                </Text>
                             </Text>
                         </View>
                         {person.deathday && (
@@ -113,11 +115,7 @@ export function PersonCreditsList({ credits }) {
                                     <Text numberOfLines={4} style={{ color: "white", marginTop: 3, fontSize: 12 }}>
                                         {item.overview}
                                     </Text>
-                                    {item.character && (
-                                        <Text numberOfLines={4} style={{ color: colors.primary, marginTop: 3, fontSize: 12 }}>
-                                            as {item.character}
-                                        </Text>
-                                    )}
+                                    {item.character && <Text style={{ color: colors.primary, marginTop: 3, fontSize: 12 }}>as {item.character}</Text>}
                                 </View>
                             </View>
                         </Link>
