@@ -48,7 +48,7 @@ export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef 
                             style={{
                                 aspectRatio: 16 / 9,
                             }}
-                            recyclingKey={apiData?.still_path}
+                            recyclingKey={apiData?.id.toString()}
                             transition={300}
                         />
                         <View

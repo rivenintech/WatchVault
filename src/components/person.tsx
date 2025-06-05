@@ -15,8 +15,13 @@ export function PersonDetails({ person, roles }: { person: APIResponses["person"
 
     return (
         <View>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-                <Image style={{ width: 100, height: 150 }} source={{ uri: getTMDBImageURL("poster", "w342", person.profile_path) }} />
+            <View style={{ flexDirection: "row", gap: 10, marginBottom: 10 }}>
+                <Image
+                    style={{ width: 100, height: 150 }}
+                    source={{ uri: getTMDBImageURL("poster", "w342", person.profile_path) }}
+                    recyclingKey={person.id.toString()}
+                    transition={200}
+                />
                 <View style={{ flex: 1 }}>
                     <View style={{ marginBottom: 10 }}>
                         <Text style={{ color: colors.textHeading, fontWeight: "500", fontSize: 16 }}>{person.name}</Text>

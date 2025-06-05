@@ -57,6 +57,7 @@ export function SelectWatchProviders({
                             style={{ width: 38, height: 38, borderRadius: 5 }}
                             source={getTMDBImageURL("logo", "w92", item.logo_path)}
                             transition={100}
+                            recyclingKey={item.provider_id.toString()}
                         />
                     </Pressable>
                 )}
