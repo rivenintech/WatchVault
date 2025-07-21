@@ -1,5 +1,6 @@
 import { ChooseTheme, ThemeList } from "@/src/constants/Themes";
 import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -7,21 +8,15 @@ import { Dropdown } from "react-native-element-dropdown";
 export default function SettingsScreen() {
     const { settings, updateSettings } = useSettings();
     const { colors } = settings.theme;
-    const [regions, setRegions] = useState<Awaited<ReturnType<typeof API.regions>>>([]);
     const [selectedRegion, setSelectedRegion] = useState(settings.region);
     const themes = ThemeList();
     const [selectedTheme, setSelectedTheme] = useState(settings.theme_name);
     const API = useTMDB();
 
-    useEffect(() => {
-        const fetchRegions = async () => {
-            const regions = await API.regions();
-
-            setRegions(regions);
-        };
-
-        fetchRegions();
-    }, [API]);
+    const { data: regions } = useQuery({
+        queryKey: ["regions"],
+        queryFn: () => API.regions(),
+    });
 
     useEffect(() => {
         updateSettings({ ...settings, region: selectedRegion, theme: ChooseTheme(selectedTheme), theme_name: selectedTheme });

@@ -133,7 +133,7 @@ const CastMemberWithRoles = v.intersect([
                 credit_id: v.string(),
                 character: v.string(),
                 episode_count: v.number(),
-            }),
+            })
         ),
         total_episode_count: v.number(),
         order: v.number(),
@@ -148,7 +148,7 @@ const CrewMemberWithJobs = v.intersect([
                 credit_id: v.string(),
                 job: v.string(),
                 episode_count: v.number(),
-            }),
+            })
         ),
         department: v.string(),
         total_episode_count: v.number(),
@@ -224,7 +224,7 @@ export const WatchProviders = v.object({
             flatrate: v.optional(v.array(Provider)),
             rent: v.optional(v.array(Provider)),
             buy: v.optional(v.array(Provider)),
-        }),
+        })
     ),
 });
 
@@ -251,7 +251,7 @@ export const MovieDetails = v.intersect([
                 id: v.number(),
                 name: v.string(),
                 poster_path: v.nullable(v.string()),
-            }),
+            })
         ),
         budget: v.number(),
         genres: v.array(Genre),
@@ -333,7 +333,7 @@ export const PersonDetails = v.intersect([
                         SearchTV,
                         v.object({ episode_count: v.nullish(v.number()), character: v.nullable(v.string()), credit_id: v.string() }),
                     ]),
-                ]),
+                ])
             ),
             crew: v.array(
                 v.union([
@@ -342,7 +342,7 @@ export const PersonDetails = v.intersect([
                         SearchTV,
                         v.object({ department: v.string(), episode_count: v.nullish(v.number()), job: v.string(), credit_id: v.string() }),
                     ]),
-                ]),
+                ])
             ),
         }),
     }),

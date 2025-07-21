@@ -1,36 +1,30 @@
 import { RenderItem } from "@/src/components/searchRenderers";
 import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
-import { APIResponses } from "@/src/utils/types/apiResponses";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
+import { useQuery } from "@tanstack/react-query";
 import { Link, router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDebounce } from "use-debounce";
 
 export default function SearchScreen() {
     const { colors } = useSettings().settings.theme;
     const [query, setQuery] = useState("");
-    const [movies, setMovies] = useState<APIResponses["search"]>();
     const API = useTMDB();
 
-    // Debouncing to reduce API calls
-    useEffect(() => {
-        const timerId = setTimeout(async () => {
-            if (query.trim() !== "") {
-                setMovies(await API.search(query));
-            } else {
-                setMovies([]);
-            }
-        }, 500);
-        return () => clearTimeout(timerId);
-    }, [query]);
+    // Using useDebounce with tanstack query to handle search input
+    const [debouncedQuery] = useDebounce(query, 500);
+    const { data: movies } = useQuery({
+        queryKey: ["search", debouncedQuery],
+        queryFn: () => API.search(debouncedQuery),
+        enabled: debouncedQuery.trim() !== "", // Only run query if debounced query is not empty
+    });
 
     const handleInputChange = (query: string) => {
         setQuery(query);
     };
-
-    if (!movies) return;
 
     return (
         // Instead of flex: 1, try: height: height (const { height } = useWindowDimensions();)
@@ -49,7 +43,7 @@ export default function SearchScreen() {
                 />
             </View>
 
-            {query.trim() !== "" ? (
+            {movies ? (
                 <FlashList
                     data={movies}
                     renderItem={({ item }) => (
@@ -59,7 +53,9 @@ export default function SearchScreen() {
                                     <RenderItem
                                         image_path={item.profile_path}
                                         text={item.name}
-                                        secondaryText={`Known for: ${item.known_for.map((movieTV) => (movieTV.media_type === "movie" ? movieTV.title : movieTV.name)).join(", ")}.`}
+                                        secondaryText={`Known for: ${item.known_for
+                                            .map((movieTV) => (movieTV.media_type === "movie" ? movieTV.title : movieTV.name))
+                                            .join(", ")}.`}
                                     />
                                 ) : item.media_type === "movie" ? (
                                     <RenderItem

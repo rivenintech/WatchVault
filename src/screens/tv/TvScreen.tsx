@@ -7,10 +7,11 @@ import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvGenresQuery, tvSeasonsQuery } from "@/src/db/dbQueries";
 import { tvShowStatusView } from "@/src/db/schema";
 import { useNetInfo } from "@react-native-community/netinfo";
+import { useQuery } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -19,7 +20,6 @@ export default function TvScreen() {
     const id = Number(idStr);
     const { settings } = useSettings();
     const { colors } = settings.theme;
-    const [apiShowData, setApiShowData] = useState<Awaited<ReturnType<typeof API.tvSeries.details>>>();
     const API = useTMDB();
     const { isInternetReachable } = useNetInfo();
 
@@ -35,16 +35,13 @@ export default function TvScreen() {
         return undefined;
     }, [localTV, localSeasons, genres]);
 
+    const { data: apiShowData } = useQuery({
+        queryKey: ["apiShowData", id],
+        queryFn: async () => localShowData || API.tvSeries.details(id, "aggregate_credits", "recommendations", "watch/providers"),
+        enabled: !!id,
+    });
+
     const showData = localShowData || apiShowData;
-
-    useEffect(() => {
-        if (!isInternetReachable) return;
-
-        (async () => {
-            const apiShowData = await API.tvSeries.details(id, "aggregate_credits", "recommendations", "watch/providers");
-            setApiShowData(apiShowData);
-        })();
-    }, [id, isInternetReachable]);
 
     return showData ? (
         <MovieTvPage

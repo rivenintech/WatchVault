@@ -3,11 +3,11 @@ import FiltersBtns from "@/src/components/Discover";
 import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
 import { MediaTypeContext } from "@/src/layouts/TabsLayout";
 import { getTMDBImageURL } from "@/src/utils/images";
-import { useNetInfo } from "@react-native-community/netinfo";
 import { FlashList } from "@shopify/flash-list";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import * as SVG from "react-native-svg";
 
@@ -26,9 +26,6 @@ export default function DiscoverScreen() {
     const ctx = useContext(MediaTypeContext);
     const listRef = useRef<FlashList<any>>(null);
     const API = useTMDB();
-    const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(1);
-    const { isInternetReachable } = useNetInfo();
 
     if (!ctx) {
         throw new Error("MediaTypeContext not found");
@@ -38,92 +35,70 @@ export default function DiscoverScreen() {
         movie: { sortBy: "popularity", genres: [], providers: [] },
         tv: { sortBy: "popularity", genres: [], providers: [] },
     });
-    const [data, setData] = useState<Awaited<ReturnType<typeof API.discover>>>();
 
-    // Fetch movies/tv in mount, on media type change and filters change
-    useEffect(() => {
-        fetchMoviesTV(1);
-    }, [filters, ctx.mediaType]);
-
-    const fetchMoviesTV = async (page: number) => {
-        // Don't fetch if loading
-        if (loading) return;
-
-        setLoading(true);
-
+    const fetchMoviesTV = async ({ pageParam }) => {
         // Fetch movies/tv with filters and current page
         const { sortBy, genres, providers } = filters[ctx.mediaType];
-        const fetchedData = await API.discover(ctx.mediaType, page, sortBy, genres, providers);
-
-        if (!fetchedData) {
-            console.error("Failed to fetch movies/tv");
-            setLoading(false);
-            return;
-        }
-
-        // Append new movies/tv
-        if (page === 1) {
-            listRef.current?.scrollToOffset({ offset: 0, animated: true });
-            setData(fetchedData);
-        } else setData((prevData = []) => [...prevData, ...fetchedData]);
-
-        setPage(page);
-        setLoading(false);
+        const fetchedData = await API.discover(ctx.mediaType, pageParam, sortBy, genres, providers);
+        return fetchedData;
     };
+
+    const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
+        queryKey: ["discover", ctx.mediaType, filters[ctx.mediaType]],
+        queryFn: fetchMoviesTV,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => lastPage?.page + 1,
+    });
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <FiltersBtns mediaType={ctx.mediaType} onChange={(filters) => setFilters(filters)} />
 
-            {data ? (
-                <FlashList
-                    ref={listRef}
-                    onEndReached={() => fetchMoviesTV(page + 1)}
-                    onEndReachedThreshold={0.2}
-                    data={data}
-                    numColumns={colsNum}
-                    keyExtractor={(item) => item.id.toString()}
-                    estimatedItemSize={150}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    ListFooterComponent={loading ? LoadingIndicator : null}
-                    renderItem={({ item }) => {
-                        const rating = Math.round(item.vote_average * 10);
-                        const ratingColors = getRatingColor(rating);
+            <FlashList
+                ref={listRef}
+                onEndReached={() => hasNextPage && !isFetching && fetchNextPage()}
+                onEndReachedThreshold={0.2}
+                data={data?.pages.flatMap((page) => page?.results)}
+                numColumns={colsNum}
+                keyExtractor={(item) => item.id.toString()}
+                estimatedItemSize={150}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
+                ListFooterComponent={isFetchingNextPage ? LoadingIndicator : null}
+                renderItem={({ item }) => {
+                    const rating = Math.round(item.vote_average * 10);
+                    const ratingColors = getRatingColor(rating);
 
-                        return (
-                            <Link href={`../${ctx.mediaType}/${item.id}`} style={styles.link}>
-                                <View style={[styles.card, { width: width / colsNum - 20 }]}>
-                                    <SVG.Svg width="40" height="40" viewBox="0 0 36 36" style={styles.svg}>
-                                        <SVG.Circle cx="18" cy="18" r="15.91549431" fill="#081c22" stroke={ratingColors.secondary} strokeWidth="2" />
-                                        <SVG.Circle
-                                            cx="18"
-                                            cy="18"
-                                            r="15.91549431"
-                                            fill="none"
-                                            stroke={ratingColors.primary}
-                                            strokeWidth="2"
-                                            strokeDasharray={`${rating}, 100`}
-                                            strokeLinecap="round"
-                                            transform="rotate(-90 18 18)"
-                                        />
-                                        <SVG.Text x="16" y="20.5" fontSize="9" textAnchor="middle" fill="white" fontWeight="bold">
-                                            {rating}%
-                                        </SVG.Text>
-                                    </SVG.Svg>
-                                    <Image
-                                        source={getTMDBImageURL("poster", "w500", item.poster_path)}
-                                        style={styles.poster}
-                                        transition={200}
-                                        recyclingKey={item.poster_path}
+                    return (
+                        <Link href={`../${ctx.mediaType}/${item.id}`} style={styles.link}>
+                            <View style={[styles.card, { width: width / colsNum - 20 }]}>
+                                <SVG.Svg width="40" height="40" viewBox="0 0 36 36" style={styles.svg}>
+                                    <SVG.Circle cx="18" cy="18" r="15.91549431" fill="#081c22" stroke={ratingColors.secondary} strokeWidth="2" />
+                                    <SVG.Circle
+                                        cx="18"
+                                        cy="18"
+                                        r="15.91549431"
+                                        fill="none"
+                                        stroke={ratingColors.primary}
+                                        strokeWidth="2"
+                                        strokeDasharray={`${rating}, 100`}
+                                        strokeLinecap="round"
+                                        transform="rotate(-90 18 18)"
                                     />
-                                </View>
-                            </Link>
-                        );
-                    }}
-                />
-            ) : (
-                <View></View>
-            )}
+                                    <SVG.Text x="16" y="20.5" fontSize="9" textAnchor="middle" fill="white" fontWeight="bold">
+                                        {rating}%
+                                    </SVG.Text>
+                                </SVG.Svg>
+                                <Image
+                                    source={getTMDBImageURL("poster", "w500", item.poster_path)}
+                                    style={styles.poster}
+                                    transition={200}
+                                    recyclingKey={item.poster_path}
+                                />
+                            </View>
+                        </Link>
+                    );
+                }}
+            />
         </View>
     );
 }

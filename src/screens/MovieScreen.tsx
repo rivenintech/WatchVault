@@ -3,10 +3,10 @@ import { CastAndCrew, MovieTvPage, Recommendations, WhereToWatch } from "@/src/c
 import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { moviesInDB, moviesToGenres } from "@/src/db/schema";
+import { useQuery } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ToggleMoreText } from "../components/ToggleMoreText";
 import { movieWithGenresQuery } from "../db/dbQueries";
@@ -16,19 +16,17 @@ export default function MovieScreen() {
     const id = Number(idStr);
     const { colors } = useSettings().settings.theme;
     const API = useTMDB();
-    const [apiMovieData, setApiMovieData] = useState<Awaited<ReturnType<typeof API.movies.details>>>();
 
     const localMovieData = useLiveQuery(movieWithGenresQuery(id)).data;
 
+    const { data: apiMovieData } = useQuery({
+        queryKey: ["movieDetails", id],
+        queryFn: () => API.movies.details(id, "credits", "recommendations", "watch/providers"),
+        enabled: !!id,
+    });
+
     // Merge local and API data
     const movieData = localMovieData || apiMovieData;
-
-    // Fetch movie from API
-    useEffect(() => {
-        (async () => {
-            setApiMovieData(await API.movies.details(id, "credits", "recommendations", "watch/providers"));
-        })();
-    }, [id]);
 
     const handleWatchedDateChange = async (date: string | null | undefined) => {
         // Delete movie

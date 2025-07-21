@@ -8,10 +8,11 @@ import { tvEpisodesInDB, tvInDB, tvSeasonsInDB, tvToGenres } from "@/src/db/sche
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
+import { useQuery } from "@tanstack/react-query";
 import { asc, count, eq, getTableColumns } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,7 +22,6 @@ export default function TvSeasonScreen() {
     const { settings } = useSettings();
     const { colors } = settings.theme;
     const [isWatched, setIsWatched] = useState(false);
-    const [apiSeasonData, setApiSeasonData] = useState<Awaited<ReturnType<typeof API.tvSeries.seasons.details>>>();
     const watchedDrawerRef = useRef<BottomSheetModal>(null);
     const episodeDetailsRef = useRef<BottomSheetModal>(null);
     const [currentEpisode, setCurrentEpisode] = useState();
@@ -30,7 +30,7 @@ export default function TvSeasonScreen() {
     const localSeason = useLiveQuery(
         LocalDB.query.tvSeasonsInDB.findFirst({
             where: eq(tvSeasonsInDB.id, id),
-        }),
+        })
     ).data;
 
     const localEpisodes = useLiveQuery(
@@ -38,13 +38,13 @@ export default function TvSeasonScreen() {
             .from(tvEpisodesInDB)
             .innerJoin(tvSeasonsInDB, eq(tvSeasonsInDB.id, tvEpisodesInDB.season_id))
             .where(eq(tvEpisodesInDB.season_id, id))
-            .orderBy(asc(tvEpisodesInDB.episode_number)),
+            .orderBy(asc(tvEpisodesInDB.episode_number))
     ).data;
 
     const localEpisodeCount = useLiveQuery(
         LocalDB.select({ watched_episodes: count(tvEpisodesInDB.watched_date), episode_count: count(tvEpisodesInDB.id) })
             .from(tvEpisodesInDB)
-            .where(eq(tvEpisodesInDB.season_id, id)),
+            .where(eq(tvEpisodesInDB.season_id, id))
     ).data[0];
 
     // Merge these queries after this is fixed
@@ -52,14 +52,11 @@ export default function TvSeasonScreen() {
     const localSeasonData =
         localSeason && localEpisodes && localEpisodeCount ? { ...localSeason, episodes: localEpisodes, ...localEpisodeCount } : undefined;
 
-    const seasonData = localSeasonData || apiSeasonData;
-
-    useEffect(() => {
-        (async () => {
-            const apiSeasonData = await API.tvSeries.seasons.details(showID, seasonNumber);
-            setApiSeasonData(apiSeasonData);
-        })();
-    }, [id]);
+    const { data: seasonData } = useQuery({
+        queryKey: ["apiSeasonData", showID, seasonNumber],
+        queryFn: async () => localSeasonData || API.tvSeries.seasons.details(showID, seasonNumber),
+        enabled: !!showID,
+    });
 
     if (!seasonData) return LoadingIndicator;
 
@@ -131,8 +128,6 @@ export default function TvSeasonScreen() {
             />
         );
     };
-
-    console.log(isWatched);
 
     return (
         <SafeAreaView>

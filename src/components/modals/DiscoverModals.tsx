@@ -10,7 +10,7 @@ import { DrawerModal, DrawerModalScroll } from "./modals";
 
 type SelectWatchProvidersProps = {
     modalRef: RefObject<BottomSheetModal>;
-    watchProviders: { provider_id: number; logo_path: string }[];
+    watchProviders?: { provider_id: number; logo_path: string }[];
     selectedProvider: number[];
     setSelectedProvider: (selectedGenres: number[]) => void;
     onSelectedProviders: () => void;

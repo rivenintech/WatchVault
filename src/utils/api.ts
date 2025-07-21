@@ -175,7 +175,7 @@ export class API {
         );
 
         try {
-            return v.parse(Discover, data).results;
+            return v.parse(Discover, data);
         } catch (error) {
             this.logError(error);
         }

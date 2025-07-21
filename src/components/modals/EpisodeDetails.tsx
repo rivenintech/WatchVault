@@ -1,9 +1,9 @@
 import { getTMDBImageURL } from "@/src/utils/images";
-import { APIResponses } from "@/src/utils/types/apiResponses";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
-import React, { RefObject, useEffect, useState } from "react";
+import React, { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings, useTMDB } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
@@ -13,7 +13,7 @@ import { DrawerModal } from "./modals";
 
 type EpisodeDetailsDrawerProps = {
     drawerRef: RefObject<BottomSheetModal>;
-    episodeData: {
+    episodeData?: {
         show_id: number;
         season_number: number;
         episode_number: number;
@@ -29,14 +29,13 @@ type EpisodeDetailsDrawerProps = {
 
 export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef }: EpisodeDetailsDrawerProps) {
     const { colors } = useSettings().settings.theme;
-    const [apiData, setApiData] = useState<APIResponses["tvSeries"]["episodes"]["details"]>();
     const API = useTMDB();
 
-    useEffect(() => {
-        (async () => {
-            setApiData(await API.tvSeries.episodes.details(episodeData.show_id, episodeData.season_number, episodeData.episode_number));
-        })();
-    }, [episodeData]);
+    const { data: apiData } = useQuery({
+        queryKey: ["episodeDetails", episodeData?.show_id, episodeData?.season_number, episodeData?.episode_number],
+        queryFn: () => API.tvSeries.episodes.details(episodeData.show_id, episodeData.season_number, episodeData.episode_number),
+        enabled: !!episodeData,
+    });
 
     return (
         <DrawerModal modalRef={drawerRef} style={{}}>
