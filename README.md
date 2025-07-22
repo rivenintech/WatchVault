@@ -70,6 +70,7 @@
 * [![Expo][Expo]][Expo-url]
 * [![React Native][ReactNative]][ReactNative-url]
 * [![TypeScript][TypeScript]][TypeScript-url]
+* [![React Query][react-query]][react-query-url]
 * [![DrizzleORM][DrizzleORM]][DrizzleORM-url]
 * [![Jest][Jest]][Jest-url]
 * [![TMDB][TMDB]][TMDB-url]
@@ -181,6 +182,8 @@ _This product uses the TMDB API but is not endorsed or certified by TMDB._
 [ReactNative-url]: https://reactnative.dev/
 [TypeScript]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
 [TypeScript-url]: https://www.typescriptlang.org/
+[react-query]: https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white
+[react-query-url]: https://tanstack.com/query
 [DrizzleORM]: https://img.shields.io/badge/Drizzle_ORM-000000?style=for-the-badge&logo=drizzle&logoColor=C5F74F
 [DrizzleORM-url]: https://orm.drizzle.team/
 [Jest]: https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white
