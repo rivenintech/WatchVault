@@ -67,7 +67,7 @@ export default function MoviesList() {
             <SlidingScreen tabs={TABS} containerStyle={{ height: "100%", width: "100%" }}>
                 {TABS.map((status) => (
                     <View key={status} style={styles.flex1}>
-                        <FlashList data={moviesData[status]} renderItem={renderItem} estimatedItemSize={2} />
+                        <FlashList data={moviesData[status]} renderItem={renderItem} />
                     </View>
                 ))}
             </SlidingScreen>

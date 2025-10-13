@@ -73,11 +73,7 @@ export default function ShowsList() {
             <SlidingScreen tabs={TABS} containerStyle={{ height: "100%", width: "100%" }}>
                 {TABS.map((status) => (
                     <View key={status} style={{ flex: 1 }}>
-                        <FlashList
-                            data={showsData.filter((item) => item.status === status.toLowerCase())}
-                            renderItem={renderItem}
-                            estimatedItemSize={2}
-                        />
+                        <FlashList data={showsData.filter((item) => item.status === status.toLowerCase())} renderItem={renderItem} />
                     </View>
                 ))}
             </SlidingScreen>

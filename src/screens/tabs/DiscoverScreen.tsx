@@ -61,7 +61,6 @@ export default function DiscoverScreen() {
                 data={data?.pages.flatMap((page) => page?.results)}
                 numColumns={colsNum}
                 keyExtractor={(item) => item.id.toString()}
-                estimatedItemSize={150}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 ListFooterComponent={isFetchingNextPage ? LoadingIndicator : null}
                 renderItem={({ item }) => {

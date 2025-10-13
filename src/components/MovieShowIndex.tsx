@@ -106,7 +106,6 @@ export function WhereToWatch({ watchProviders }: WhereToWatchProps) {
                     data={watchProviders.providers}
                     showsHorizontalScrollIndicator={false}
                     horizontal={true}
-                    estimatedItemSize={100}
                     ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
                 />
             </View>
@@ -170,7 +169,6 @@ export function CastAndCrew({ credits, title }: CastAndCrewProps) {
                     )}
                     data={transformedData}
                     horizontal={true}
-                    estimatedItemSize={150}
                     ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
                     renderScrollComponent={ScrollView}
                     showsHorizontalScrollIndicator={false}
@@ -208,7 +206,6 @@ export function Recommendations({ recommendations }: RecommendationsProps) {
                     )}
                     data={recommendations}
                     horizontal={true}
-                    estimatedItemSize={150}
                     ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
                     renderScrollComponent={ScrollView}
                     showsHorizontalScrollIndicator={false}

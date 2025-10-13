@@ -64,7 +64,6 @@ export function PersonCreditsList({ credits }) {
             data={credits}
             ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
             keyExtractor={(item) => item.id.toString()}
-            estimatedItemSize={22}
             renderItem={({ item }) => {
                 const year = item.media_type === "movie" ? item.release_date.split("-")[0] : item.first_air_date.split("-")[0];
                 const isSameYear = year === lastYear;

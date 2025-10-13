@@ -42,7 +42,6 @@ export function SelectWatchProviders({
             <FlashList
                 data={watchProviders}
                 numColumns={6}
-                estimatedItemSize={55}
                 extraData={selectedProvider}
                 keyExtractor={(item) => item.provider_id.toString()}
                 renderItem={({ item }) => (
