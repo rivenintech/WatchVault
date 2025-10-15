@@ -274,46 +274,44 @@ export const MovieDetails = v.intersect([
     }),
 ]);
 
-export const TvDetails = v.intersect([
-    CommonMediaInfo,
-    v.object({
-        created_by: v.array(Creator),
-        episode_run_time: v.array(v.number()),
-        first_air_date: v.string(),
-        genres: v.array(Genre),
-        homepage: v.nullable(v.string()),
-        in_production: v.boolean(),
-        languages: v.array(v.string()),
-        last_air_date: v.string(),
-        last_episode_to_air: Episode,
-        name: v.string(),
-        next_episode_to_air: v.nullable(Episode),
-        networks: v.array(ProductionCompany),
-        number_of_episodes: v.number(),
-        number_of_seasons: v.number(),
-        origin_country: v.array(v.string()),
-        original_name: v.string(),
-        popularity: v.number(),
-        production_companies: v.array(ProductionCompany),
-        production_countries: v.array(Country),
-        seasons: v.array(Season),
-        spoken_languages: v.array(Language),
-        status: v.string(),
-        tagline: v.string(),
-        type: v.string(),
-        recommendations: v.nullish(Recommendations),
-        "watch/providers": v.nullish(WatchProviders),
-        aggregate_credits: v.nullish(AggregateCredits),
-    }),
-]);
+export const TvDetails = v.object({
+    ...CommonMediaInfo.entries,
+    created_by: v.array(Creator),
+    episode_run_time: v.array(v.number()),
+    first_air_date: v.string(),
+    genres: v.array(Genre),
+    homepage: v.nullable(v.string()),
+    in_production: v.boolean(),
+    languages: v.array(v.string()),
+    last_air_date: v.string(),
+    last_episode_to_air: Episode,
+    name: v.string(),
+    next_episode_to_air: v.nullable(Episode),
+    networks: v.array(ProductionCompany),
+    number_of_episodes: v.number(),
+    number_of_seasons: v.number(),
+    origin_country: v.array(v.string()),
+    original_name: v.string(),
+    popularity: v.number(),
+    production_companies: v.array(ProductionCompany),
+    production_countries: v.array(Country),
+    seasons: v.array(Season),
+    spoken_languages: v.array(Language),
+    status: v.string(),
+    tagline: v.string(),
+    type: v.string(),
+    recommendations: v.nullish(Recommendations),
+    "watch/providers": v.nullish(WatchProviders),
+    aggregate_credits: v.nullish(AggregateCredits),
+});
 
-export const SeasonDetails = v.intersect([
-    v.omit(Season, ["episode_count"]),
-    v.object({
-        _id: v.string(),
-        episodes: v.array(v.intersect([EpisodeDetails, v.object({ show_id: v.number() })])),
-    }),
-]);
+export const SeasonDetails = v.object({
+    ...v.omit(Season, ["episode_count"]).entries,
+    _id: v.string(),
+    episodes: v.array(v.intersect([EpisodeDetails, v.object({ show_id: v.number() })])),
+});
+
+export const TvDetailsWithSeasons = v.objectWithRest(TvDetails.entries, v.omit(SeasonDetails, ["id"]));
 
 export const PersonDetails = v.intersect([
     v.omit(CommonPersonInfo, ["original_name"]),

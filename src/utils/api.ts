@@ -12,6 +12,7 @@ import {
     SearchMulti,
     SeasonDetails,
     TvDetails,
+    TvDetailsWithSeasons,
     type WatchProviders,
 } from "./apiSchemas";
 
@@ -33,6 +34,7 @@ export class API {
         episodes: {
             details: this.getEpisodeDetails.bind(this),
         },
+        detailsWithSeasonsAndEpisodes: this.getTVWithSeasonsAndEpisodes.bind(this),
     };
     person = this.personDetails.bind(this);
     genresList = this.getGenresList.bind(this);
@@ -126,6 +128,39 @@ export class API {
         }
     }
 
+    private async getTVWithSeasonsAndEpisodes(id: number, seasonKeys: string[]) {
+        // Split append_to_response into chunks of 20 (TMDB limit)
+        const seasonKeysChunks = this.splitArrayIntoChunks(seasonKeys, 20);
+
+        try {
+            const mergedData = {};
+
+            for (const chunk of seasonKeysChunks) {
+                const data = await this.fetchTMDB(`tv/${id}?language=${this.settings.locale}&append_to_response=${chunk.join(",")}`);
+                Object.assign(mergedData, data);
+            }
+
+            const parsedData = v.parse(TvDetailsWithSeasons, mergedData);
+
+            return parsedData;
+        } catch (error) {
+            this.logError(error);
+        }
+    }
+
+    private splitArrayIntoChunks(array: any[], chunkSize: number) {
+        if (chunkSize <= 0) throw new Error("Chunk size must be greater than 0");
+
+        const chunks = [];
+
+        for (let i = 0; i < array.length; i += chunkSize) {
+            const chunk = array.slice(i, i + chunkSize);
+            chunks.push(chunk);
+        }
+
+        return chunks;
+    }
+
     private async searchTMDB(searchQuery: string) {
         const data = await this.fetchTMDB(`search/multi?language=${this.settings.locale}&query=${searchQuery}`);
 
@@ -163,7 +198,7 @@ export class API {
         page: number,
         sortBy: "popularity" | "rating",
         genres?: number[],
-        watchProviders?: number[],
+        watchProviders?: number[]
     ) {
         const sortType = sortBy === "popularity" ? "popularity.desc" : "vote_average.desc&vote_count.gte=100";
         const genresList = genres ? `&with_genres=${genres?.join("|")}` : "";
@@ -171,7 +206,7 @@ export class API {
 
         const path = mediaType === "tv" ? "tv?watch_region=" : "movie?include_video=false&region=";
         const data = await this.fetchTMDB(
-            `discover/${path}${this.settings.region}&language=${this.settings.locale}&page=${page}&sort_by=${sortType}${genresList}${watchProvidersList}`,
+            `discover/${path}${this.settings.region}&language=${this.settings.locale}&page=${page}&sort_by=${sortType}${genresList}${watchProvidersList}`
         );
 
         try {
@@ -234,52 +269,3 @@ export class API {
         return { link: localeData.link, providers: sortedProviders };
     }
 }
-
-/**
- * Fetches a TV show from The Movie Database (TMDB) API, including all episodes.
- *
- * @param seriesId The ID of the TV show to retrieve
- * @returns The TV show as a processed `TVFromAPI` object with all episodes, or `undefined` if the request fails
- */
-// private async getTVwithEpisodes(seriesId: number) {
-//     // Function to split array into chunks
-//     function splitIntoChunks(array: any, chunkSize: number) {
-//         const chunks = [];
-//         for (let i = 0; i < array.length; i += chunkSize) {
-//             chunks.push(array.slice(i, i + chunkSize));
-//         }
-//         return chunks;
-//     }
-
-//     const tvSeries = await this.getTV(seriesId);
-
-//     if (!tvSeries) return;
-
-//     // Get all season numbers into an array
-//     const seasonNumbers = tvSeries.seasons.map((season) => `season/${season.season_number}`);
-
-//     // Split into chunks of 20
-//     const seasonChunks = splitIntoChunks(seasonNumbers, 20);
-
-//     // Fetch data for each chunk
-//     const responses = await Promise.all(
-//         seasonChunks.map((chunk) =>
-//             this.fetchTMDB<{ [key: string]: TVSeason } & RawTVFromAPI>(
-//                 `tv/${seriesId}?language=${this.settings.locale}&append_to_response=${chunk.join(",")}`
-//             )
-//         )
-//     );
-
-//     const seasons: TVSeason[] = [];
-//     responses.forEach((data) => {
-//         if (!data) return tvSeries;
-
-//         seasonNumbers.forEach((seasonNumber) => {
-//             if (data[seasonNumber]) {
-//                 seasons.push(data[seasonNumber]);
-//             }
-//         });
-//     });
-
-//     return { ...tvSeries, seasons: seasons };
-// }

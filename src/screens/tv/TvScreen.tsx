@@ -43,12 +43,27 @@ export default function TvScreen() {
 
     const showData = localShowData || apiShowData;
 
+    const seasonKeys = showData?.seasons.map((season) => `season/${season.season_number}`);
+
+    const { data: tvWithAllEpisodes } = useQuery({
+        queryKey: ["tvWithAllEpisodes", id],
+        queryFn: async () => API.tvSeries.detailsWithSeasonsAndEpisodes(id, seasonKeys),
+        enabled: !!seasonKeys,
+    });
+
+    const totalRuntime = useMemo(() => {
+        return seasonKeys?.reduce(
+            (total, season) => total + (tvWithAllEpisodes?.[season]?.episodes.reduce((total, ep) => total + (ep.runtime || 0), 0) || 0),
+            0
+        );
+    }, [seasonKeys]);
+
     return showData ? (
         <MovieTvPage
             backdrop_path={showData.backdrop_path}
             poster_path={showData.poster_path}
             release_date={showData.first_air_date}
-            runtime={showData.total_runtime}
+            runtime={totalRuntime}
             title={showData.name}
             genres={showData.genres}
             localData={Boolean(localShowData)}
