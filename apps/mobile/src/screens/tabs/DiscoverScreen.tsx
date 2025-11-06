@@ -1,12 +1,14 @@
 import { LoadingIndicator } from "@/src/components/components";
 import FiltersBtns from "@/src/components/Discover";
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { MediaTypeContext } from "@/src/layouts/TabsLayout";
+import { tmdbClient } from "@/src/utils/apiClient";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { FlashList } from "@shopify/flash-list";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
+import { parseResponse } from "hono/client";
 import { useContext, useRef, useState } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import * as SVG from "react-native-svg";
@@ -21,11 +23,11 @@ const getRatingColor = (rating: number) => {
 };
 
 export default function DiscoverScreen() {
-    const { colors } = useSettings().settings.theme;
+    const { settings } = useSettings();
+    const { colors } = settings.theme;
     const { width } = useWindowDimensions();
     const ctx = useContext(MediaTypeContext);
     const listRef = useRef<FlashList<any>>(null);
-    const API = useTMDB();
 
     if (!ctx) {
         throw new Error("MediaTypeContext not found");
@@ -36,16 +38,31 @@ export default function DiscoverScreen() {
         tv: { sortBy: "popularity", genres: [], providers: [] },
     });
 
-    const fetchMoviesTV = async ({ pageParam }) => {
+    const fetchMoviesTV = async ({ pageParam }: { pageParam: number }) => {
         // Fetch movies/tv with filters and current page
         const { sortBy, genres, providers } = filters[ctx.mediaType];
-        const fetchedData = await API.discover(ctx.mediaType, pageParam, sortBy, genres, providers);
+        const fetchedData = await parseResponse(
+            tmdbClient.discover[":mediaType"].$get({
+                param: {
+                    mediaType: ctx.mediaType,
+                },
+                query: {
+                    page: pageParam.toString(),
+                    sortBy,
+                    genres: genres.map(String),
+                    watchProviders: providers.map(String),
+                    region: settings.region,
+                    language: settings.locale,
+                },
+            })
+        );
+
         return fetchedData;
     };
 
     const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useInfiniteQuery({
         queryKey: ["discover", ctx.mediaType, filters[ctx.mediaType]],
-        queryFn: fetchMoviesTV,
+        queryFn: ({ pageParam }) => fetchMoviesTV({ pageParam }),
         initialPageParam: 1,
         getNextPageParam: (lastPage) => lastPage?.page + 1,
     });

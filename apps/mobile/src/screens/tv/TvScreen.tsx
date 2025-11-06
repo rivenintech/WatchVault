@@ -2,15 +2,17 @@ import { LoadingIndicator } from "@/src/components/components";
 import { CastAndCrew, MovieTvPage, Recommendations, TVSeasons, WhereToWatch } from "@/src/components/MovieShowIndex";
 import SlidingScreen from "@/src/components/SlidingScreen";
 import { ToggleMoreText } from "@/src/components/ToggleMoreText";
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvGenresQuery, tvSeasonsQuery } from "@/src/db/dbQueries";
 import { tvShowStatusView } from "@/src/db/schema";
+import { tmdbClient } from "@/src/utils/apiClient";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useQuery } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
+import { parseResponse } from "hono/client";
 import React, { useMemo } from "react";
 import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -20,7 +22,6 @@ export default function TvScreen() {
     const id = Number(idStr);
     const { settings } = useSettings();
     const { colors } = settings.theme;
-    const API = useTMDB();
     const { isInternetReachable } = useNetInfo();
 
     const localTV = useLiveQuery(LocalDB.select().from(tvShowStatusView).where(eq(tvShowStatusView.id, id))).data[0];
@@ -37,26 +38,34 @@ export default function TvScreen() {
 
     const { data: apiShowData } = useQuery({
         queryKey: ["apiShowData", id],
-        queryFn: async () => localShowData || API.tvSeries.details(id, "aggregate_credits", "recommendations", "watch/providers"),
+        queryFn: () =>
+            parseResponse(
+                tmdbClient.tv[":id"].$get({
+                    param: {
+                        id: id.toString(),
+                    },
+                    query: {
+                        language: settings.locale,
+                        region: settings.region,
+                    },
+                })
+            ),
         enabled: !!id,
     });
 
     const showData = localShowData || apiShowData;
 
-    const seasonKeys = showData?.seasons.map((season) => `season/${season.season_number}`);
-
-    const { data: tvWithAllEpisodes } = useQuery({
-        queryKey: ["tvWithAllEpisodes", id],
-        queryFn: async () => API.tvSeries.detailsWithSeasonsAndEpisodes(id, seasonKeys),
-        enabled: !!seasonKeys,
+    const { data: totalRuntime } = useQuery({
+        queryKey: ["totalRuntime", id],
+        queryFn: () =>
+            parseResponse(
+                tmdbClient.tv[":id"]["total-runtime"].$get({
+                    param: {
+                        id: id.toString(),
+                    },
+                })
+            ),
     });
-
-    const totalRuntime = useMemo(() => {
-        return seasonKeys?.reduce(
-            (total, season) => total + (tvWithAllEpisodes?.[season]?.episodes.reduce((total, ep) => total + (ep.runtime || 0), 0) || 0),
-            0
-        );
-    }, [seasonKeys]);
 
     return showData ? (
         <MovieTvPage

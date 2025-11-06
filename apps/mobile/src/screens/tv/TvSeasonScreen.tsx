@@ -2,9 +2,10 @@ import { TvEpisodeItem } from "@/src/components/TvComponents";
 import { LoadingIndicator } from "@/src/components/components";
 import { EpisodeDetailsDrawer } from "@/src/components/modals/EpisodeDetails";
 import { WatchedDrawer } from "@/src/components/modals/modals";
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvEpisodesInDB, tvInDB, tvSeasonsInDB, tvToGenres } from "@/src/db/schema";
+import { tmdbClient } from "@/src/utils/apiClient";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
@@ -12,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { asc, count, eq, getTableColumns } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { Stack, router, useLocalSearchParams } from "expo-router";
+import { parseResponse } from "hono/client";
 import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,7 +27,6 @@ export default function TvSeasonScreen() {
     const watchedDrawerRef = useRef<BottomSheetModal>(null);
     const episodeDetailsRef = useRef<BottomSheetModal>(null);
     const [currentEpisode, setCurrentEpisode] = useState();
-    const API = useTMDB();
 
     const localSeason = useLiveQuery(
         LocalDB.query.tvSeasonsInDB.findFirst({
@@ -54,7 +55,19 @@ export default function TvSeasonScreen() {
 
     const { data: seasonData } = useQuery({
         queryKey: ["apiSeasonData", showID, seasonNumber],
-        queryFn: async () => localSeasonData || API.tvSeries.seasons.details(showID, seasonNumber),
+        queryFn: async () =>
+            localSeasonData ||
+            parseResponse(
+                tmdbClient.tv[":id"].season[":seasonNumber"].$get({
+                    param: {
+                        id: showID.toString(),
+                        seasonNumber: seasonNumber.toString(),
+                    },
+                    query: {
+                        language: settings.locale,
+                    },
+                })
+            ),
         enabled: !!showID,
     });
 
@@ -79,7 +92,16 @@ export default function TvSeasonScreen() {
         } else {
             // Add show to db
             // Add TV Series
-            const tv = await API.tvSeries.details(showID);
+            const tv = await parseResponse(
+                tmdbClient.tv[":id"]["to-local-db"].$get({
+                    param: {
+                        id: showID.toString(),
+                    },
+                    query: {
+                        language: settings.locale,
+                    },
+                })
+            );
 
             if (!tv) return;
 
@@ -100,11 +122,9 @@ export default function TvSeasonScreen() {
 
             // Insert episodes
             for (const season of tv.seasons) {
-                const episodes = (await API.tvSeries.seasons.details(tv.id, season.season_number))?.episodes;
+                if (!season.episodes) return;
 
-                if (!episodes) return;
-
-                await LocalDB.insert(tvEpisodesInDB).values(episodes.map((episode) => ({ ...episode, season_id: season.id })));
+                await LocalDB.insert(tvEpisodesInDB).values(season.episodes.map((episode) => ({ ...episode, season_id: season.id })));
             }
 
             await LocalDB.update(tvEpisodesInDB).set({ watched_date: selectedDate }).where(eq(tvEpisodesInDB.id, currentEpisode.id));

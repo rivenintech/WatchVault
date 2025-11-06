@@ -1,27 +1,40 @@
 import { WatchedWatchlistBtn } from "@/src/components/Movie";
 import { CastAndCrew, MovieTvPage, Recommendations, WhereToWatch } from "@/src/components/MovieShowIndex";
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { moviesInDB, moviesToGenres } from "@/src/db/schema";
 import { useQuery } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
+import { parseResponse } from "hono/client";
 import { StyleSheet, Text, View } from "react-native";
 import { ToggleMoreText } from "../components/ToggleMoreText";
 import { movieWithGenresQuery } from "../db/dbQueries";
+import { tmdbClient } from "../utils/apiClient";
 
 export default function MovieScreen() {
     const { id: idStr } = useLocalSearchParams();
     const id = Number(idStr);
-    const { colors } = useSettings().settings.theme;
-    const API = useTMDB();
+    const { settings } = useSettings();
+    const { colors } = settings.theme;
 
     const localMovieData = useLiveQuery(movieWithGenresQuery(id)).data;
 
     const { data: apiMovieData } = useQuery({
         queryKey: ["movieDetails", id],
-        queryFn: () => API.movies.details(id, "credits", "recommendations", "watch/providers"),
+        queryFn: () =>
+            parseResponse(
+                tmdbClient.movie[":id"].$get({
+                    param: {
+                        id: id.toString(),
+                    },
+                    query: {
+                        language: settings.locale,
+                        region: settings.region,
+                    },
+                })
+            ),
         enabled: !!id,
     });
 

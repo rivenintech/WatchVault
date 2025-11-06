@@ -1,9 +1,11 @@
 import { ChooseTheme, ThemeList } from "@/src/constants/Themes";
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { useQuery } from "@tanstack/react-query";
+import { parseResponse } from "hono/client";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import { tmdbClient } from "../utils/apiClient";
 
 export default function SettingsScreen() {
     const { settings, updateSettings } = useSettings();
@@ -11,11 +13,17 @@ export default function SettingsScreen() {
     const [selectedRegion, setSelectedRegion] = useState(settings.region);
     const themes = ThemeList();
     const [selectedTheme, setSelectedTheme] = useState(settings.theme_name);
-    const API = useTMDB();
 
     const { data: regions } = useQuery({
         queryKey: ["regions"],
-        queryFn: () => API.regions(),
+        queryFn: () =>
+            parseResponse(
+                tmdbClient.configuration.regions.$get({
+                    query: {
+                        language: settings.locale,
+                    },
+                })
+            ),
     });
 
     useEffect(() => {
@@ -41,7 +49,7 @@ export default function SettingsScreen() {
                     search
                     maxHeight={300}
                     value={selectedRegion}
-                    data={regions}
+                    data={regions?.results || []}
                     valueField="iso_3166_1"
                     labelField="english_name"
                     placeholder="Select region"

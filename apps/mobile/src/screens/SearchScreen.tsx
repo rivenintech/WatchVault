@@ -1,24 +1,34 @@
 import { RenderItem } from "@/src/components/searchRenderers";
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { Link, router } from "expo-router";
+import { parseResponse } from "hono/client";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDebounce } from "use-debounce";
+import { tmdbClient } from "../utils/apiClient";
 
 export default function SearchScreen() {
-    const { colors } = useSettings().settings.theme;
+    const { settings } = useSettings();
+    const { colors } = settings.theme;
     const [query, setQuery] = useState("");
-    const API = useTMDB();
 
     // Using useDebounce with tanstack query to handle search input
     const [debouncedQuery] = useDebounce(query, 500);
     const { data: movies } = useQuery({
         queryKey: ["search", debouncedQuery],
-        queryFn: () => API.search(debouncedQuery),
+        queryFn: () =>
+            parseResponse(
+                tmdbClient.search.$get({
+                    query: {
+                        language: settings.locale,
+                        q: debouncedQuery,
+                    },
+                })
+            ),
         enabled: debouncedQuery.trim() !== "", // Only run query if debounced query is not empty
     });
 
@@ -45,7 +55,7 @@ export default function SearchScreen() {
 
             {movies ? (
                 <FlashList
-                    data={movies}
+                    data={movies.results}
                     renderItem={({ item }) => (
                         <Link href={`/${item.media_type}/${item.id}`} asChild>
                             <Pressable style={styles.listItemContainer}>

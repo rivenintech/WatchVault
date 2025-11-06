@@ -5,10 +5,22 @@ import { Text, View } from "react-native";
 import { useSettings } from "../contexts/UtilsProvider";
 import { formatDate, getAge } from "../utils/datetime";
 import { getTMDBImageURL } from "../utils/images";
-import { APIResponses } from "../utils/types/apiResponses";
 import { ToggleMoreText } from "./ToggleMoreText";
 
-export function PersonDetails({ person, roles }: { person: APIResponses["person"] & { roles: { character: string }[] } }) {
+type PersonDetailsProps = {
+    person: {
+        id: number;
+        name: string;
+        profile_path: string | null;
+        birthday: string;
+        deathday: string | null;
+        place_of_birth: string | null;
+        biography: string | null;
+    };
+    roles: { character: string }[];
+};
+
+export function PersonDetails({ person, roles }: PersonDetailsProps) {
     const { colors } = useSettings().settings.theme;
 
     if (!person) return;

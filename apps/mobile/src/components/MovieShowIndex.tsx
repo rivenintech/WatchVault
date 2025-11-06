@@ -195,7 +195,7 @@ export function Recommendations({ recommendations }: RecommendationsProps) {
             <View style={{ height: 150 }}>
                 <FlashList
                     renderItem={({ item }) => (
-                        <Link href={`/${item.media_type}/${item.id}`} style={{ aspectRatio: 2 / 3 }} replace>
+                        <Link href={`/${item.media_type}/${item.id}`} style={{ aspectRatio: 2 / 3, width: 100 }} replace>
                             <Image
                                 style={{ width: "100%", height: "100%" }}
                                 source={getTMDBImageURL("poster", "w500", item.poster_path)}

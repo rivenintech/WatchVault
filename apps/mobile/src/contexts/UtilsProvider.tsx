@@ -1,21 +1,15 @@
 import type { Settings } from "@/src/components/types/shared";
 import { ChooseTheme } from "@/src/constants/Themes";
 import { moviesGenresInDB, settingsInDB, tvGenresInDB } from "@/src/db/schema";
-import { API } from "@/src/utils/api";
 import { sql } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { getLocales } from "expo-localization";
+import { parseResponse } from "hono/client";
 import { type ReactNode, createContext, useContext } from "react";
 import { LocalDB } from "../db/DatabaseProvider";
+import { tmdbClient } from "../utils/apiClient";
 
-// Custom hooks to access the API and settings
-export const useTMDB = () => {
-    const context = useContext(UtilsContext);
-    if (!context) throw new Error("useTMDB must be used within a UtilsProvider");
-
-    return context.apiInstance;
-};
-
+// Custom hooks to access the settings
 export const useSettings = () => {
     const context = useContext(UtilsContext);
     if (!context) throw new Error("useSettings must be used within a UtilsProvider");
@@ -24,7 +18,6 @@ export const useSettings = () => {
 };
 
 type UtilsContextType = {
-    apiInstance: API;
     settings: Settings;
     updateSettings: (newSettings: Settings) => void;
 };
@@ -49,7 +42,7 @@ export const UtilsProvider = ({ children }: { children: ReactNode }) => {
 
         // If the genres are not in the database, add them
         const genresExist = [Boolean(await LocalDB.query.moviesGenresInDB.findFirst()), Boolean(await LocalDB.query.tvGenresInDB.findFirst())].every(
-            Boolean,
+            Boolean
         );
 
         if (!genresExist) await addGenres();
@@ -60,7 +53,6 @@ export const UtilsProvider = ({ children }: { children: ReactNode }) => {
     if (!settingsFromDB.data) return;
 
     const settings = { ...settingsFromDB.data, theme: ChooseTheme(settingsFromDB.data.theme_name) };
-    const apiInstance = new API(settings);
 
     const updateSettings = async (newSettings: Settings) => {
         // If the locale has changed, update the genres
@@ -77,19 +69,29 @@ export const UtilsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const addGenres = async (locale?: string) => {
-        const movieGenres = await apiInstance.genresList("movie", locale);
-        const tvGenres = await apiInstance.genresList("tv", locale);
+        const movieGenres = await parseResponse(
+            tmdbClient.genres[":mediaType"].$get({
+                param: { mediaType: "movie" },
+                query: { language: locale || settings.locale },
+            })
+        );
+        const tvGenres = await parseResponse(
+            tmdbClient.genres[":mediaType"].$get({
+                param: { mediaType: "tv" },
+                query: { language: locale || settings.locale },
+            })
+        );
 
         if (!movieGenres || !tvGenres) return;
 
         await LocalDB.insert(moviesGenresInDB)
-            .values(movieGenres)
+            .values(movieGenres.genres)
             .onConflictDoUpdate({ target: moviesGenresInDB.id, set: { name: sql`excluded.name` } });
 
         await LocalDB.insert(tvGenresInDB)
-            .values(tvGenres)
+            .values(tvGenres.genres)
             .onConflictDoUpdate({ target: tvGenresInDB.id, set: { name: sql`excluded.name` } });
     };
 
-    return <UtilsContext.Provider value={{ apiInstance, settings, updateSettings }}>{children}</UtilsContext.Provider>;
+    return <UtilsContext.Provider value={{ settings, updateSettings }}>{children}</UtilsContext.Provider>;
 };

@@ -1,7 +1,9 @@
+import { tmdbClient } from "@/src/utils/apiClient";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useQuery } from "@tanstack/react-query";
+import { parseResponse } from "hono/client";
 import React, { RefObject } from "react";
-import { useTMDB } from "../../contexts/UtilsProvider";
+import { useSettings } from "../../contexts/UtilsProvider";
 import { LoadingIndicator } from "../components";
 import { PersonCreditsList, PersonDetails } from "../person";
 import { DrawerModalScroll } from "./modals";
@@ -12,10 +14,19 @@ type PersonModalProps = {
 };
 
 export function PersonModal({ modalRef, person }: PersonModalProps) {
-    const API = useTMDB();
+    const { settings } = useSettings();
 
     const fetchPersonDetails = async (id: number) => {
-        const data = await API.person(id);
+        const data = await parseResponse(
+            tmdbClient.person[":id"].$get({
+                param: {
+                    id: id.toString(),
+                },
+                query: {
+                    language: settings.locale,
+                },
+            })
+        );
 
         if (!data) return;
 

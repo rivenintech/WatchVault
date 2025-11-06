@@ -1,10 +1,12 @@
-import { useSettings, useTMDB } from "@/src/contexts/UtilsProvider";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { moviesGenresInDB, tvGenresInDB } from "@/src/db/schema";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useQuery } from "@tanstack/react-query";
+import { parseResponse } from "hono/client";
 import React, { useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { tmdbClient } from "../utils/apiClient";
 import { SelectGenres, SelectWatchProviders, SortByModal } from "./modals/DiscoverModals";
 
 type selected = Record<"movie" | "tv", { sortBy: "popularity" | "rating"; genres: number[]; providers: number[] }>;
@@ -15,11 +17,11 @@ type DiscoverProps = {
 };
 
 export default function FiltersBtns({ mediaType, onChange }: DiscoverProps) {
-    const { colors } = useSettings().settings.theme;
+    const settings = useSettings().settings;
+    const { colors } = settings.theme;
     const genreSheet = useRef<BottomSheetModal>(null);
     const watchProvidersSheet = useRef<BottomSheetModal>(null);
     const sortBySheet = useRef<BottomSheetModal>(null);
-    const API = useTMDB();
 
     const movieGenres = useMemo(() => LocalDB.select().from(moviesGenresInDB).orderBy(moviesGenresInDB.name).all(), []);
     const tvGenres = useMemo(() => LocalDB.select().from(tvGenresInDB).orderBy(tvGenresInDB.name).all(), []);
@@ -32,7 +34,18 @@ export default function FiltersBtns({ mediaType, onChange }: DiscoverProps) {
 
     const { data: watchProviders } = useQuery({
         queryKey: ["watchProviders", mediaType],
-        queryFn: () => API.watchProvidersList(mediaType),
+        queryFn: () =>
+            parseResponse(
+                tmdbClient.configuration["watch-providers"][":mediaType"].$get({
+                    param: {
+                        mediaType: mediaType,
+                    },
+                    query: {
+                        language: settings.locale,
+                        region: settings.region,
+                    },
+                })
+            ),
     });
 
     const updateSelected = (key: "genres" | "providers" | "sortBy", value: number[] | "popularity" | "rating") => {
@@ -54,7 +67,7 @@ export default function FiltersBtns({ mediaType, onChange }: DiscoverProps) {
 
             <SelectWatchProviders
                 modalRef={watchProvidersSheet}
-                watchProviders={watchProviders}
+                watchProviders={watchProviders?.results}
                 selectedProvider={selected[mediaType].providers}
                 setSelectedProvider={(providers) => updateSelected("providers", providers)}
                 onSelectedProviders={() => onChange(selected)}
