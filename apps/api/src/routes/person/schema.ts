@@ -8,13 +8,6 @@ export const PersonQuery = v.object({
     language: v.optional(v.string()),
 });
 
-const role = v.object({
-    id: v.number(),
-    character: v.string(),
-    poster_path: v.nullable(v.string()),
-    overview: v.string(),
-});
-
 export const PersonDetails = v.object({
     id: v.number(),
     profile_path: v.nullable(v.string()),
@@ -25,17 +18,19 @@ export const PersonDetails = v.object({
     biography: v.string(),
     combined_credits: v.object({
         cast: v.array(
-            v.union([
-                v.intersect([
-                    role,
+            v.intersect([
+                v.object({
+                    id: v.number(),
+                    character: v.string(),
+                    poster_path: v.nullable(v.string()),
+                    overview: v.string(),
+                }),
+                v.variant("media_type", [
                     v.object({
                         media_type: v.literal("movie"),
                         release_date: v.nullable(v.string()),
                         title: v.string(),
                     }),
-                ]),
-                v.intersect([
-                    role,
                     v.object({
                         media_type: v.literal("tv"),
                         first_air_date: v.nullable(v.string()),

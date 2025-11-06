@@ -17,30 +17,26 @@ const person = v.object({
     ),
 });
 
-const media = v.object({
-    id: v.number(),
-    poster_path: v.nullable(v.string()),
-    overview: v.string(),
-});
-
-const movie = v.intersect([
-    media,
+const movieAndTv = v.intersect([
     v.object({
-        media_type: v.literal("movie"),
-        release_date: v.string(),
-        title: v.string(),
+        id: v.number(),
+        poster_path: v.nullable(v.string()),
+        overview: v.string(),
     }),
-]);
-
-const tv = v.intersect([
-    media,
-    v.object({
-        media_type: v.literal("tv"),
-        first_air_date: v.string(),
-        name: v.string(),
-    }),
+    v.variant("media_type", [
+        v.object({
+            media_type: v.literal("tv"),
+            first_air_date: v.string(),
+            name: v.string(),
+        }),
+        v.object({
+            media_type: v.literal("movie"),
+            release_date: v.string(),
+            title: v.string(),
+        }),
+    ]),
 ]);
 
 export const Search = v.object({
-    results: v.array(v.union([movie, tv, person])),
+    results: v.array(v.union([movieAndTv, person])),
 });
