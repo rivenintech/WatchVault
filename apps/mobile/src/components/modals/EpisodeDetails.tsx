@@ -5,7 +5,7 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { parseResponse } from "hono/client";
-import React, { RefObject } from "react";
+import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
@@ -14,7 +14,7 @@ import { ToggleMoreText } from "../ToggleMoreText";
 import { DrawerModal } from "./modals";
 
 type EpisodeDetailsDrawerProps = {
-    drawerRef: RefObject<BottomSheetModal>;
+    drawerRef: React.RefObject<BottomSheetModal | null>;
     episodeData?: {
         show_id: number;
         season_number: number;
@@ -26,7 +26,7 @@ type EpisodeDetailsDrawerProps = {
         watched_date: string | null;
         vote_average: number;
     };
-    watchedDrawerRef: RefObject<BottomSheetModal>;
+    watchedDrawerRef: React.RefObject<BottomSheetModal | null>;
 };
 
 export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef }: EpisodeDetailsDrawerProps) {

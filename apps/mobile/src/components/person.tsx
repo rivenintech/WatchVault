@@ -12,7 +12,7 @@ type PersonDetailsProps = {
         id: number;
         name: string;
         profile_path: string | null;
-        birthday: string;
+        birthday: string | null;
         deathday: string | null;
         place_of_birth: string | null;
         biography: string | null;
@@ -40,19 +40,23 @@ export function PersonDetails({ person, roles }: PersonDetailsProps) {
                         <Text style={{ color: colors.primary }}>as {roles?.map((role) => role.character).join(", ")}</Text>
                     </View>
                     <View>
-                        <View style={{ flexDirection: "row" }}>
-                            <Text style={{ color: colors.textSecondary }}>Age: </Text>
-                            <Text style={{ color: colors.text }}>{getAge(person.birthday)}</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                            <Text style={{ color: colors.textSecondary }}>
-                                Born:{" "}
-                                <Text style={{ color: colors.text }}>
-                                    {formatDate(person.birthday, "medium")}
-                                    {person.place_of_birth && `, ${person.place_of_birth}`}
-                                </Text>
-                            </Text>
-                        </View>
+                        {person.birthday && (
+                            <>
+                                <View style={{ flexDirection: "row" }}>
+                                    <Text style={{ color: colors.textSecondary }}>Age: </Text>
+                                    <Text style={{ color: colors.text }}>{getAge(person.birthday)}</Text>
+                                </View>
+                                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                                    <Text style={{ color: colors.textSecondary }}>
+                                        Born:{" "}
+                                        <Text style={{ color: colors.text }}>
+                                            {formatDate(person.birthday, "medium")}
+                                            {person.place_of_birth && `, ${person.place_of_birth}`}
+                                        </Text>
+                                    </Text>
+                                </View>
+                            </>
+                        )}
                         {person.deathday && (
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={{ color: colors.textSecondary }}>Deathday: </Text>
@@ -67,7 +71,30 @@ export function PersonDetails({ person, roles }: PersonDetailsProps) {
     );
 }
 
-export function PersonCreditsList({ credits }) {
+type PersonCreditsListProps = {
+    credits: (
+        | {
+              id: number;
+              media_type: "movie";
+              poster_path: string | null;
+              overview: string;
+              character: string;
+              title: string;
+              release_date: string | null;
+          }
+        | {
+              id: number;
+              media_type: "tv";
+              poster_path: string | null;
+              overview: string;
+              character: string;
+              name: string;
+              first_air_date: string | null;
+          }
+    )[];
+};
+
+export function PersonCreditsList({ credits }: PersonCreditsListProps) {
     const { colors } = useSettings().settings.theme;
     let lastYear: string | null = null;
 
@@ -101,7 +128,6 @@ export function PersonCreditsList({ credits }) {
                             <View
                                 style={{
                                     flexDirection: "row",
-                                    alignCredits: "center",
                                     borderRadius: 10,
                                     borderBottomColor: colors.border,
                                     borderBottomWidth: 1,

@@ -10,7 +10,7 @@ import {
 import { BottomSheetScrollViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetScrollable/types";
 import { BottomSheetViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types";
 import { useCalendars, useLocales } from "expo-localization";
-import React, { RefObject, useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DateTimePicker, { DateType, useDefaultStyles } from "react-native-ui-datepicker";
@@ -18,7 +18,7 @@ import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate } from "../../utils/datetime";
 
 type WatchedDrawerProps = {
-    drawerRef: RefObject<BottomSheetModal>;
+    drawerRef: React.RefObject<BottomSheetModal | null>;
     releaseDate?: string | null;
     onSubmit: (selectedDate: string, props: any) => void;
 } & Record<string, unknown>;
@@ -71,7 +71,7 @@ export function WatchedDrawer({ drawerRef, releaseDate, onSubmit, ...props }: Wa
     );
 }
 
-type ConfirmModalProps = { modalRef: RefObject<BottomSheetModal>; onSubmit: () => void };
+type ConfirmModalProps = { modalRef: React.RefObject<BottomSheetModal | null>; onSubmit: () => void };
 
 export function ConfirmModal({ modalRef, onSubmit }: ConfirmModalProps) {
     const { colors } = useSettings().settings.theme;
@@ -106,7 +106,7 @@ export function ConfirmModal({ modalRef, onSubmit }: ConfirmModalProps) {
 }
 
 type CalendarModalProps = {
-    modalRef: RefObject<BottomSheetModal>;
+    modalRef: React.RefObject<BottomSheetModal | null>;
     onSubmit: (selectedDate: string) => void;
     minDate?: string;
     maxDate?: string;
@@ -188,7 +188,7 @@ export function CalendarModal({ modalRef, onSubmit, minDate, maxDate }: Calendar
 
 type DrawerModalTemplateProps = BottomSheetModalProps & {
     children: React.ReactNode;
-    modalRef: React.RefObject<BottomSheetModal>;
+    modalRef: React.RefObject<BottomSheetModal | null>;
 };
 
 export function DrawerModalTemplate({ modalRef, children, ...props }: DrawerModalTemplateProps) {
@@ -199,7 +199,7 @@ export function DrawerModalTemplate({ modalRef, children, ...props }: DrawerModa
         (backdropProps: BottomSheetBackdropProps) => (
             <BottomSheetBackdrop {...backdropProps} opacity={0.5} appearsOnIndex={0} disappearsOnIndex={-1} />
         ),
-        [],
+        []
     );
 
     return (

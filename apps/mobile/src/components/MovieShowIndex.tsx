@@ -115,12 +115,7 @@ export function WhereToWatch({ watchProviders }: WhereToWatchProps) {
 
 type CastAndCrewProps = {
     credits: {
-        cast: Array<
-            { id: number; profile_path: string | null; name: string } & (
-                | { character: string; credit_id: string }
-                | { roles: { character: string; credit_id: string }[] }
-            )
-        >;
+        cast: Array<{ id: number; profile_path: string | null; name: string } & ({ character: string } | { roles: { character: string }[] })>;
     };
     title?: string;
 };
@@ -133,7 +128,7 @@ export function CastAndCrew({ credits, title }: CastAndCrewProps) {
         if (!("roles" in item)) {
             return {
                 ...item,
-                roles: [{ character: item.character, credit_id: item.credit_id }],
+                roles: [{ character: item.character }],
             };
         }
         return item;
@@ -182,7 +177,7 @@ type RecommendationsProps = {
     recommendations: {
         id: number;
         media_type: "movie" | "tv";
-        poster_path: string;
+        poster_path: string | null;
     }[];
 };
 

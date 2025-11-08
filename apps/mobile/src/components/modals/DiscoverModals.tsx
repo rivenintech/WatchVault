@@ -3,13 +3,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import React, { RefObject } from "react";
+import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { DrawerModal, DrawerModalScroll } from "./modals";
 
 type SelectWatchProvidersProps = {
-    modalRef: RefObject<BottomSheetModal>;
+    modalRef: React.RefObject<BottomSheetModal | null>;
     watchProviders?: { provider_id: number; logo_path: string }[];
     selectedProvider: number[];
     setSelectedProvider: (selectedGenres: number[]) => void;
@@ -87,7 +87,7 @@ export function SelectWatchProviders({
 }
 
 type SortByModalProps = {
-    modalRef: RefObject<BottomSheetModal>;
+    modalRef: React.RefObject<BottomSheetModal | null>;
     selectedOption: "popularity" | "rating";
     setSelectedOption: (option: "popularity" | "rating") => void;
     onSelectedOption: () => void;
@@ -143,7 +143,7 @@ export function SortByModal({ modalRef, selectedOption, setSelectedOption, onSel
 }
 
 type SelectGenresProps = {
-    modalRef: RefObject<BottomSheetModal>;
+    modalRef: React.RefObject<BottomSheetModal | null>;
     genres: { id: number; name: string }[];
     selectedGenres: number[];
     setSelectedGenres: (selectedGenres: number[]) => void;

@@ -9,7 +9,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { parseResponse } from "hono/client";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import * as SVG from "react-native-svg";
 
@@ -27,7 +27,6 @@ export default function DiscoverScreen() {
     const { colors } = settings.theme;
     const { width } = useWindowDimensions();
     const ctx = useContext(MediaTypeContext);
-    const listRef = useRef<FlashList<any>>(null);
 
     if (!ctx) {
         throw new Error("MediaTypeContext not found");
@@ -72,7 +71,6 @@ export default function DiscoverScreen() {
             <FiltersBtns mediaType={ctx.mediaType} onChange={(filters) => setFilters(filters)} />
 
             <FlashList
-                ref={listRef}
                 onEndReached={() => hasNextPage && !isFetching && fetchNextPage()}
                 onEndReachedThreshold={0.2}
                 data={data?.pages.flatMap((page) => page?.results)}
