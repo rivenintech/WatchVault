@@ -2,7 +2,7 @@ import { tmdbClient } from "@/src/utils/apiClient";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { parseResponse } from "hono/client";
 import React, { RefObject } from "react";
@@ -35,20 +35,21 @@ export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef 
 
     const { data: apiData } = useQuery({
         queryKey: ["episodeDetails", episodeData?.show_id, episodeData?.season_number, episodeData?.episode_number],
-        queryFn: () =>
-            parseResponse(
-                tmdbClient.tv[":id"].season[":seasonNumber"].episode[":episodeNumber"].$get({
-                    param: {
-                        id: episodeData.show_id.toString(),
-                        seasonNumber: episodeData.season_number.toString(),
-                        episodeNumber: episodeData.episode_number.toString(),
-                    },
-                    query: {
-                        language: settings.locale,
-                    },
-                })
-            ),
-        enabled: !!episodeData,
+        queryFn: episodeData
+            ? () =>
+                  parseResponse(
+                      tmdbClient.tv[":id"].season[":seasonNumber"].episode[":episodeNumber"].$get({
+                          param: {
+                              id: episodeData.show_id.toString(),
+                              seasonNumber: episodeData.season_number.toString(),
+                              episodeNumber: episodeData.episode_number.toString(),
+                          },
+                          query: {
+                              language: settings.locale,
+                          },
+                      })
+                  )
+            : skipToken,
     });
 
     return (

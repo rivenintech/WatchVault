@@ -35,7 +35,6 @@ export default function MovieScreen() {
                     },
                 })
             ),
-        enabled: !!id,
     });
 
     // Merge local and API data

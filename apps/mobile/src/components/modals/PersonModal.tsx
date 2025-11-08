@@ -1,6 +1,6 @@
 import { tmdbClient } from "@/src/utils/apiClient";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import { parseResponse } from "hono/client";
 import React, { RefObject } from "react";
 import { useSettings } from "../../contexts/UtilsProvider";
@@ -60,8 +60,7 @@ export function PersonModal({ modalRef, person }: PersonModalProps) {
 
     const { data: personDetails } = useQuery({
         queryKey: ["personDetails", person?.id],
-        queryFn: () => fetchPersonDetails(person?.id),
-        enabled: !!person?.id,
+        queryFn: person?.id ? () => fetchPersonDetails(person.id) : skipToken,
     });
 
     return (

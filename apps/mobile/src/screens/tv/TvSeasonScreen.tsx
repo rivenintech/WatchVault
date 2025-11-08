@@ -68,7 +68,6 @@ export default function TvSeasonScreen() {
                     },
                 })
             ),
-        enabled: !!showID,
     });
 
     if (!seasonData) return LoadingIndicator;

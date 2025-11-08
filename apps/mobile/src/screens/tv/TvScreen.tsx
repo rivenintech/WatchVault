@@ -50,7 +50,6 @@ export default function TvScreen() {
                     },
                 })
             ),
-        enabled: !!id,
     });
 
     const showData = localShowData || apiShowData;
