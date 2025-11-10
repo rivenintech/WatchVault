@@ -1,0 +1,108 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Find latest version bump commit
+        id: find_version
+        run: |
+          # Look for the most recent commit matching the pattern
+          VERSION_COMMIT=$(git log -n 20 --grep="^chore: bump version to v[0-9]\+\.[0-9]\+\.[0-9]\+" --pretty=format:"%H" | head -n1)
+
+          if [ -z "$VERSION_COMMIT" ]; then
+            echo "No version bump commit found. Skipping release."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Extract version from commit message
+          VERSION=$(git show -s --format=%s $VERSION_COMMIT | grep -oE "v[0-9]+\.[0-9]+\.[0-9]+([-a-z0-9\.]*)?")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "commit=$VERSION_COMMIT" >> $GITHUB_OUTPUT
+
+      - name: Skip job if no version bump
+        if: ${{ steps.find_version.outputs.skip == 'true' }}
+        run: |
+          echo "Skipping job — no version bump."
+          exit 0
+
+      - name: Tag release
+        run: |
+          VERSION=${{ steps.find_version.outputs.version }}
+          COMMIT=${{ steps.find_version.outputs.commit }}
+          git tag -f "$VERSION" $COMMIT
+          git push origin "$VERSION" --force
+
+      - name: Generate grouped release notes
+        run: |
+          VERSION=${{ steps.find_version.outputs.version }}
+          COMMIT=${{ steps.find_version.outputs.commit }}
+          REPO_URL="https://github.com/${{ github.repository }}"
+          PREV_TAG=$(git describe --tags --abbrev=0 --match "v*" --exclude "$VERSION" 2>/dev/null || echo "")
+
+          echo "" > RELEASE_NOTES.md
+
+          # Function to extract commits by type between prev tag and this commit
+          get_commits_by_type() {
+            local type=$1
+            if [ -n "$PREV_TAG" ]; then
+              git log "$PREV_TAG..$COMMIT" --pretty=format:"%s|%H" \
+                | grep -E "^$type(\(|:)" \
+                | grep -Ev "bump version to v[0-9]+\.[0-9]+\.[0-9]+" || true
+            else
+              git log --pretty=format:"%s|%H" "$COMMIT" \
+                | grep -E "^$type(\(|:)" \
+                | grep -Ev "bump version to v[0-9]+\.[0-9]+\.[0-9]+" || true
+            fi
+          }
+
+          write_section() {
+            local section_title="$1"
+            local type="$2"
+            COMMITS=$(get_commits_by_type "$type")
+            if [ -n "$COMMITS" ]; then
+              echo "## $section_title" >> RELEASE_NOTES.md
+              echo "$COMMITS" | while IFS="|" read -r subject hash; do
+                clean_subject=$(echo "$subject" | sed -E "s/^$type(\([^)]+\))?: //")
+                echo "- $clean_subject ([\`$(echo $hash | cut -c1-7)\`]($REPO_URL/commit/$hash))" >> RELEASE_NOTES.md
+              done
+              echo -e "\n" >> RELEASE_NOTES.md
+            fi
+          }
+
+          # Generate grouped sections
+          write_section "✨ Features" "feat"
+          write_section "🐛 Fixes" "fix"
+          write_section "🧹 Chores" "chore"
+          write_section "🧪 Tests" "test"
+          write_section "📝 Docs" "docs"
+
+          # Add full changelog link
+          if [ -n "$PREV_TAG" ]; then
+            echo -e "**Full Changelog:** $REPO_URL/compare/$PREV_TAG...$VERSION" >> RELEASE_NOTES.md
+          fi
+
+          echo "---- RELEASE_NOTES.md ----"
+          cat RELEASE_NOTES.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.find_version.outputs.version }}
+          name: ${{ steps.find_version.outputs.version }}
+          body_path: ${{ github.workspace }}/RELEASE_NOTES.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
