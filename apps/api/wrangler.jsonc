@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "api",
+  "name": "watchvault-api",
   "main": "src/main.ts",
   "compatibility_date": "2025-10-26"
   // "compatibility_flags": [
