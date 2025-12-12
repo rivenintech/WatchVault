@@ -1,7 +1,7 @@
 import MoviesList from "@/src/components/MoviesList";
 import ShowsList from "@/src/components/ShowsList";
 import { useSettings } from "@/src/contexts/UtilsProvider";
-import { MediaTypeContext } from "@/src/layouts/TabsLayout";
+import { MediaTypeContext } from "@/src/screens/(tabs)/_layout";
 import { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 

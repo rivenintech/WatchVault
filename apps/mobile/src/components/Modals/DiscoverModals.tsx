@@ -6,7 +6,7 @@ import { Image } from "expo-image";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
-import { DrawerModal, DrawerModalScroll } from "./modals";
+import { DrawerModal, DrawerModalScroll } from "./Modals";
 
 type SelectWatchProvidersProps = {
     modalRef: React.RefObject<BottomSheetModal | null>;

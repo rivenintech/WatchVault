@@ -1,4 +1,4 @@
-import { ChooseTheme, ThemeList } from "@/src/constants/Themes";
+import { ChooseTheme, ThemeList } from "@/src/constants/themes";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { useQuery } from "@tanstack/react-query";
 import { parseResponse } from "hono/client";

@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettings } from "../contexts/UtilsProvider";
-import type { MediaTypeContextType } from "../layouts/TabsLayout";
+import type { MediaTypeContextType } from "../screens/(tabs)/_layout";
 import { SearchBar } from "./Search";
 
 export default function Header({ mediaType, setMediaType }: MediaTypeContextType) {

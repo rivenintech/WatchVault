@@ -4,9 +4,9 @@ import { skipToken, useQuery } from "@tanstack/react-query";
 import { parseResponse } from "hono/client";
 import React from "react";
 import { useSettings } from "../../contexts/UtilsProvider";
-import { LoadingIndicator } from "../components";
-import { PersonCreditsList, PersonDetails } from "../person";
-import { DrawerModalScroll } from "./modals";
+import { LoadingIndicator } from "../Components";
+import { PersonCreditsList, PersonDetails } from "../Person";
+import { DrawerModalScroll } from "./Modals";
 
 type PersonModalProps = {
     modalRef: React.RefObject<BottomSheetModal | null>;

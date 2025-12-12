@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Pressable } from "react-native-gesture-handler";
 import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { useSettings } from "../contexts/UtilsProvider";
-import { ConfirmModal, WatchedDrawer } from "./modals/modals";
+import { ConfirmModal, WatchedDrawer } from "./Modals/Modals";
 
 export function WatchedWatchlistBtn({ releaseDate, watchedDate, setWatchedDate }) {
     const { colors } = useSettings().settings.theme;

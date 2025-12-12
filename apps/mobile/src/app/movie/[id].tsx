@@ -1,4 +1,4 @@
-import MovieScreen from "@/src/screens/MovieScreen";
+import MovieScreen from "@/src/screens/Movie";
 import React from "react";
 
 export default function MoviePage() {

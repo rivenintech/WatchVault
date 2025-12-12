@@ -11,9 +11,9 @@ import { LocalDB } from "../db/DatabaseProvider";
 import { plannedMoviesQuery, watchedMoviesQuery } from "../db/dbQueries";
 import { formatDate } from "../utils/datetime";
 import { WatchedButtonTick } from "./Buttons";
-import { LoadingIndicator } from "./components";
+import { LoadingIndicator } from "./Components";
 import { WatchlistItem } from "./ListItem";
-import { WatchedDrawer } from "./modals/modals";
+import { WatchedDrawer } from "./Modals/Modals";
 import SlidingScreen from "./SlidingScreen";
 
 const TABS = ["Planned", "Watched"];

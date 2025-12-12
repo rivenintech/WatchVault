@@ -1,4 +1,4 @@
-import { LoadingIndicator } from "@/src/components/components";
+import { LoadingIndicator } from "@/src/components/Components";
 import { CastAndCrew, MovieTvPage, Recommendations, TVSeasons, WhereToWatch } from "@/src/components/MovieShowIndex";
 import SlidingScreen from "@/src/components/SlidingScreen";
 import { ToggleMoreText } from "@/src/components/ToggleMoreText";

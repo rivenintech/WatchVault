@@ -1,7 +1,7 @@
-import { LoadingIndicator } from "@/src/components/components";
+import { LoadingIndicator } from "@/src/components/Components";
 import FiltersBtns from "@/src/components/Discover";
 import { useSettings } from "@/src/contexts/UtilsProvider";
-import { MediaTypeContext } from "@/src/layouts/TabsLayout";
+import { MediaTypeContext } from "@/src/screens/(tabs)/_layout";
 import { tmdbClient } from "@/src/utils/apiClient";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { FlashList } from "@shopify/flash-list";

@@ -1,4 +1,4 @@
-import RootLayout from "@/src/layouts/RootLayout";
+import RootLayout from "@/src/screens/_layout";
 import * as SystemUI from "expo-system-ui";
 
 SystemUI.setBackgroundColorAsync("transparent");

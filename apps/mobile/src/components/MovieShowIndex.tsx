@@ -10,8 +10,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettings } from "../contexts/UtilsProvider";
+import { PersonModal } from "./Modals/PersonModal";
 import { ProgressBar } from "./TvComponents";
-import { PersonModal } from "./modals/PersonModal";
 
 export function MovieTvPage({ backdrop_path, poster_path, release_date, runtime, title, genres, localData, children }) {
     const { settings } = useSettings();

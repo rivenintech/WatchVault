@@ -11,7 +11,7 @@ import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
 import { CastAndCrew } from "../MovieShowIndex";
 import { ToggleMoreText } from "../ToggleMoreText";
-import { DrawerModal } from "./modals";
+import { DrawerModal } from "./Modals";
 
 type EpisodeDetailsDrawerProps = {
     drawerRef: React.RefObject<BottomSheetModal | null>;

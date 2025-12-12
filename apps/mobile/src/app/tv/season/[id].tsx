@@ -1,4 +1,4 @@
-import TvSeasonScreen from "@/src/screens/tv/TvSeasonScreen";
+import TvSeasonScreen from "@/src/screens/Tv/Season";
 
 export default function TvSeason() {
     return <TvSeasonScreen />;

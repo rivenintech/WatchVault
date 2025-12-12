@@ -7,7 +7,7 @@ import { parseResponse } from "hono/client";
 import React, { useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { tmdbClient } from "../utils/apiClient";
-import { SelectGenres, SelectWatchProviders, SortByModal } from "./modals/DiscoverModals";
+import { SelectGenres, SelectWatchProviders, SortByModal } from "./Modals/DiscoverModals";
 
 type selected = Record<"movie" | "tv", { sortBy: "popularity" | "rating"; genres: number[]; providers: number[] }>;
 

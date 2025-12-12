@@ -1,7 +1,7 @@
+import { LoadingIndicator } from "@/src/components/Components";
+import { EpisodeDetailsDrawer } from "@/src/components/Modals/EpisodeDetails";
+import { WatchedDrawer } from "@/src/components/Modals/Modals";
 import { TvEpisodeItem } from "@/src/components/TvComponents";
-import { LoadingIndicator } from "@/src/components/components";
-import { EpisodeDetailsDrawer } from "@/src/components/modals/EpisodeDetails";
-import { WatchedDrawer } from "@/src/components/modals/modals";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvEpisodesInDB, tvInDB, tvSeasonsInDB, tvToGenres } from "@/src/db/schema";

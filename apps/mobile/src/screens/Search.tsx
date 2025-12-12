@@ -1,4 +1,4 @@
-import { RenderItem } from "@/src/components/searchRenderers";
+import { RenderItem } from "@/src/components/SearchRenderers";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";

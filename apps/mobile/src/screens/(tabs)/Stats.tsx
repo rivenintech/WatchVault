@@ -1,9 +1,9 @@
 import DonutChart from "@/src/components/Charts";
-import { LoadingIndicator } from "@/src/components/components";
-import { pastelColors } from "@/src/constants/ChartsColors";
+import { LoadingIndicator } from "@/src/components/Components";
+import { pastelColors } from "@/src/constants/chartsColors";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { finishedTvQuery, statsMoviesGenresQuery, statsMoviesQuery, statsTvGenresQuery, statsTvQuery } from "@/src/db/dbQueries";
-import { MediaTypeContext } from "@/src/layouts/TabsLayout";
+import { MediaTypeContext } from "@/src/screens/(tabs)/_layout";
 import { formatTime } from "@/src/utils/datetime";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";

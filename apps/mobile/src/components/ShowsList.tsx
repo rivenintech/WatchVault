@@ -10,8 +10,8 @@ import { useSettings } from "../contexts/UtilsProvider";
 import { nextEpisodesQuery } from "../db/dbQueries";
 import { WatchedButtonTick } from "./Buttons";
 import { WatchlistItem } from "./ListItem";
-import { EpisodeDetailsDrawer } from "./modals/EpisodeDetails";
-import { WatchedDrawer } from "./modals/modals";
+import { EpisodeDetailsDrawer } from "./Modals/EpisodeDetails";
+import { WatchedDrawer } from "./Modals/Modals";
 import SlidingScreen from "./SlidingScreen";
 import { TvNextEpisode, TvProgress } from "./TvComponents";
 

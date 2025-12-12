@@ -1,5 +1,5 @@
 import type { Settings } from "@/src/components/types/shared";
-import { ChooseTheme } from "@/src/constants/Themes";
+import { ChooseTheme } from "@/src/constants/themes";
 import { moviesGenresInDB, settingsInDB, tvGenresInDB } from "@/src/db/schema";
 import { sql } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";

@@ -1,4 +1,4 @@
-import TvScreen from "@/src/screens/tv/TvScreen";
+import TvScreen from "@/src/screens/Tv";
 import React from "react";
 
 export default function TVShowPage() {

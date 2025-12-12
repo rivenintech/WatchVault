@@ -1,4 +1,4 @@
-import SearchScreen from "@/src/screens/SearchScreen";
+import SearchScreen from "@/src/screens/Search";
 
 export default function Search() {
     return <SearchScreen />;
