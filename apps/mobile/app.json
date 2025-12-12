@@ -4,7 +4,7 @@
         "slug": "watchvault",
         "version": "0.2.0",
         "orientation": "portrait",
-        "icon": "./src/assets/images/icon.png",
+        "icon": "./assets/images/icon.png",
         "scheme": "myapp",
         "userInterfaceStyle": "automatic",
         "newArchEnabled": true,
@@ -14,7 +14,7 @@
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./src/assets/images/icon.png",
+                "foregroundImage": "./assets/images/icon.png",
                 "backgroundColor": "#2A2845"
             },
             "edgeToEdgeEnabled": true,
@@ -23,7 +23,7 @@
         "web": {
             "bundler": "metro",
             "output": "static",
-            "favicon": "./src/assets/images/favicon.png"
+            "favicon": "./assets/images/favicon.png"
         },
         "plugins": [
             "expo-router",
@@ -34,9 +34,9 @@
                 "expo-splash-screen",
                 {
                     "backgroundColor": "#2A2845",
-                    "image": "./src/assets/images/splash.png",
+                    "image": "./assets/images/splash.png",
                     "dark": {
-                        "image": "./src/assets/images/splash.png",
+                        "image": "./assets/images/splash.png",
                         "backgroundColor": "#2A2845"
                     },
                     "imageWidth": 200
