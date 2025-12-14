@@ -1,8 +1,8 @@
 import { tmdbClient } from "@/src/utils/apiClient";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { parseResponse } from "hono/client";
-import React from "react";
+import type { RefObject } from "react";
 import { useSettings } from "../../../contexts/UtilsProvider";
 import { LoadingIndicator } from "../../LoadingIndicator";
 import { DrawerModalScroll } from "../Templates";
@@ -10,7 +10,7 @@ import PersonCreditsList from "./components/PersonCreditsList";
 import PersonDetails from "./components/PersonDetails";
 
 type PersonModalProps = {
-    modalRef: React.RefObject<BottomSheetModal | null>;
+    modalRef: RefObject<BottomSheetModal | null>;
     person?: { id: number; profile_path: string | null; name: string; roles: { character: string }[] };
 };
 

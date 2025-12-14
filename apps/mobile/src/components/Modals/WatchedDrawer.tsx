@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import React, { useRef } from "react";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { RefObject} from "react";
+import { useRef } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate } from "../../utils/datetime";
@@ -8,7 +9,7 @@ import { CalendarModal } from "./CalendarModal";
 import { DrawerModal } from "./Templates";
 
 type WatchedDrawerProps = {
-    drawerRef: React.RefObject<BottomSheetModal | null>;
+    drawerRef: RefObject<BottomSheetModal | null>;
     releaseDate?: string | null;
     onSubmit: (selectedDate: string, props: any) => void;
 } & Record<string, unknown>;

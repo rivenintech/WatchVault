@@ -1,11 +1,11 @@
 import { tmdbClient } from "@/src/utils/apiClient";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { parseResponse } from "hono/client";
-import React from "react";
+import type { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
@@ -14,7 +14,7 @@ import ToggleMoreText from "../ToggleMoreText";
 import { DrawerModal } from "./Templates";
 
 type EpisodeDetailsDrawerProps = {
-    drawerRef: React.RefObject<BottomSheetModal | null>;
+    drawerRef: RefObject<BottomSheetModal | null>;
     episodeData?: {
         show_id: number;
         season_number: number;
@@ -26,7 +26,7 @@ type EpisodeDetailsDrawerProps = {
         watched_date: string | null;
         vote_average: number;
     };
-    watchedDrawerRef: React.RefObject<BottomSheetModal | null>;
+    watchedDrawerRef: RefObject<BottomSheetModal | null>;
 };
 
 export default function EpisodeDetails({ drawerRef, episodeData, watchedDrawerRef }: EpisodeDetailsDrawerProps) {

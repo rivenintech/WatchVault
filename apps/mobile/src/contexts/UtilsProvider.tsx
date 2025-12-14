@@ -1,4 +1,5 @@
-import { ChooseTheme, ThemeType } from "@/src/constants/themes";
+import type { ThemeType } from "@/src/constants/themes";
+import { ChooseTheme } from "@/src/constants/themes";
 import { moviesGenresInDB, settingsInDB, tvGenresInDB } from "@/src/db/schema";
 import { sql } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";

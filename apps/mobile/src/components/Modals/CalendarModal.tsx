@@ -1,13 +1,15 @@
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useCalendars, useLocales } from "expo-localization";
-import React, { useState } from "react";
+import type { RefObject} from "react";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import DateTimePicker, { DateType, useDefaultStyles } from "react-native-ui-datepicker";
+import type { DateType} from "react-native-ui-datepicker";
+import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { DrawerModal } from "./Templates";
 
 type CalendarModalProps = {
-    modalRef: React.RefObject<BottomSheetModal | null>;
+    modalRef: RefObject<BottomSheetModal | null>;
     onSubmit: (selectedDate: string) => void;
     minDate?: string;
     maxDate?: string;

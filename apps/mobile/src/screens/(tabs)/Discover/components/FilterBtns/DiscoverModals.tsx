@@ -1,15 +1,15 @@
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
-import React from "react";
+import type { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
 import { DrawerModal, DrawerModalScroll } from "../../../../../components/Modals/Templates";
 import { useSettings } from "../../../../../contexts/UtilsProvider";
 
 type SelectWatchProvidersProps = {
-    modalRef: React.RefObject<BottomSheetModal | null>;
+    modalRef: RefObject<BottomSheetModal | null>;
     watchProviders?: { provider_id: number; logo_path: string }[];
     selectedProvider: number[];
     setSelectedProvider: (selectedGenres: number[]) => void;
@@ -87,7 +87,7 @@ export function SelectWatchProviders({
 }
 
 type SortByModalProps = {
-    modalRef: React.RefObject<BottomSheetModal | null>;
+    modalRef: RefObject<BottomSheetModal | null>;
     selectedOption: "popularity" | "rating";
     setSelectedOption: (option: "popularity" | "rating") => void;
     onSelectedOption: () => void;
@@ -143,7 +143,7 @@ export function SortByModal({ modalRef, selectedOption, setSelectedOption, onSel
 }
 
 type SelectGenresProps = {
-    modalRef: React.RefObject<BottomSheetModal | null>;
+    modalRef: RefObject<BottomSheetModal | null>;
     genres: { id: number; name: string }[];
     selectedGenres: number[];
     setSelectedGenres: (selectedGenres: number[]) => void;

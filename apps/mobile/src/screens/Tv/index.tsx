@@ -13,7 +13,7 @@ import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
 import { parseResponse } from "hono/client";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import TvSeasons from "./components/TvSeasons";

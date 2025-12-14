@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { NativeSyntheticEvent, Pressable, Text, TextLayoutEventData, TextStyle, View } from "react-native";
+import type { NativeSyntheticEvent, TextLayoutEventData, TextStyle} from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../contexts/UtilsProvider";
 
 export default function ToggleMoreText({ max_lines, children, style }: { max_lines: number; children: string; style?: TextStyle }) {

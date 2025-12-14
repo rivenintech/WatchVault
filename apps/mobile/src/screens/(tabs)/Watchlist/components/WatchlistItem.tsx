@@ -1,6 +1,7 @@
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
+import type { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSettings } from "../../../../contexts/UtilsProvider";
 
@@ -8,7 +9,7 @@ type WatchlistItemProps = {
     link: string;
     title: string;
     poster_path: string | null;
-    children: React.ReactNode;
+    children: ReactNode;
 };
 export default function WatchlistItem({ link, title, poster_path, children }: WatchlistItemProps) {
     const { colors } = useSettings().settings.theme;

@@ -1,10 +1,10 @@
 import { useSettings } from "@/src/contexts/UtilsProvider";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import React from "react";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
 import { DrawerModal } from "./Templates";
 
-export type ConfirmModalProps = { modalRef: React.RefObject<BottomSheetModal | null>; onSubmit: () => void };
+export type ConfirmModalProps = { modalRef: RefObject<BottomSheetModal | null>; onSubmit: () => void };
 
 export function ConfirmModal({ modalRef, onSubmit }: ConfirmModalProps) {
     const { colors } = useSettings().settings.theme;

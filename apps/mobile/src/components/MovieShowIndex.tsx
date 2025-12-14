@@ -1,7 +1,7 @@
 import { formatDate, formatTime } from "@/src/utils/datetime";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { Image, ImageBackground } from "expo-image";
 import { Link, router } from "expo-router";
