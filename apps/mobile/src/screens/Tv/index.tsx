@@ -49,7 +49,7 @@ export default function TvScreen() {
                         language: settings.locale,
                         region: settings.region,
                     },
-                })
+                }),
             ),
     });
 
@@ -63,7 +63,7 @@ export default function TvScreen() {
                     param: {
                         id: id.toString(),
                     },
-                })
+                }),
             ),
     });
 

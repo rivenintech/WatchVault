@@ -114,7 +114,7 @@ export function WhereToWatch({ watchProviders }: WhereToWatchProps) {
 
 type CastAndCrewProps = {
     credits: {
-        cast: Array<{ id: number; profile_path: string | null; name: string } & ({ character: string } | { roles: { character: string }[] })>;
+        cast: ({ id: number; profile_path: string | null; name: string } & ({ character: string } | { roles: { character: string }[] }))[];
     };
     title?: string;
 };

@@ -53,7 +53,7 @@ export default function DiscoverScreen() {
                     region: settings.region,
                     language: settings.locale,
                 },
-            })
+            }),
         );
 
         return fetchedData;

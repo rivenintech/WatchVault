@@ -27,7 +27,7 @@ export default function SearchScreen() {
                         language: settings.locale,
                         q: debouncedQuery,
                     },
-                })
+                }),
             ),
         enabled: debouncedQuery.trim() !== "", // Only run query if debounced query is not empty
     });

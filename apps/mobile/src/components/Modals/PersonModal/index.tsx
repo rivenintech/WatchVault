@@ -26,7 +26,7 @@ export function PersonModal({ modalRef, person }: PersonModalProps) {
                 query: {
                     language: settings.locale,
                 },
-            })
+            }),
         );
 
         if (!data) return;
@@ -40,7 +40,7 @@ export function PersonModal({ modalRef, person }: PersonModalProps) {
                     acc[item.id].character += `, ${item.character}`;
                 }
                 return acc;
-            }, {})
+            }, {}),
         );
 
         // Sort by release date/first air date

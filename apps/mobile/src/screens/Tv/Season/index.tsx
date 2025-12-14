@@ -31,7 +31,7 @@ export default function TvSeasonScreen() {
     const localSeason = useLiveQuery(
         LocalDB.query.tvSeasonsInDB.findFirst({
             where: eq(tvSeasonsInDB.id, id),
-        })
+        }),
     ).data;
 
     const localEpisodes = useLiveQuery(
@@ -39,13 +39,13 @@ export default function TvSeasonScreen() {
             .from(tvEpisodesInDB)
             .innerJoin(tvSeasonsInDB, eq(tvSeasonsInDB.id, tvEpisodesInDB.season_id))
             .where(eq(tvEpisodesInDB.season_id, id))
-            .orderBy(asc(tvEpisodesInDB.episode_number))
+            .orderBy(asc(tvEpisodesInDB.episode_number)),
     ).data;
 
     const localEpisodeCount = useLiveQuery(
         LocalDB.select({ watched_episodes: count(tvEpisodesInDB.watched_date), episode_count: count(tvEpisodesInDB.id) })
             .from(tvEpisodesInDB)
-            .where(eq(tvEpisodesInDB.season_id, id))
+            .where(eq(tvEpisodesInDB.season_id, id)),
     ).data[0];
 
     // Merge these queries after this is fixed
@@ -66,7 +66,7 @@ export default function TvSeasonScreen() {
                     query: {
                         language: settings.locale,
                     },
-                })
+                }),
             ),
     });
 
@@ -99,7 +99,7 @@ export default function TvSeasonScreen() {
                     query: {
                         language: settings.locale,
                     },
-                })
+                }),
             );
 
             if (!tv) return;

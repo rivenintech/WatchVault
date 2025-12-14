@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
-import type { RefObject} from "react";
+import type { RefObject } from "react";
 import { useRef } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";

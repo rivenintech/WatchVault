@@ -44,7 +44,7 @@ export default function FiltersBtns({ mediaType, onChange }: FiltersBtnsProps) {
                         language: settings.locale,
                         region: settings.region,
                     },
-                })
+                }),
             ),
     });
 

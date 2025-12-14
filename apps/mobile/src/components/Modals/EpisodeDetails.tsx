@@ -47,7 +47,7 @@ export default function EpisodeDetails({ drawerRef, episodeData, watchedDrawerRe
                           query: {
                               language: settings.locale,
                           },
-                      })
+                      }),
                   )
             : skipToken,
     });

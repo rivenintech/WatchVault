@@ -44,7 +44,7 @@ export const UtilsProvider = ({ children }: { children: ReactNode }) => {
 
         // If the genres are not in the database, add them
         const genresExist = [Boolean(await LocalDB.query.moviesGenresInDB.findFirst()), Boolean(await LocalDB.query.tvGenresInDB.findFirst())].every(
-            Boolean
+            Boolean,
         );
 
         if (!genresExist) await addGenres();
@@ -75,13 +75,13 @@ export const UtilsProvider = ({ children }: { children: ReactNode }) => {
             tmdbClient.genres[":mediaType"].$get({
                 param: { mediaType: "movie" },
                 query: { language: locale || settings.locale },
-            })
+            }),
         );
         const tvGenres = await parseResponse(
             tmdbClient.genres[":mediaType"].$get({
                 param: { mediaType: "tv" },
                 query: { language: locale || settings.locale },
-            })
+            }),
         );
 
         if (!movieGenres || !tvGenres) return;

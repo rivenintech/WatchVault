@@ -33,7 +33,7 @@ export default function MovieScreen() {
                         language: settings.locale,
                         region: settings.region,
                     },
-                })
+                }),
             ),
     });
 

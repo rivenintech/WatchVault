@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import type { NativeSyntheticEvent, TextLayoutEventData, TextStyle} from "react-native";
+import type { NativeSyntheticEvent, TextLayoutEventData, TextStyle } from "react-native";
 import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../contexts/UtilsProvider";
 

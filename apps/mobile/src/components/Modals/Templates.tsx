@@ -1,15 +1,8 @@
-import type {
-    BottomSheetBackdropProps,
-    BottomSheetModalProps} from "@gorhom/bottom-sheet";
-import {
-    BottomSheetBackdrop,
-    BottomSheetModal,
-    BottomSheetScrollView,
-    BottomSheetView,
-} from "@gorhom/bottom-sheet";
+import type { BottomSheetBackdropProps, BottomSheetModalProps } from "@gorhom/bottom-sheet";
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import type { BottomSheetScrollViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetScrollable/types";
 import type { BottomSheetViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetView/types";
-import type { ReactNode, RefObject} from "react";
+import type { ReactNode, RefObject } from "react";
 import { useCallback } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettings } from "../../contexts/UtilsProvider";
@@ -27,7 +20,7 @@ function DrawerModalTemplate({ modalRef, children, ...props }: DrawerModalTempla
         (backdropProps: BottomSheetBackdropProps) => (
             <BottomSheetBackdrop {...backdropProps} opacity={0.5} appearsOnIndex={0} disappearsOnIndex={-1} />
         ),
-        []
+        [],
     );
 
     return (
