@@ -1,5 +1,4 @@
-import type { Settings } from "@/src/components/types/shared";
-import { ChooseTheme } from "@/src/constants/themes";
+import { ChooseTheme, ThemeType } from "@/src/constants/themes";
 import { moviesGenresInDB, settingsInDB, tvGenresInDB } from "@/src/db/schema";
 import { sql } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -8,6 +7,8 @@ import { parseResponse } from "hono/client";
 import { type ReactNode, createContext, useContext } from "react";
 import { LocalDB } from "../db/DatabaseProvider";
 import { tmdbClient } from "../utils/apiClient";
+
+type Settings = { id: number; locale: string; theme: ThemeType; theme_name: string; region: string };
 
 // Custom hooks to access the settings
 export const useSettings = () => {

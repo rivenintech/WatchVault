@@ -10,8 +10,8 @@ import { Pressable, Text, View } from "react-native";
 import { useSettings } from "../../contexts/UtilsProvider";
 import { formatDate, formatTime } from "../../utils/datetime";
 import { CastAndCrew } from "../MovieShowIndex";
-import { ToggleMoreText } from "../ToggleMoreText";
-import { DrawerModal } from "./Modals";
+import ToggleMoreText from "../ToggleMoreText";
+import { DrawerModal } from "./Templates";
 
 type EpisodeDetailsDrawerProps = {
     drawerRef: React.RefObject<BottomSheetModal | null>;
@@ -29,7 +29,7 @@ type EpisodeDetailsDrawerProps = {
     watchedDrawerRef: React.RefObject<BottomSheetModal | null>;
 };
 
-export function EpisodeDetailsDrawer({ drawerRef, episodeData, watchedDrawerRef }: EpisodeDetailsDrawerProps) {
+export default function EpisodeDetails({ drawerRef, episodeData, watchedDrawerRef }: EpisodeDetailsDrawerProps) {
     const { settings } = useSettings();
     const { colors } = settings.theme;
 

@@ -1,7 +1,7 @@
-import { LoadingIndicator } from "@/src/components/Components";
-import { CastAndCrew, MovieTvPage, Recommendations, TVSeasons, WhereToWatch } from "@/src/components/MovieShowIndex";
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import { CastAndCrew, MovieTvPage, Recommendations, WhereToWatch } from "@/src/components/MovieShowIndex";
 import SlidingScreen from "@/src/components/SlidingScreen";
-import { ToggleMoreText } from "@/src/components/ToggleMoreText";
+import ToggleMoreText from "@/src/components/ToggleMoreText";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvGenresQuery, tvSeasonsQuery } from "@/src/db/dbQueries";
@@ -16,6 +16,7 @@ import { parseResponse } from "hono/client";
 import React, { useMemo } from "react";
 import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import TvSeasons from "./components/TvSeasons";
 
 export default function TvScreen() {
     const { id: idStr } = useLocalSearchParams();
@@ -88,7 +89,7 @@ export default function TvScreen() {
                         </>
                     )}
                 </ScrollView>
-                <TVSeasons seasons={showData.seasons} showID={showData.id} />
+                <TvSeasons seasons={showData.seasons} showID={showData.id} />
             </SlidingScreen>
         </MovieTvPage>
     ) : isInternetReachable === false ? (

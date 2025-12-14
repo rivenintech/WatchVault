@@ -1,7 +1,6 @@
-import { LoadingIndicator } from "@/src/components/Components";
-import { EpisodeDetailsDrawer } from "@/src/components/Modals/EpisodeDetails";
-import { WatchedDrawer } from "@/src/components/Modals/Modals";
-import { TvEpisodeItem } from "@/src/components/TvComponents";
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import EpisodeDetails from "@/src/components/Modals/EpisodeDetails";
+import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvEpisodesInDB, tvInDB, tvSeasonsInDB, tvToGenres } from "@/src/db/schema";
@@ -17,6 +16,7 @@ import { parseResponse } from "hono/client";
 import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import TvEpisodeItem from "./components/TvEpisodeItem";
 
 export default function TvSeasonScreen() {
     const { id: idStr, showID, seasonNumber } = useLocalSearchParams();
@@ -152,7 +152,7 @@ export default function TvSeasonScreen() {
         <SafeAreaView>
             <Stack.Screen options={{ header: () => null }} />
             <WatchedDrawer drawerRef={watchedDrawerRef} releaseDate={currentEpisode?.air_date} onSubmit={handleUpsert} itemData={currentEpisode} />
-            <EpisodeDetailsDrawer episodeData={currentEpisode} watchedDrawerRef={watchedDrawerRef} drawerRef={episodeDetailsRef} />
+            <EpisodeDetails episodeData={currentEpisode} watchedDrawerRef={watchedDrawerRef} drawerRef={episodeDetailsRef} />
 
             <View style={styles.wrapper}>
                 <View style={styles.header}>

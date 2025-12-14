@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NativeSyntheticEvent, Pressable, Text, TextLayoutEventData, TextStyle, View } from "react-native";
 import { useSettings } from "../contexts/UtilsProvider";
 
-export function ToggleMoreText({ max_lines, children, style }: { max_lines: number; children: string; style?: TextStyle }) {
+export default function ToggleMoreText({ max_lines, children, style }: { max_lines: number; children: string; style?: TextStyle }) {
     const { colors } = useSettings().settings.theme;
     const [showFullText, setShowText] = useState(false);
     const [showBtn, setShowBtn] = useState(false);
