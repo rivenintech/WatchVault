@@ -1,10 +1,10 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
+import { formatDate } from "@/src/utils/datetime";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import type { RefObject } from "react";
 import { useRef } from "react";
 import { Pressable, Text, View } from "react-native";
-import { useSettings } from "../../contexts/UtilsProvider";
-import { formatDate } from "../../utils/datetime";
 import { CalendarModal } from "./CalendarModal";
 import { DrawerModal } from "./Templates";
 

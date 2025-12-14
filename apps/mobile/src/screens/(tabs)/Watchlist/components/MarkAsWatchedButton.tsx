@@ -1,7 +1,7 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { Ionicons } from "@expo/vector-icons";
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { useSettings } from "../../../../contexts/UtilsProvider";
 
 type MarkAsWatchedButtonProps = { onPress: () => void; children?: ReactNode };
 export default function MarkAsWatchedButton({ onPress, children }: MarkAsWatchedButtonProps) {

@@ -1,3 +1,4 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import type { BottomSheetBackdropProps, BottomSheetModalProps } from "@gorhom/bottom-sheet";
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import type { BottomSheetScrollViewProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetScrollable/types";
@@ -5,7 +6,6 @@ import type { BottomSheetViewProps } from "@gorhom/bottom-sheet/lib/typescript/c
 import type { ReactNode, RefObject } from "react";
 import { useCallback } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSettings } from "../../contexts/UtilsProvider";
 
 type DrawerModalTemplateProps = BottomSheetModalProps & {
     children: ReactNode;

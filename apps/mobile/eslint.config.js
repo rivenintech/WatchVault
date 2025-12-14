@@ -8,6 +8,14 @@ module.exports = defineConfig([
     eslintPluginPrettierRecommended,
     {
         ignores: ["dist/*"],
-        rules: { "@typescript-eslint/consistent-type-imports": "error" },
+        rules: {
+            "@typescript-eslint/consistent-type-imports": "error",
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: ["../../*"],
+                },
+            ],
+        },
     },
 ]);

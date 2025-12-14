@@ -1,5 +1,6 @@
 import { ConfirmModal } from "@/src/components/Modals/ConfirmModal";
 import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { formatDate } from "@/src/utils/datetime";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -7,7 +8,6 @@ import { useEffect, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Pressable } from "react-native-gesture-handler";
 import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
-import { useSettings } from "../../../contexts/UtilsProvider";
 
 export default function WatchedStatusButton({ releaseDate, watchedDate, setWatchedDate }) {
     const { colors } = useSettings().settings.theme;

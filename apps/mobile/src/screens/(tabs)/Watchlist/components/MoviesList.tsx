@@ -1,5 +1,11 @@
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
 import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
+import SlidingScreen from "@/src/components/SlidingScreen";
+import { useSettings } from "@/src/contexts/UtilsProvider";
+import { LocalDB } from "@/src/db/DatabaseProvider";
+import { plannedMoviesQuery, watchedMoviesQuery } from "@/src/db/dbQueries";
 import { moviesInDB } from "@/src/db/schema";
+import { formatDate } from "@/src/utils/datetime";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
@@ -7,12 +13,6 @@ import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { LoadingIndicator } from "../../../../components/LoadingIndicator";
-import SlidingScreen from "../../../../components/SlidingScreen";
-import { useSettings } from "../../../../contexts/UtilsProvider";
-import { LocalDB } from "../../../../db/DatabaseProvider";
-import { plannedMoviesQuery, watchedMoviesQuery } from "../../../../db/dbQueries";
-import { formatDate } from "../../../../utils/datetime";
 import MarkAsWatchedButton from "./MarkAsWatchedButton";
 import WatchlistItem from "./WatchlistItem";
 

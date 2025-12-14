@@ -1,3 +1,5 @@
+import { DrawerModal, DrawerModalScroll } from "@/src/components/Modals/Templates";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -5,8 +7,6 @@ import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import type { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
-import { DrawerModal, DrawerModalScroll } from "../../../../../components/Modals/Templates";
-import { useSettings } from "../../../../../contexts/UtilsProvider";
 
 type SelectWatchProvidersProps = {
     modalRef: RefObject<BottomSheetModal | null>;

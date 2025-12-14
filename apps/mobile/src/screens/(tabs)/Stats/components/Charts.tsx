@@ -1,7 +1,7 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
-import { useSettings } from "../../../../contexts/UtilsProvider";
 
 type Slice = { id: number | string; name: string; value: number };
 

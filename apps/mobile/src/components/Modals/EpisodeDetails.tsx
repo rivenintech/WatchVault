@@ -1,4 +1,6 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { tmdbClient } from "@/src/utils/apiClient";
+import { formatDate, formatTime } from "@/src/utils/datetime";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -7,8 +9,6 @@ import { Image } from "expo-image";
 import { parseResponse } from "hono/client";
 import type { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
-import { useSettings } from "../../contexts/UtilsProvider";
-import { formatDate, formatTime } from "../../utils/datetime";
 import { CastAndCrew } from "../MovieShowIndex";
 import ToggleMoreText from "../ToggleMoreText";
 import { DrawerModal } from "./Templates";

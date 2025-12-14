@@ -1,8 +1,8 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
+import { formatDate } from "@/src/utils/datetime";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View } from "react-native";
-import { useSettings } from "../../../contexts/UtilsProvider";
-import { formatDate } from "../../../utils/datetime";
 
 type SearchResultItemProps = {
     image_path: string | null;

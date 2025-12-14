@@ -1,7 +1,7 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text } from "react-native";
-import { useSettings } from "../../../../../contexts/UtilsProvider";
 
 export default function SearchBar() {
     const { colors } = useSettings().settings.theme;

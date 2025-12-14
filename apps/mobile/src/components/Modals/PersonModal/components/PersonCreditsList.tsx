@@ -1,9 +1,9 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
+import { getTMDBImageURL } from "@/src/utils/images";
 import { FlashList } from "@shopify/flash-list";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
-import { useSettings } from "../../../../contexts/UtilsProvider";
-import { getTMDBImageURL } from "../../../../utils/images";
 
 type PersonCreditsListProps = {
     credits: (

@@ -1,4 +1,9 @@
+import EpisodeDetails from "@/src/components/Modals/EpisodeDetails";
+import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
+import SlidingScreen from "@/src/components/SlidingScreen";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
+import { nextEpisodesQuery } from "@/src/db/dbQueries";
 import { tvEpisodesInDB, tvShowStatusView } from "@/src/db/schema";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
@@ -6,15 +11,10 @@ import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import EpisodeDetails from "../../../../../components/Modals/EpisodeDetails";
-import SlidingScreen from "../../../../../components/SlidingScreen";
-import { useSettings } from "../../../../../contexts/UtilsProvider";
-import { nextEpisodesQuery } from "../../../../../db/dbQueries";
 import MarkAsWatchedButton from "../MarkAsWatchedButton";
 import WatchlistItem from "../WatchlistItem";
 import TvNextEpisode from "./TvNextEpisode";
 import TvProgress from "./TvProgress";
-import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
 
 const TABS = ["Watching", "Planned", "Watched"];
 

@@ -1,12 +1,12 @@
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { moviesGenresInDB, tvGenresInDB } from "@/src/db/schema";
+import { tmdbClient } from "@/src/utils/apiClient";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useQuery } from "@tanstack/react-query";
 import { parseResponse } from "hono/client";
 import { useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { tmdbClient } from "../../../../../utils/apiClient";
 import { SelectGenres, SelectWatchProviders, SortByModal } from "./DiscoverModals";
 
 type selected = Record<"movie" | "tv", { sortBy: "popularity" | "rating"; genres: number[]; providers: number[] }>;

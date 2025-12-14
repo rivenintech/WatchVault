@@ -1,9 +1,9 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { getTMDBImageURL } from "@/src/utils/images";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useSettings } from "../../../../contexts/UtilsProvider";
 
 type WatchlistItemProps = {
     link: string;

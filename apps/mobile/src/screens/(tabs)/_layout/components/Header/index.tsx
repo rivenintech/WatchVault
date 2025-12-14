@@ -1,8 +1,8 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { MediaTypeContextType } from "../..";
-import { useSettings } from "../../../../../contexts/UtilsProvider";
 import SearchBar from "./SearchBar";
 
 export default function Header({ mediaType, setMediaType }: MediaTypeContextType) {

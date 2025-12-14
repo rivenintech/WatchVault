@@ -1,10 +1,10 @@
+import { LoadingIndicator } from "@/src/components/LoadingIndicator";
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import { tmdbClient } from "@/src/utils/apiClient";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import { parseResponse } from "hono/client";
 import type { RefObject } from "react";
-import { useSettings } from "../../../contexts/UtilsProvider";
-import { LoadingIndicator } from "../../LoadingIndicator";
 import { DrawerModalScroll } from "../Templates";
 import PersonCreditsList from "./components/PersonCreditsList";
 import PersonDetails from "./components/PersonDetails";

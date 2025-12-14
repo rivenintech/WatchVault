@@ -1,3 +1,4 @@
+import { useSettings } from "@/src/contexts/UtilsProvider";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useCalendars, useLocales } from "expo-localization";
 import type { RefObject } from "react";
@@ -5,7 +6,6 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { DateType } from "react-native-ui-datepicker";
 import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
-import { useSettings } from "../../contexts/UtilsProvider";
 import { DrawerModal } from "./Templates";
 
 type CalendarModalProps = {

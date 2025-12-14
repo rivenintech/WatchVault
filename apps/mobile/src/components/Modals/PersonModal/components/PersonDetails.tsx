@@ -1,9 +1,9 @@
+import ToggleMoreText from "@/src/components/ToggleMoreText";
+import { useSettings } from "@/src/contexts/UtilsProvider";
+import { formatDate, getAge } from "@/src/utils/datetime";
+import { getTMDBImageURL } from "@/src/utils/images";
 import { Image } from "expo-image";
 import { Text, View } from "react-native";
-import { useSettings } from "../../../../contexts/UtilsProvider";
-import { formatDate, getAge } from "../../../../utils/datetime";
-import { getTMDBImageURL } from "../../../../utils/images";
-import ToggleMoreText from "../../../ToggleMoreText";
 
 type PersonDetailsProps = {
     person: {
