@@ -1,5 +1,5 @@
 import SettingsScreen from "@/src/screens/Settings";
 
 export default function Settings() {
-    return <SettingsScreen />;
+  return <SettingsScreen />;
 }

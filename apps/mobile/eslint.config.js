@@ -4,18 +4,18 @@ const expoConfig = require("eslint-config-expo/flat");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 
 module.exports = defineConfig([
-    expoConfig,
-    eslintPluginPrettierRecommended,
-    {
-        ignores: ["dist/*"],
-        rules: {
-            "@typescript-eslint/consistent-type-imports": "error",
-            "no-restricted-imports": [
-                "error",
-                {
-                    patterns: ["../../*"],
-                },
-            ],
+  expoConfig,
+  eslintPluginPrettierRecommended,
+  {
+    ignores: ["dist/*"],
+    rules: {
+      "@typescript-eslint/consistent-type-imports": "error",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: ["../../*"],
         },
+      ],
     },
+  },
 ]);

@@ -1,57 +1,57 @@
 {
-    "expo": {
-        "name": "WatchVault",
-        "slug": "watchvault",
-        "version": "0.2.0",
-        "orientation": "portrait",
-        "icon": "./assets/images/icon.png",
-        "scheme": "myapp",
-        "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.rivenintech.watchvault"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/images/icon.png",
-                "backgroundColor": "#2A2845"
-            },
-            "edgeToEdgeEnabled": true,
-            "package": "com.rivenintech.watchvault"
-        },
-        "web": {
-            "bundler": "metro",
-            "output": "static",
-            "favicon": "./assets/images/favicon.png"
-        },
-        "plugins": [
-            "expo-router",
-            "expo-font",
-            "expo-localization",
-            "expo-sqlite",
-            [
-                "expo-splash-screen",
-                {
-                    "backgroundColor": "#2A2845",
-                    "image": "./assets/images/splash.png",
-                    "dark": {
-                        "image": "./assets/images/splash.png",
-                        "backgroundColor": "#2A2845"
-                    },
-                    "imageWidth": 200
-                }
-            ]
-        ],
-        "experiments": {
-            "typedRoutes": true
-        },
-        "extra": {
-            "router": {},
-            "eas": {
-                "projectId": "dbc47116-fe9a-4972-a753-03b3efba91a9"
-            }
-        },
-        "owner": "rivenintech"
-    }
+  "expo": {
+    "name": "WatchVault",
+    "slug": "watchvault",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rivenintech.watchvault"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#2A2845"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.rivenintech.watchvault"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-localization",
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#2A2845",
+          "image": "./assets/images/splash.png",
+          "dark": {
+            "image": "./assets/images/splash.png",
+            "backgroundColor": "#2A2845"
+          },
+          "imageWidth": 200
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "dbc47116-fe9a-4972-a753-03b3efba91a9"
+      }
+    },
+    "owner": "rivenintech"
+  }
 }

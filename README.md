@@ -47,6 +47,7 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 ### App Video Demo
@@ -59,21 +60,21 @@
 
 ### Screenshots
 
-|      Watchlist Tab      |     Explore Tab     |         Movie's Page          |        TV Show's Page       |    Stats Tab    |
-|-------------------------|---------------------|-------------------------------|-----------------------------|-----------------|
+| Watchlist Tab           | Explore Tab         | Movie's Page                  | TV Show's Page              | Stats Tab       |
+| ----------------------- | ------------------- | ----------------------------- | --------------------------- | --------------- |
 | ![Watchlist][Watchlist] | ![Explore][Explore] | ![MovieDetails][MovieDetails] | ![ShowDetails][ShowDetails] | ![Stats][Stats] |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-* [![Expo][Expo]][Expo-url]
-* [![React Native][ReactNative]][ReactNative-url]
-* [![TypeScript][TypeScript]][TypeScript-url]
-* [![React Query][react-query]][react-query-url]
-* [![DrizzleORM][DrizzleORM]][DrizzleORM-url]
-* [![Jest][Jest]][Jest-url]
-* [![TMDB][TMDB]][TMDB-url]
+- [![Expo][Expo]][Expo-url]
+- [![React Native][ReactNative]][ReactNative-url]
+- [![TypeScript][TypeScript]][TypeScript-url]
+- [![React Query][react-query]][react-query-url]
+- [![DrizzleORM][DrizzleORM]][DrizzleORM-url]
+- [![Jest][Jest]][Jest-url]
+- [![TMDB][TMDB]][TMDB-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -145,6 +146,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- CONTACT -->
+
 ## Contact
 
 [rivenintech.com](https://rivenintech.com) - All of my socials and contact information can be found on my website.
@@ -152,9 +154,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CREDITS -->
+
 ## Credits
 
-* [Showly - for the watchlist UI design inspiration](https://github.com/michaldrabik/showly)
+- [Showly - for the watchlist UI design inspiration](https://github.com/michaldrabik/showly)
 
 <br>
 
@@ -162,20 +165,26 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <img src="./assets/tmdb-logo.svg" alt="TMDB Logo" height="20">
 
 _This product uses the TMDB API but is not endorsed or certified by TMDB._
+
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [DrizzleRoadmap-url]: https://orm.drizzle.team/roadmap
+
 <!-- Screenshots -->
+
 [Watchlist]: ./assets/screenshots/watchlist.jpg
 [Explore]: ./assets/screenshots/explore.jpg
 [MovieDetails]: ./assets/screenshots/movie-details.jpg
 [ShowDetails]: ./assets/screenshots/show-details.jpg
 [Stats]: ./assets/screenshots/stats.jpg
+
 <!-- Built with -->
+
 [Expo]: https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37
 [Expo-url]: https://expo.dev/
 [ReactNative]: https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB

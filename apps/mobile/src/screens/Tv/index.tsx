@@ -19,82 +19,82 @@ import { ScrollView } from "react-native-gesture-handler";
 import TvSeasons from "./components/TvSeasons";
 
 export default function TvScreen() {
-    const { id: idStr } = useLocalSearchParams();
-    const id = Number(idStr);
-    const { settings } = useSettings();
-    const { colors } = settings.theme;
-    const { isInternetReachable } = useNetInfo();
+  const { id: idStr } = useLocalSearchParams();
+  const id = Number(idStr);
+  const { settings } = useSettings();
+  const { colors } = settings.theme;
+  const { isInternetReachable } = useNetInfo();
 
-    const localTV = useLiveQuery(LocalDB.select().from(tvShowStatusView).where(eq(tvShowStatusView.id, id))).data[0];
-    const genres = useLiveQuery(tvGenresQuery(id)).data;
-    const localSeasons = useLiveQuery(tvSeasonsQuery(id)).data;
+  const localTV = useLiveQuery(LocalDB.select().from(tvShowStatusView).where(eq(tvShowStatusView.id, id))).data[0];
+  const genres = useLiveQuery(tvGenresQuery(id)).data;
+  const localSeasons = useLiveQuery(tvSeasonsQuery(id)).data;
 
-    const localShowData = useMemo(() => {
-        if (localTV && localSeasons) {
-            return { ...localTV, seasons: localSeasons, genres: genres };
-        }
+  const localShowData = useMemo(() => {
+    if (localTV && localSeasons) {
+      return { ...localTV, seasons: localSeasons, genres: genres };
+    }
 
-        return undefined;
-    }, [localTV, localSeasons, genres]);
+    return undefined;
+  }, [localTV, localSeasons, genres]);
 
-    const { data: apiShowData } = useQuery({
-        queryKey: ["apiShowData", id],
-        queryFn: () =>
-            parseResponse(
-                tmdbClient.tv[":id"].$get({
-                    param: {
-                        id: id.toString(),
-                    },
-                    query: {
-                        language: settings.locale,
-                        region: settings.region,
-                    },
-                }),
-            ),
-    });
+  const { data: apiShowData } = useQuery({
+    queryKey: ["apiShowData", id],
+    queryFn: () =>
+      parseResponse(
+        tmdbClient.tv[":id"].$get({
+          param: {
+            id: id.toString(),
+          },
+          query: {
+            language: settings.locale,
+            region: settings.region,
+          },
+        }),
+      ),
+  });
 
-    const showData = localShowData || apiShowData;
+  const showData = localShowData || apiShowData;
 
-    const { data: totalRuntime } = useQuery({
-        queryKey: ["totalRuntime", id],
-        queryFn: () =>
-            parseResponse(
-                tmdbClient.tv[":id"]["total-runtime"].$get({
-                    param: {
-                        id: id.toString(),
-                    },
-                }),
-            ),
-    });
+  const { data: totalRuntime } = useQuery({
+    queryKey: ["totalRuntime", id],
+    queryFn: () =>
+      parseResponse(
+        tmdbClient.tv[":id"]["total-runtime"].$get({
+          param: {
+            id: id.toString(),
+          },
+        }),
+      ),
+  });
 
-    return showData ? (
-        <MovieTvPage
-            backdrop_path={showData.backdrop_path}
-            poster_path={showData.poster_path}
-            release_date={showData.first_air_date}
-            runtime={totalRuntime}
-            title={showData.name}
-            genres={showData.genres}
-            localData={Boolean(localShowData)}
-        >
-            <SlidingScreen tabs={["Overview", "Seasons"]}>
-                <ScrollView contentContainerStyle={{ gap: 15 }}>
-                    <ToggleMoreText max_lines={3}>{showData.overview}</ToggleMoreText>
+  return showData ? (
+    <MovieTvPage
+      backdrop_path={showData.backdrop_path}
+      poster_path={showData.poster_path}
+      release_date={showData.first_air_date}
+      runtime={totalRuntime}
+      title={showData.name}
+      genres={showData.genres}
+      localData={Boolean(localShowData)}
+    >
+      <SlidingScreen tabs={["Overview", "Seasons"]}>
+        <ScrollView contentContainerStyle={{ gap: 15 }}>
+          <ToggleMoreText max_lines={3}>{showData.overview}</ToggleMoreText>
 
-                    {apiShowData && (
-                        <>
-                            {apiShowData["watch/providers"] && <WhereToWatch watchProviders={apiShowData["watch/providers"]} />}
-                            {apiShowData.aggregate_credits && <CastAndCrew credits={apiShowData.aggregate_credits} />}
-                            <Recommendations recommendations={apiShowData.recommendations?.results} />
-                        </>
-                    )}
-                </ScrollView>
-                <TvSeasons seasons={showData.seasons} showID={showData.id} />
-            </SlidingScreen>
-        </MovieTvPage>
-    ) : isInternetReachable === false ? (
-        <Text style={{ color: "red" }}>No internet connection</Text>
-    ) : (
-        LoadingIndicator
-    );
+          {apiShowData && (
+            <>
+              {apiShowData["watch/providers"] && <WhereToWatch watchProviders={apiShowData["watch/providers"]} />}
+              {apiShowData.aggregate_credits && <CastAndCrew credits={apiShowData.aggregate_credits} />}
+              <Recommendations recommendations={apiShowData.recommendations?.results} />
+            </>
+          )}
+        </ScrollView>
+        <TvSeasons seasons={showData.seasons} showID={showData.id} />
+      </SlidingScreen>
+    </MovieTvPage>
+  ) : isInternetReachable === false ? (
+    <Text style={{ color: "red" }}>No internet connection</Text>
+  ) : (
+    LoadingIndicator
+  );
 }

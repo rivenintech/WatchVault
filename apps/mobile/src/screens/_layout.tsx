@@ -12,46 +12,46 @@ SplashScreen.preventAutoHideAsync();
 
 // Set the animation options. This is optional.
 SplashScreen.setOptions({
-    duration: 150,
-    fade: true,
+  duration: 150,
+  fade: true,
 });
 
 const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: 1000 * 60 * 5, // 5 minutes
-        },
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
     },
+  },
 });
 
 export default function RootLayout() {
-    return (
-        <LocalDatabase>
-            <UtilsProvider>
-                <QueryClientProvider client={queryClient}>
-                    <ThemedLayout />
-                </QueryClientProvider>
-            </UtilsProvider>
-        </LocalDatabase>
-    );
+  return (
+    <LocalDatabase>
+      <UtilsProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemedLayout />
+        </QueryClientProvider>
+      </UtilsProvider>
+    </LocalDatabase>
+  );
 }
 
 function ThemedLayout() {
-    const { theme } = useSettings().settings;
+  const { theme } = useSettings().settings;
 
-    return (
-        <ThemeProvider value={theme}>
-            <GestureHandlerRootView style={{ flex: 1 }} onLayout={() => SplashScreen.hide()}>
-                <BottomSheetModalProvider>
-                    <Stack screenOptions={{ contentStyle: { backgroundColor: theme.colors.background } }}>
-                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                        <Stack.Screen name="search" options={{ presentation: "modal", headerShown: false, animation: "fade" }} />
-                        <Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
-                        <Stack.Screen name="tv/[id]" options={{ headerShown: false }} />
-                        <Stack.Screen name="person/[id]" options={{ headerShown: false }} />
-                    </Stack>
-                </BottomSheetModalProvider>
-            </GestureHandlerRootView>
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider value={theme}>
+      <GestureHandlerRootView style={{ flex: 1 }} onLayout={() => SplashScreen.hide()}>
+        <BottomSheetModalProvider>
+          <Stack screenOptions={{ contentStyle: { backgroundColor: theme.colors.background } }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="search" options={{ presentation: "modal", headerShown: false, animation: "fade" }} />
+            <Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="tv/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="person/[id]" options={{ headerShown: false }} />
+          </Stack>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
+  );
 }

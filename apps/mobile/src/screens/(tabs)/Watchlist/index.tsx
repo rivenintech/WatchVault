@@ -6,20 +6,18 @@ import { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function IndexScreen() {
-    const { colors } = useSettings().settings.theme;
-    const context = useContext(MediaTypeContext);
+  const { colors } = useSettings().settings.theme;
+  const context = useContext(MediaTypeContext);
 
-    if (!context) {
-        throw new Error("MediaTypeContext not found");
-    }
+  if (!context) {
+    throw new Error("MediaTypeContext not found");
+  }
 
-    return (
-        <View style={[styles.wrapper, { backgroundColor: colors.background }]}>{context.mediaType === "tv" ? <ShowsList /> : <MoviesList />}</View>
-    );
+  return <View style={[styles.wrapper, { backgroundColor: colors.background }]}>{context.mediaType === "tv" ? <ShowsList /> : <MoviesList />}</View>;
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
-        paddingHorizontal: 10,
-    },
+  wrapper: {
+    paddingHorizontal: 10,
+  },
 });

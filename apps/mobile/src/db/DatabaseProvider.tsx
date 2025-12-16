@@ -12,23 +12,23 @@ expo.execSync("PRAGMA foreign_keys = ON");
 export const LocalDB = drizzle(expo, { schema });
 
 export const LocalDatabase = ({ children }: { children?: ReactNode }) => {
-    const { success, error } = useMigrations(LocalDB, migrations);
+  const { success, error } = useMigrations(LocalDB, migrations);
 
-    if (error) {
-        return (
-            <View>
-                <Text style={{ color: "red" }}>Migration error: {error.message}</Text>
-            </View>
-        );
-    }
+  if (error) {
+    return (
+      <View>
+        <Text style={{ color: "red" }}>Migration error: {error.message}</Text>
+      </View>
+    );
+  }
 
-    if (!success) {
-        return (
-            <View>
-                <Text>Migration is in progress...</Text>
-            </View>
-        );
-    }
+  if (!success) {
+    return (
+      <View>
+        <Text>Migration is in progress...</Text>
+      </View>
+    );
+  }
 
-    return children;
+  return children;
 };
