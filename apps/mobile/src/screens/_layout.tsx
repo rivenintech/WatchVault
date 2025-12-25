@@ -46,8 +46,8 @@ function ThemedLayout() {
           <Stack screenOptions={{ contentStyle: { backgroundColor: theme.colors.background } }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="search" options={{ presentation: "modal", headerShown: false, animation: "fade" }} />
-            <Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
-            <Stack.Screen name="tv/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="(media)/movie/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="(media)/tv/[id]" options={{ headerShown: false }} />
             <Stack.Screen name="person/[id]" options={{ headerShown: false }} />
           </Stack>
         </BottomSheetModalProvider>

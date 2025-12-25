@@ -1,10 +1,11 @@
-import { CastAndCrew, MovieTvPage, Recommendations, WhereToWatch } from "@/src/components/MovieShowIndex";
+import CastAndCrew from "@/src/components/CastAndCrew";
 import ToggleMoreText from "@/src/components/ToggleMoreText";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { movieWithGenresQuery } from "@/src/db/dbQueries";
 import { moviesInDB, moviesToGenres } from "@/src/db/schema";
-import WatchedStatusButton from "@/src/screens/Movie/components/WatchedStatusButton";
+import { MovieTvPage } from "@/src/screens/(media)/components/MovieShowIndex";
+import WhereToWatch from "@/src/screens/(media)/components/WhereToWatch";
 import { tmdbClient } from "@/src/utils/apiClient";
 import { useQuery } from "@tanstack/react-query";
 import { eq } from "drizzle-orm";
@@ -12,6 +13,8 @@ import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
 import { parseResponse } from "hono/client";
 import { StyleSheet, Text, View } from "react-native";
+import Recommendations from "../components/Recommendations";
+import WatchedStatusButton from "./components/WatchedStatusButton";
 
 export default function MovieScreen() {
   const { id: idStr } = useLocalSearchParams();

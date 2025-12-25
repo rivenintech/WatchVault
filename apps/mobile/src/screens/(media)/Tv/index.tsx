@@ -1,11 +1,14 @@
+import CastAndCrew from "@/src/components/CastAndCrew";
 import { LoadingIndicator } from "@/src/components/LoadingIndicator";
-import { CastAndCrew, MovieTvPage, Recommendations, WhereToWatch } from "@/src/components/MovieShowIndex";
 import SlidingScreen from "@/src/components/SlidingScreen";
 import ToggleMoreText from "@/src/components/ToggleMoreText";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
 import { tvGenresQuery, tvSeasonsQuery } from "@/src/db/dbQueries";
 import { tvShowStatusView } from "@/src/db/schema";
+import { MovieTvPage } from "@/src/screens/(media)/components/MovieShowIndex";
+import Recommendations from "@/src/screens/(media)/components/Recommendations";
+import WhereToWatch from "@/src/screens/(media)/components/WhereToWatch";
 import { tmdbClient } from "@/src/utils/apiClient";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useQuery } from "@tanstack/react-query";

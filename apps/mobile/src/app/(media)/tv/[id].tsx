@@ -1,4 +1,4 @@
-import TvScreen from "@/src/screens/Tv";
+import TvScreen from "@/src/screens/(media)/Tv";
 
 export default function TVShowPage() {
   return <TvScreen />;

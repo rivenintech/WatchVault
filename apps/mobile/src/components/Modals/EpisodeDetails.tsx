@@ -9,9 +9,9 @@ import { Image } from "expo-image";
 import { parseResponse } from "hono/client";
 import type { RefObject } from "react";
 import { Pressable, Text, View } from "react-native";
-import { CastAndCrew } from "../MovieShowIndex";
 import ToggleMoreText from "../ToggleMoreText";
 import { DrawerModal } from "./Templates";
+import CastAndCrew from "../CastAndCrew";
 
 type EpisodeDetailsDrawerProps = {
   drawerRef: RefObject<BottomSheetModal | null>;
