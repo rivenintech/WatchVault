@@ -8,6 +8,7 @@ on:
 
 jobs:
   create-release:
+    if: "startsWith(github.event.head_commit.message, 'chore: bump version to v')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,41 +16,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Find latest version bump commit
+      - name: Extract version
         id: find_version
         run: |
-          # Look for the most recent commit matching the pattern
-          VERSION_COMMIT=$(git log -n 20 --grep="^chore: bump version to v[0-9]\+\.[0-9]\+\.[0-9]\+" --pretty=format:"%H" | head -n1)
+          MESSAGE="${{ github.event.head_commit.message }}"
 
-          if [ -z "$VERSION_COMMIT" ]; then
-            echo "No version bump commit found. Skipping release."
-            echo "skip=true" >> $GITHUB_OUTPUT
+          if [[ "$MESSAGE" =~ v([0-9]+\.[0-9]+\.[0-9]+([-a-z0-9\.]*)?) ]]; then
+            VERSION="v${BASH_REMATCH[1]}"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           else
-            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "Failed to extract version"
+            exit 1
           fi
-
-          # Extract version from commit message
-          VERSION=$(git show -s --format=%s $VERSION_COMMIT | grep -oE "v[0-9]+\.[0-9]+\.[0-9]+([-a-z0-9\.]*)?")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "commit=$VERSION_COMMIT" >> $GITHUB_OUTPUT
-
-      - name: Skip job if no version bump
-        if: ${{ steps.find_version.outputs.skip == 'true' }}
-        run: |
-          echo "Skipping job — no version bump."
-          exit 0
 
       - name: Tag release
         run: |
           VERSION=${{ steps.find_version.outputs.version }}
-          COMMIT=${{ steps.find_version.outputs.commit }}
-          git tag -f "$VERSION" $COMMIT
+          git tag -f "$VERSION"
           git push origin "$VERSION" --force
 
       - name: Generate grouped release notes
         run: |
           VERSION=${{ steps.find_version.outputs.version }}
-          COMMIT=${{ steps.find_version.outputs.commit }}
+          COMMIT=${{ github.sha }}
           REPO_URL="https://github.com/${{ github.repository }}"
           PREV_TAG=$(git describe --tags --abbrev=0 --match "v*" --exclude "$VERSION" 2>/dev/null || echo "")
 
