@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "start": "expo start",
-    "update": "npx npm-check-updates -u && expo install --check",
+    "update": "npm run update:all && npm run update:expo || npm run update:expo",
+    "update:all": "npx npm-check-updates -u --install always",
+    "update:expo": "expo install --fix",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
