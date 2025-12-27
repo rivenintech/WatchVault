@@ -1,3 +1,4 @@
+import { SearchBar } from "@/src/components/SearchBar";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import SearchResultItem from "@/src/screens/Search/components/SearchResultItem";
 import { tmdbClient } from "@/src/utils/apiClient";
@@ -7,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, router } from "expo-router";
 import { parseResponse } from "hono/client";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDebounce } from "use-debounce";
 
@@ -32,26 +33,10 @@ export default function SearchScreen() {
     enabled: debouncedQuery.trim() !== "", // Only run query if debounced query is not empty
   });
 
-  const handleInputChange = (query: string) => {
-    setQuery(query);
-  };
-
   return (
     // Instead of flex: 1, try: height: height (const { height } = useWindowDimensions();)
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.searchContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
-        <Pressable onPress={() => router.back()}>
-          <Ionicons name="close" color={colors.textSecondary} size={24} />
-        </Pressable>
-        <TextInput
-          style={[styles.textInput, { color: colors.text }]}
-          autoFocus={true}
-          placeholderTextColor={colors.textSecondary}
-          placeholder="Search"
-          onChangeText={handleInputChange}
-          value={query}
-        />
-      </View>
+      <SearchBar input={query} onClose={() => router.back()} handleInput={(input) => setQuery(input)} />
 
       {movies ? (
         <FlashList
@@ -90,19 +75,6 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    flex: 1,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    borderWidth: 1,
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    height: 50,
-    marginBottom: 10,
-  },
-  textInput: {
     flex: 1,
   },
   listItemContainer: {
