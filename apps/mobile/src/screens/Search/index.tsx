@@ -18,7 +18,7 @@ export default function SearchScreen() {
   const [query, setQuery] = useState("");
 
   // Using useDebounce with tanstack query to handle search input
-  const [debouncedQuery] = useDebounce(query, 500);
+  const [debouncedQuery] = useDebounce(query, 400);
   const { data: movies } = useQuery({
     queryKey: ["search", debouncedQuery],
     queryFn: () =>
