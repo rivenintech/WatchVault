@@ -57,30 +57,55 @@ export const TvToLocalDB = v.object({
   ),
 });
 
-export const TvSeasons = v.objectWithRest(
-  {
-    seasons: v.array(
-      v.object({
-        id: v.number(),
-        name: v.string(),
-        season_number: v.number(),
-        overview: v.string(),
-        poster_path: v.nullable(v.string()),
-      }),
-    ),
-  },
+const SeasonMetaSchema = v.object({
+  id: v.number(),
+  name: v.string(),
+  season_number: v.number(),
+  overview: v.string(),
+  poster_path: v.nullable(v.string()),
+});
+
+export const TvSeasons = v.pipe(
+  v.looseObject({
+    seasons: v.array(SeasonMetaSchema),
+  }),
+  v.transform((input) => {
+    const { seasons, ...rest } = input;
+
+    // Iterate over the dynamic keys (e.g., "season/1", "season/2")
+    for (const [key, value] of Object.entries(rest)) {
+      if (key.startsWith("season/")) {
+        const seasonNum = parseInt(key.split("/")[1]);
+        const season = seasons.find((s) => s.season_number === seasonNum);
+
+        if (season) {
+          // @ts-ignore (or cast to any) - we are enriching the object dynamically
+          season.episodes = value.episodes;
+        }
+      }
+    }
+    return { seasons };
+  }),
+
   v.object({
-    episodes: v.array(
-      v.object({
-        id: v.number(),
-        name: v.string(),
-        episode_number: v.number(),
-        overview: v.string(),
-        runtime: v.nullable(v.number()),
-        air_date: v.nullable(v.string()),
-        vote_average: v.number(),
-        vote_count: v.number(),
-      }),
+    seasons: v.array(
+      v.intersect([
+        SeasonMetaSchema,
+        v.object({
+          episodes: v.array(
+            v.object({
+              id: v.number(),
+              name: v.string(),
+              episode_number: v.number(),
+              overview: v.string(),
+              runtime: v.nullable(v.number()),
+              air_date: v.nullable(v.string()),
+              vote_average: v.number(),
+              vote_count: v.number(),
+            }),
+          ),
+        }),
+      ]),
     ),
   }),
 );

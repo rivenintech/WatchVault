@@ -46,20 +46,16 @@ const routes = app
     const mergedData = {};
 
     for (const chunk of seasonKeysChunks) {
-      const data = await fetchTMDB(`tv/${id}?language=${language}&append_to_response=${chunk.join(",")}`, c.env.TMDB_API_KEY);
+      const response = await fetchTMDB(`tv/${id}?language=${language}&append_to_response=${chunk.join(",")}`, c.env.TMDB_API_KEY);
+      const data = await response.json();
       Object.assign(mergedData, data);
     }
 
     const parsedTVSeasons = v.parse(TvSeasons, mergedData);
 
-    const seasonsWithEp = parsedTVSeasons.seasons.map((season) => ({
-      ...season,
-      episodes: parsedTVSeasons[`season/${season.season_number}`].episodes,
-    }));
-
     const completeTvInfo = {
       ...parsedTvDetails.output,
-      seasons: seasonsWithEp,
+      ...parsedTVSeasons,
     };
 
     return c.json(completeTvInfo, 200);
