@@ -1,4 +1,4 @@
-import { count, eq, getTableColumns, relations, sql, sum } from "drizzle-orm";
+import { count, eq, getColumns, sql, sum } from "drizzle-orm";
 import { int, primaryKey, real, sqliteTable, sqliteView, text } from "drizzle-orm/sqlite-core";
 
 export const settingsInDB = sqliteTable("settings", {
@@ -19,18 +19,10 @@ export const moviesInDB = sqliteTable("movies", {
   watched_date: text(),
 });
 
-export const moviesRelations = relations(moviesInDB, ({ many }) => ({
-  genres: many(moviesToGenres),
-}));
-
 export const moviesGenresInDB = sqliteTable("movies_genres", {
   id: int().primaryKey(),
   name: text().notNull(),
 });
-
-export const moviesGenresRelations = relations(moviesGenresInDB, ({ many }) => ({
-  movies: many(moviesToGenres),
-}));
 
 export const moviesToGenres = sqliteTable(
   "movie_to_genre",
@@ -45,17 +37,6 @@ export const moviesToGenres = sqliteTable(
   (table) => [primaryKey({ columns: [table.movie_id, table.genre_id] })],
 );
 
-export const moviesToGenresRelations = relations(moviesToGenres, ({ one }) => ({
-  movie: one(moviesInDB, {
-    fields: [moviesToGenres.movie_id],
-    references: [moviesInDB.id],
-  }),
-  genre: one(moviesGenresInDB, {
-    fields: [moviesToGenres.genre_id],
-    references: [moviesGenresInDB.id],
-  }),
-}));
-
 export const tvInDB = sqliteTable("tv", {
   id: int().primaryKey(),
   name: text().notNull(),
@@ -65,19 +46,10 @@ export const tvInDB = sqliteTable("tv", {
   poster_path: text(),
 });
 
-export const tvRelations = relations(tvInDB, ({ many }) => ({
-  seasons: many(tvSeasonsInDB),
-  genres: many(tvToGenres),
-}));
-
 export const tvGenresInDB = sqliteTable("tv_genres", {
   id: int().primaryKey(),
   name: text().notNull(),
 });
-
-export const tvGenresRelations = relations(tvGenresInDB, ({ many }) => ({
-  shows: many(tvToGenres),
-}));
 
 export const tvToGenres = sqliteTable(
   "tv_to_genres",
@@ -92,17 +64,6 @@ export const tvToGenres = sqliteTable(
   (table) => [primaryKey({ columns: [table.show_id, table.genre_id] })],
 );
 
-export const tvToGenresRelations = relations(tvToGenres, ({ one }) => ({
-  genre: one(tvGenresInDB, {
-    fields: [tvToGenres.genre_id],
-    references: [tvGenresInDB.id],
-  }),
-  tvShow: one(tvInDB, {
-    fields: [tvToGenres.show_id],
-    references: [tvInDB.id],
-  }),
-}));
-
 export const tvSeasonsInDB = sqliteTable("tv_seasons", {
   id: int().primaryKey(),
   name: text().notNull(),
@@ -113,14 +74,6 @@ export const tvSeasonsInDB = sqliteTable("tv_seasons", {
     .references(() => tvInDB.id, { onDelete: "cascade" })
     .notNull(),
 });
-
-export const tvSeasonsRelations = relations(tvSeasonsInDB, ({ one, many }) => ({
-  tvShow: one(tvInDB, {
-    fields: [tvSeasonsInDB.show_id],
-    references: [tvInDB.id],
-  }),
-  episodes: many(tvEpisodesInDB),
-}));
 
 export const tvEpisodesInDB = sqliteTable("tv_episodes", {
   id: int().primaryKey(),
@@ -137,18 +90,11 @@ export const tvEpisodesInDB = sqliteTable("tv_episodes", {
     .notNull(),
 });
 
-export const tvEpisodesRelations = relations(tvEpisodesInDB, ({ one }) => ({
-  season: one(tvSeasonsInDB, {
-    fields: [tvEpisodesInDB.season_id],
-    references: [tvSeasonsInDB.id],
-  }),
-}));
-
 // Views
 export const tvShowStatusView = sqliteView("tv_show_status_view").as((qb) =>
   qb
     .select({
-      ...getTableColumns(tvInDB),
+      ...getColumns(tvInDB),
       watched_episodes: count(tvEpisodesInDB.watched_date).as("watched_episodes"),
       episode_count: count(tvEpisodesInDB.id).as("episode_count"),
       total_runtime: sum(tvEpisodesInDB.runtime).as("total_runtime"),

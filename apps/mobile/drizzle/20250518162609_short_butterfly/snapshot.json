@@ -1,0 +1,647 @@
+{
+  "dialect": "sqlite",
+  "id": "b8b470af-6906-4e51-8081-af98d35bd4a4",
+  "prevIds": [
+    "69c1b7c6-d7f7-4582-a7c7-971ce7bb07e3"
+  ],
+  "version": "7",
+  "ddl": [
+    {
+      "name": "movies_genres",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "movies_genres",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "movies_genres_pk",
+      "table": "movies_genres",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "table": "movies_genres",
+      "entityType": "columns"
+    },
+    {
+      "name": "movies",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "movies_pk",
+      "table": "movies",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "title",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "overview",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "release_date",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "runtime",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "backdrop_path",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "poster_path",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "watched_date",
+      "table": "movies",
+      "entityType": "columns"
+    },
+    {
+      "name": "movie_to_genre",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "movie_id",
+      "table": "movie_to_genre",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "genre_id",
+      "table": "movie_to_genre",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "movie_id",
+        "genre_id"
+      ],
+      "nameExplicit": false,
+      "name": "movie_to_genre_movie_id_genre_id_pk",
+      "table": "movie_to_genre",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "movie_id"
+      ],
+      "tableTo": "movies",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "movie_to_genre_movie_id_movies_id_fk",
+      "table": "movie_to_genre",
+      "entityType": "fks"
+    },
+    {
+      "columns": [
+        "genre_id"
+      ],
+      "tableTo": "movies_genres",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "movie_to_genre_genre_id_movies_genres_id_fk",
+      "table": "movie_to_genre",
+      "entityType": "fks"
+    },
+    {
+      "name": "settings",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": true,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "settings",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "settings_pk",
+      "table": "settings",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "locale",
+      "table": "settings",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "region",
+      "table": "settings",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "theme_name",
+      "table": "settings",
+      "entityType": "columns"
+    },
+    {
+      "name": "tv_episodes",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tv_episodes_pk",
+      "table": "tv_episodes",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "episode_number",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "overview",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "runtime",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "air_date",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "real",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "vote_average",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "vote_count",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "watched_date",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "season_id",
+      "table": "tv_episodes",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "season_id"
+      ],
+      "tableTo": "tv_seasons",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "tv_episodes_season_id_tv_seasons_id_fk",
+      "table": "tv_episodes",
+      "entityType": "fks"
+    },
+    {
+      "name": "tv_genres",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "tv_genres",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tv_genres_pk",
+      "table": "tv_genres",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "table": "tv_genres",
+      "entityType": "columns"
+    },
+    {
+      "name": "tv",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "tv",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tv_pk",
+      "table": "tv",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "table": "tv",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "overview",
+      "table": "tv",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "first_air_date",
+      "table": "tv",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "backdrop_path",
+      "table": "tv",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "poster_path",
+      "table": "tv",
+      "entityType": "columns"
+    },
+    {
+      "name": "tv_seasons",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "table": "tv_seasons",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tv_seasons_pk",
+      "table": "tv_seasons",
+      "entityType": "pks"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "table": "tv_seasons",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "season_number",
+      "table": "tv_seasons",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "overview",
+      "table": "tv_seasons",
+      "entityType": "columns"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "poster_path",
+      "table": "tv_seasons",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "show_id",
+      "table": "tv_seasons",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "show_id"
+      ],
+      "tableTo": "tv",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "tv_seasons_show_id_tv_id_fk",
+      "table": "tv_seasons",
+      "entityType": "fks"
+    },
+    {
+      "name": "tv_to_genres",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "show_id",
+      "table": "tv_to_genres",
+      "entityType": "columns"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "genre_id",
+      "table": "tv_to_genres",
+      "entityType": "columns"
+    },
+    {
+      "columns": [
+        "show_id",
+        "genre_id"
+      ],
+      "nameExplicit": false,
+      "name": "tv_to_genres_show_id_genre_id_pk",
+      "table": "tv_to_genres",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "show_id"
+      ],
+      "tableTo": "tv",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "tv_to_genres_show_id_tv_id_fk",
+      "table": "tv_to_genres",
+      "entityType": "fks"
+    },
+    {
+      "columns": [
+        "genre_id"
+      ],
+      "tableTo": "tv_genres",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "tv_to_genres_genre_id_tv_genres_id_fk",
+      "table": "tv_to_genres",
+      "entityType": "fks"
+    },
+    {
+      "definition": "select \"tv\".\"id\", \"tv\".\"name\", \"tv\".\"overview\", \"tv\".\"first_air_date\", \"tv\".\"backdrop_path\", \"tv\".\"poster_path\", count(\"tv_episodes\".\"watched_date\") as \"watched_episodes\", count(\"tv_episodes\".\"id\") as \"episode_count\", CASE\n                WHEN COUNT(\"tv_episodes\".\"watched_date\") = COUNT(\"tv_episodes\".\"id\") THEN 'watched'\n                WHEN COUNT(\"tv_episodes\".\"watched_date\") > 0 THEN 'watching'\n                ELSE 'planned' END as \"status\" from \"tv\" inner join \"tv_seasons\" on \"tv_seasons\".\"show_id\" = \"tv\".\"id\" inner join \"tv_episodes\" on \"tv_episodes\".\"season_id\" = \"tv_seasons\".\"id\" group by \"tv\".\"id\"",
+      "isExisting": false,
+      "error": null,
+      "name": "tv_show_status_view",
+      "entityType": "views"
+    }
+  ],
+  "renames": []
+}

@@ -25,24 +25,34 @@ export const nextEpisodesQuery = LocalDB.select({
   .groupBy(tvSeasonsInDB.show_id);
 
 export const plannedMoviesQuery = LocalDB.query.moviesInDB.findMany({
-  where: isNull(moviesInDB.watched_date),
+  where: {
+    watched_date: {
+      isNull: true,
+    },
+  },
 });
 
 export const watchedMoviesQuery = LocalDB.query.moviesInDB.findMany({
-  where: isNotNull(moviesInDB.watched_date),
+  where: {
+    watched_date: {
+      isNotNull: true,
+    },
+  },
 });
 
 export const movieWithGenresQuery = (id: number) =>
   LocalDB.query.moviesInDB.findFirst({
-    where: eq(moviesInDB.id, id),
-    with: { genres: { with: { genre: true } } },
+    where: {
+      id,
+    },
+    with: { genres: true },
   });
 
 export const tvWithGenresQuery = (id: number) =>
   LocalDB.query.tvInDB.findFirst({
-    where: eq(tvInDB.id, id),
+    where: { id },
     with: {
-      genres: { with: { genre: true } },
+      genres: true,
     },
   });
 
