@@ -1,9 +1,9 @@
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
-import { moviesGenresInDB, tvGenresInDB } from "@/src/db/schema";
 import { tmdbClient } from "@/src/utils/apiClient";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useQuery } from "@tanstack/react-query";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { parseResponse } from "hono/client";
 import { useMemo, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -23,8 +23,20 @@ export default function FiltersBtns({ mediaType, onChange }: FiltersBtnsProps) {
   const watchProvidersSheet = useRef<BottomSheetModal>(null);
   const sortBySheet = useRef<BottomSheetModal>(null);
 
-  const movieGenres = useMemo(() => LocalDB.select().from(moviesGenresInDB).orderBy(moviesGenresInDB.name).all(), []);
-  const tvGenres = useMemo(() => LocalDB.select().from(tvGenresInDB).orderBy(tvGenresInDB.name).all(), []);
+  const movieGenres = useLiveQuery(
+    LocalDB.query.moviesGenresInDB.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+  ).data;
+  const tvGenres = useLiveQuery(
+    LocalDB.query.tvGenresInDB.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+  ).data;
   const genres = useMemo(() => (mediaType === "movie" ? movieGenres : tvGenres), [mediaType]);
 
   const [selected, setSelected] = useState<selected>({

@@ -4,19 +4,17 @@ import SlidingScreen from "@/src/components/SlidingScreen";
 import ToggleMoreText from "@/src/components/ToggleMoreText";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
-import { tvGenresQuery, tvSeasonsQuery } from "@/src/db/dbQueries";
-import { tvShowStatusView } from "@/src/db/schema";
+import { tvEpisodesInDB } from "@/src/db/schema";
 import { MovieTvPage } from "@/src/screens/(media)/components/MovieShowIndex";
 import Recommendations from "@/src/screens/(media)/components/Recommendations";
 import WhereToWatch from "@/src/screens/(media)/components/WhereToWatch";
 import { tmdbClient } from "@/src/utils/apiClient";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useQuery } from "@tanstack/react-query";
-import { eq } from "drizzle-orm";
+import { and, eq, isNotNull } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams } from "expo-router";
 import { parseResponse } from "hono/client";
-import { useMemo } from "react";
 import { Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import TvSeasons from "./components/TvSeasons";
@@ -28,17 +26,27 @@ export default function TvScreen() {
   const { colors } = settings.theme;
   const { isInternetReachable } = useNetInfo();
 
-  const localTV = useLiveQuery(LocalDB.select().from(tvShowStatusView).where(eq(tvShowStatusView.id, id))).data[0];
-  const genres = useLiveQuery(tvGenresQuery(id)).data;
-  const localSeasons = useLiveQuery(tvSeasonsQuery(id)).data;
+  // TODO: https://github.com/drizzle-team/drizzle-orm/issues/2660
+  const { updatedAt: episodesUpdatedAt } = useLiveQuery(LocalDB.query.tvEpisodesInDB.findFirst());
 
-  const localShowData = useMemo(() => {
-    if (localTV && localSeasons) {
-      return { ...localTV, seasons: localSeasons, genres: genres };
-    }
-
-    return undefined;
-  }, [localTV, localSeasons, genres]);
+  const localShowData = useLiveQuery(
+    LocalDB.query.tvInDB.findFirst({
+      with: {
+        genres: true,
+        seasons: {
+          extras: {
+            watched_episodes: (t) => LocalDB.$count(tvEpisodesInDB, and(eq(tvEpisodesInDB.season_id, t.id), isNotNull(tvEpisodesInDB.watched_date))),
+            episode_count: (t) => LocalDB.$count(tvEpisodesInDB, eq(tvEpisodesInDB.season_id, t.id)),
+          },
+          orderBy: {
+            season_number: "asc",
+          },
+        },
+      },
+      where: { id },
+    }),
+    [episodesUpdatedAt],
+  ).data;
 
   const { data: apiShowData } = useQuery({
     queryKey: ["apiShowData", id],

@@ -1,7 +1,6 @@
 import { LoadingIndicator } from "@/src/components/LoadingIndicator";
 import { pastelColors } from "@/src/constants/chartsColors";
 import { useSettings } from "@/src/contexts/UtilsProvider";
-import { finishedTvQuery, statsMoviesGenresQuery, statsMoviesQuery, statsTvGenresQuery, statsTvQuery } from "@/src/db/dbQueries";
 import { MediaTypeContext } from "@/src/screens/(tabs)/_layout";
 import DonutChart from "@/src/screens/(tabs)/Stats/components/Charts";
 import { formatTime } from "@/src/utils/datetime";
@@ -9,6 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { completedShowsQuery, movieDetailsQuery, moviesGenresStatsQuery, TvDetailsQuery, tvGenresStatsQuery } from "./dbQueries";
 
 export default function StatsScreen() {
   const { colors } = useSettings().settings.theme;
@@ -24,11 +24,11 @@ export default function StatsScreen() {
     setSelectedSlice(undefined);
   }, [ctx]);
 
-  const movieDetails = useLiveQuery(statsMoviesQuery).data[0];
-  const moviesGenres = useLiveQuery(statsMoviesGenresQuery).data;
-  const tvDetails = useLiveQuery(statsTvQuery).data[0];
-  const completedShows = useLiveQuery(finishedTvQuery).data[0];
-  const tvGenres = useLiveQuery(statsTvGenresQuery).data;
+  const movieDetails = useLiveQuery(movieDetailsQuery).data[0];
+  const moviesGenres = useLiveQuery(moviesGenresStatsQuery).data;
+  const tvDetails = useLiveQuery(TvDetailsQuery).data[0];
+  const completedShows = useLiveQuery(completedShowsQuery).data[0];
+  const tvGenres = useLiveQuery(tvGenresStatsQuery).data;
 
   const dataObjects = useMemo(() => {
     const tv = { total: completedShows?.total, totalTime: tvDetails?.totalTime, totalEpisodes: tvDetails?.totalEpisodes, genres: tvGenres };

@@ -2,7 +2,6 @@ import CastAndCrew from "@/src/components/CastAndCrew";
 import ToggleMoreText from "@/src/components/ToggleMoreText";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
-import { movieWithGenresQuery } from "@/src/db/dbQueries";
 import { moviesInDB, moviesToGenres } from "@/src/db/schema";
 import { MovieTvPage } from "@/src/screens/(media)/components/MovieShowIndex";
 import WhereToWatch from "@/src/screens/(media)/components/WhereToWatch";
@@ -22,7 +21,14 @@ export default function MovieScreen() {
   const { settings } = useSettings();
   const { colors } = settings.theme;
 
-  const localMovieData = useLiveQuery(movieWithGenresQuery(id)).data;
+  const localMovieData = useLiveQuery(
+    LocalDB.query.moviesInDB.findFirst({
+      with: { genres: true },
+      where: {
+        id,
+      },
+    }),
+  ).data;
 
   const { data: apiMovieData } = useQuery({
     queryKey: ["movieDetails", id],

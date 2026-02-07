@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
-import { asc, count, eq, getTableColumns } from "drizzle-orm";
+import { and, eq, isNotNull } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { parseResponse } from "hono/client";
@@ -28,35 +28,30 @@ export default function TvSeasonScreen() {
   const episodeDetailsRef = useRef<BottomSheetModal>(null);
   const [currentEpisode, setCurrentEpisode] = useState();
 
-  const localSeason = useLiveQuery(
+  // TODO: https://github.com/drizzle-team/drizzle-orm/issues/2660
+  const { updatedAt: episodesUpdatedAt } = useLiveQuery(LocalDB.query.tvEpisodesInDB.findFirst());
+
+  const localSeasonData = useLiveQuery(
     LocalDB.query.tvSeasonsInDB.findFirst({
-      where: eq(tvSeasonsInDB.id, id),
+      with: {
+        episodes: {
+          orderBy: {
+            episode_number: "asc",
+          },
+        },
+      },
+      extras: {
+        watched_episodes: (t) => LocalDB.$count(tvEpisodesInDB, and(eq(tvEpisodesInDB.season_id, t.id), isNotNull(tvEpisodesInDB.watched_date))),
+        episode_count: (t) => LocalDB.$count(tvEpisodesInDB, eq(tvEpisodesInDB.season_id, t.id)),
+      },
+      where: { id },
     }),
+    [episodesUpdatedAt],
   ).data;
 
-  const localEpisodes = useLiveQuery(
-    LocalDB.select({ ...getTableColumns(tvEpisodesInDB), show_id: tvSeasonsInDB.show_id, season_number: tvSeasonsInDB.season_number })
-      .from(tvEpisodesInDB)
-      .innerJoin(tvSeasonsInDB, eq(tvSeasonsInDB.id, tvEpisodesInDB.season_id))
-      .where(eq(tvEpisodesInDB.season_id, id))
-      .orderBy(asc(tvEpisodesInDB.episode_number)),
-  ).data;
-
-  const localEpisodeCount = useLiveQuery(
-    LocalDB.select({ watched_episodes: count(tvEpisodesInDB.watched_date), episode_count: count(tvEpisodesInDB.id) })
-      .from(tvEpisodesInDB)
-      .where(eq(tvEpisodesInDB.season_id, id)),
-  ).data[0];
-
-  // Merge these queries after this is fixed
-  // https://github.com/drizzle-team/drizzle-orm/issues/2660
-  const localSeasonData =
-    localSeason && localEpisodes && localEpisodeCount ? { ...localSeason, episodes: localEpisodes, ...localEpisodeCount } : undefined;
-
-  const { data: seasonData } = useQuery({
+  const { data: apiData } = useQuery({
     queryKey: ["apiSeasonData", showID, seasonNumber],
-    queryFn: async () =>
-      localSeasonData ||
+    queryFn: () =>
       parseResponse(
         tmdbClient.tv[":id"].season[":seasonNumber"].$get({
           param: {
@@ -69,6 +64,8 @@ export default function TvSeasonScreen() {
         }),
       ),
   });
+
+  const seasonData = localSeasonData || apiData;
 
   if (!seasonData) return LoadingIndicator;
 

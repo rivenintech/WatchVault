@@ -3,7 +3,6 @@ import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
 import SlidingScreen from "@/src/components/SlidingScreen";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
-import { plannedMoviesQuery, watchedMoviesQuery } from "@/src/db/dbQueries";
 import { moviesInDB } from "@/src/db/schema";
 import { formatDate } from "@/src/utils/datetime";
 import { Ionicons } from "@expo/vector-icons";
@@ -24,8 +23,24 @@ export default function MoviesList() {
   const [openModalData, setOpenModalData] = useState<{ id: number; releaseDate: string }>();
   const watchedDrawerRef = useRef<BottomSheetModal>(null);
 
-  const plannedMovies = useLiveQuery(plannedMoviesQuery).data;
-  const watchedMovies = useLiveQuery(watchedMoviesQuery).data;
+  const plannedMovies = useLiveQuery(
+    LocalDB.query.moviesInDB.findMany({
+      where: {
+        watched_date: {
+          isNull: true,
+        },
+      },
+    }),
+  ).data;
+  const watchedMovies = useLiveQuery(
+    LocalDB.query.moviesInDB.findMany({
+      where: {
+        watched_date: {
+          isNotNull: true,
+        },
+      },
+    }),
+  ).data;
 
   const moviesData = { Planned: plannedMovies, Watched: watchedMovies };
 
