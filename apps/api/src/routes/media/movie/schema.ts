@@ -9,11 +9,14 @@ export const Movie = v.object({
   runtime: v.nullable(v.number()),
   backdrop_path: v.nullable(v.string()),
   poster_path: v.nullable(v.string()),
-  genres: v.array(
-    v.object({
-      id: v.number(),
-      name: v.string(),
-    }),
+  genres: v.pipe(
+    v.array(
+      v.object({
+        id: v.number(),
+        name: v.string(),
+      }),
+    ),
+    v.sortItems((a, b) => a.id - b.id),
   ),
   "watch/providers": WatchProviders,
   credits: Credits,

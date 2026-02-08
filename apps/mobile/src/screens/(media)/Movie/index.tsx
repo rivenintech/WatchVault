@@ -23,7 +23,13 @@ export default function MovieScreen() {
 
   const localMovieData = useLiveQuery(
     LocalDB.query.moviesInDB.findFirst({
-      with: { genres: true },
+      with: {
+        genres: {
+          orderBy: {
+            id: "asc",
+          },
+        },
+      },
       where: {
         id,
       },

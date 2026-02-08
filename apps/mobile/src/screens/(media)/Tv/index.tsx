@@ -32,7 +32,11 @@ export default function TvScreen() {
   const localShowData = useLiveQuery(
     LocalDB.query.tvInDB.findFirst({
       with: {
-        genres: true,
+        genres: {
+          orderBy: {
+            id: "asc",
+          },
+        },
         seasons: {
           extras: {
             watched_episodes: (t) => LocalDB.$count(tvEpisodesInDB, and(eq(tvEpisodesInDB.season_id, t.id), isNotNull(tvEpisodesInDB.watched_date))),

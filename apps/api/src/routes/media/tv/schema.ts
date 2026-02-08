@@ -15,11 +15,14 @@ export const TVDetails = v.object({
   poster_path: v.nullable(v.string()),
   first_air_date: v.nullable(v.string()),
   name: v.string(),
-  genres: v.array(
-    v.object({
-      id: v.number(),
-      name: v.string(),
-    }),
+  genres: v.pipe(
+    v.array(
+      v.object({
+        id: v.number(),
+        name: v.string(),
+      }),
+    ),
+    v.sortItems((a, b) => a.id - b.id),
   ),
   overview: v.string(),
   id: v.number(),
