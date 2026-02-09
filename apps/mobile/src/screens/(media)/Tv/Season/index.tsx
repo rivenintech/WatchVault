@@ -148,7 +148,11 @@ export default function TvSeasonScreen() {
   return (
     <SafeAreaView>
       <WatchedDrawer drawerRef={watchedDrawerRef} releaseDate={currentEpisode?.air_date} onSubmit={handleUpsert} itemData={currentEpisode} />
-      <EpisodeDetails episodeData={currentEpisode} watchedDrawerRef={watchedDrawerRef} drawerRef={episodeDetailsRef} />
+      <EpisodeDetails
+        episodeData={{ ...currentEpisode, show_id: showID, season_number: seasonNumber }}
+        watchedDrawerRef={watchedDrawerRef}
+        drawerRef={episodeDetailsRef}
+      />
 
       <View style={styles.wrapper}>
         <View style={styles.header}>
