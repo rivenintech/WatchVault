@@ -11,7 +11,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { and, eq, isNotNull } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { Stack, router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { parseResponse } from "hono/client";
 import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -147,7 +147,6 @@ export default function TvSeasonScreen() {
 
   return (
     <SafeAreaView>
-      <Stack.Screen options={{ header: () => null }} />
       <WatchedDrawer drawerRef={watchedDrawerRef} releaseDate={currentEpisode?.air_date} onSubmit={handleUpsert} itemData={currentEpisode} />
       <EpisodeDetails episodeData={currentEpisode} watchedDrawerRef={watchedDrawerRef} drawerRef={episodeDetailsRef} />
 

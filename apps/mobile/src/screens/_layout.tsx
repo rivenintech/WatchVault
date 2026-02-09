@@ -48,6 +48,7 @@ function ThemedLayout() {
             <Stack.Screen name="search" options={{ presentation: "modal", headerShown: false, animation: "fade" }} />
             <Stack.Screen name="(media)/movie/[id]" options={{ headerShown: false }} />
             <Stack.Screen name="(media)/tv/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="(media)/tv/season/[id]" options={{ headerShown: false }} />
             <Stack.Screen name="person/[id]" options={{ headerShown: false }} />
           </Stack>
         </BottomSheetModalProvider>
