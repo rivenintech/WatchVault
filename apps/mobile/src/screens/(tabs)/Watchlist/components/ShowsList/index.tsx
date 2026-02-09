@@ -3,10 +3,10 @@ import WatchedDrawer from "@/src/components/Modals/WatchedDrawer";
 import SlidingScreen from "@/src/components/SlidingScreen";
 import { useSettings } from "@/src/contexts/UtilsProvider";
 import { LocalDB } from "@/src/db/DatabaseProvider";
-import { tvEpisodesInDB, tvSeasonsInDB, tvShowStatusView } from "@/src/db/schema";
+import { tvEpisodesInDB, tvShowStatusView } from "@/src/db/schema";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FlashList } from "@shopify/flash-list";
-import { asc, eq, getColumns, isNull } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -14,6 +14,7 @@ import MarkAsWatchedButton from "../MarkAsWatchedButton";
 import WatchlistItem from "../WatchlistItem";
 import TvNextEpisode from "./TvNextEpisode";
 import TvProgress from "./TvProgress";
+import { firstUnwatchedQuery } from "./dbQueries";
 
 const TABS = ["Watching", "Planned", "Watched"];
 
@@ -22,20 +23,7 @@ export default function ShowsList() {
   const watchedDrawerRef = useRef<BottomSheetModal>(null);
   const episodeDrawerRef = useRef<BottomSheetModal>(null);
 
-  const nextEpisodes = useLiveQuery(
-    LocalDB.select({
-      ...getColumns(tvEpisodesInDB),
-      season_name: tvSeasonsInDB.name,
-      season_number: tvSeasonsInDB.season_number,
-      show_id: tvSeasonsInDB.show_id,
-    })
-      .from(tvEpisodesInDB)
-      .innerJoin(tvSeasonsInDB, eq(tvSeasonsInDB.id, tvEpisodesInDB.season_id))
-      .where(isNull(tvEpisodesInDB.watched_date))
-      .orderBy(asc(tvSeasonsInDB.season_number), asc(tvEpisodesInDB.episode_number))
-      .groupBy(tvSeasonsInDB.show_id),
-  ).data;
-
+  const nextEpisodes = useLiveQuery(firstUnwatchedQuery).data;
   const showsData = useLiveQuery(LocalDB.select().from(tvShowStatusView), [nextEpisodes]).data;
 
   const [focusedShowId, setFocusedShowId] = useState<number | undefined>();
